@@ -4,7 +4,7 @@ import React, { FC, useEffect, useId, useRef, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import ProductCard from "./ProductCard";
+import ProductCard from "./products/product-card";
 import { Product, PRODUCTS } from "@/data/data";
 
 export interface SectionSliderProductCardProps {

@@ -3,34 +3,39 @@ import { Transition } from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import { PRODUCTS } from "@/data/data";
 import Image, { StaticImageData } from "next/image";
+import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import { COLORS } from "@/enum/colors";
+import { formatCurrency } from "@/enum/functions";
 
 interface Props {
   show: boolean;
   productImage: string | StaticImageData;
-  variantActive: number;
-  sizeSelected: string;
   qualitySelected: number;
+  selectedVariants: any;
 }
 
 const NotifyAddTocart: FC<Props> = ({
   show,
   productImage,
-  variantActive,
   qualitySelected,
-  sizeSelected,
+  selectedVariants,
 }) => {
-  const { name, price, variants } = PRODUCTS[0];
+  const { name, price } = PRODUCTS[0];
+
+  const allSelectedVariants = selectedVariants.map(
+    (item: any) => Object.values(item)[0]
+  );
 
   const renderProductCartOnNotify = () => {
     return (
-      <div className="flex ">
-        <div className="h-24 w-20 relative flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
+      <div className="flex">
+        <div className="h-24 w-24 overflow-hidden rounded-lg bg-grey-c10">
           <Image
+            width={80}
+            height={80}
             src={productImage}
             alt={name}
-            fill
-            sizes="100px"
-            className="h-full w-full object-contain object-center"
+            className="object-cover object-center"
           />
         </div>
 
@@ -38,27 +43,34 @@ const NotifyAddTocart: FC<Props> = ({
           <div>
             <div className="flex justify-between ">
               <div>
-                <h3 className="text-base font-medium ">{name}</h3>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  <span>
-                    {variants ? variants[variantActive].name : `Natural`}
-                  </span>
-                  <span className="mx-2 border-l border-slate-200 dark:border-slate-700 h-4"></span>
-                  <span>{sizeSelected || "XL"}</span>
+                <h3 className="text-base font-medium">{name}</h3>
+                <h3 className="text-base font-medium truncate overflow-hidden w-[220px]">
+                  Nước Tẩy Trang Dưỡng Ẩm Cho Da Thường, Khô L'Oreal Paris
+                  Micellar Water 3-In-1 Moisturizing Even For Sensitive Skin
+                  400Ml
+                </h3>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {allSelectedVariants.map((variant: string, index: number) => {
+                    if (index === allSelectedVariants.length - 1) {
+                      return <span>{`${variant}`}</span>;
+                    } else return <span>{`${variant},  `}</span>;
+                  })}
                 </p>
               </div>
-              <Prices price={price} className="mt-0.5" />
+              <div className="text-sm font-bold text-primary-c900">
+                {formatCurrency(250000)}
+              </div>
             </div>
           </div>
-          <div className="flex flex-1 items-end justify-between text-sm">
-            <p className="text-gray-500 dark:text-slate-400">{`Qty ${qualitySelected}`}</p>
+          <div className="flex flex-1 items-end justify-between text-xs">
+            <p className="text-gray-500 dark:text-slate-400">{`Số lượng: ${qualitySelected}`}</p>
 
             <div className="flex">
               <button
                 type="button"
-                className="font-medium text-primary-6000 dark:text-primary-500 "
+                className="font-medium text-primary-6000 dark:text-primary-500 hover:bg-grey-c50 px-2.5 py-1 rounded-full"
               >
-                View cart
+                Xem giỏ hàng
               </button>
             </div>
           </div>
@@ -79,9 +91,12 @@ const NotifyAddTocart: FC<Props> = ({
       leaveFrom="opacity-100 translate-x-0"
       leaveTo="opacity-0 translate-x-20"
     >
-      <p className="block text-base font-semibold leading-none">
-        Added to cart!
-      </p>
+      <div className="flex gap-2 items-center">
+        <DoneRoundedIcon sx={{ color: COLORS.success.c900, fontSize: 22 }} />
+        <p className="block text-base font-semibold leading-none text-success-c900">
+          Đã thêm vào giỏ hàng!
+        </p>
+      </div>
       <hr className=" border-slate-200 dark:border-slate-700 my-4" />
       {renderProductCartOnNotify()}
     </Transition>

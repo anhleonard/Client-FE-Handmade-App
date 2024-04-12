@@ -5,7 +5,7 @@ import Nav from "@/shared/Nav/Nav";
 import NavItem from "@/shared/NavItem/NavItem";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import TabFilters from "@/components/TabFilters";
+import TabFilters from "@/components/filters/tab-filters";
 import { Transition } from "@/app/headlessui";
 
 export interface HeaderFilterSearchPageProps {

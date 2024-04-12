@@ -6,7 +6,7 @@ import SectionPromo1 from "@/components/SectionPromo1";
 import HeaderFilterSearchPage from "@/components/HeaderFilterSearchPage";
 import Input from "@/shared/Input/Input";
 import ButtonCircle from "@/shared/Button/ButtonCircle";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/products/product-card";
 import { PRODUCTS } from "@/data/data";
 
 const PageSearch = ({}) => {

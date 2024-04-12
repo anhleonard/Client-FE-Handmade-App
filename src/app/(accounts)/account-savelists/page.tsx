@@ -1,4 +1,4 @@
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/products/product-card";
 import { PRODUCTS } from "@/data/data";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 

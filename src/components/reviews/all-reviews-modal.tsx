@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@/app/headlessui";
 import { StarIcon } from "@heroicons/react/24/solid";
-import ReviewItem from "@/components/ReviewItem";
-import SortOrderFilter from "@/components/SectionGridMoreExplore/SortOrderFilter";
+import ReviewItem from "@/components/reviews/review-item";
+import SortOrderFilter from "@/components/filters/sort-order-filter";
 import React, { FC, Fragment } from "react";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
 
@@ -57,24 +57,24 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
                     className="text-lg font-medium leading-6 text-gray-900"
                     id="headlessui-dialog-title-70"
                   >
-                    View all reviews
+                    Tất cả đánh giá
                   </h3>
-                  <span className="absolute left-3 top-3">
+                  <span className="absolute right-3 top-3">
                     <ButtonClose onClick={onCloseModalViewAllReviews} />
                   </span>
                 </div>
                 <div className="px-8 my-5 flex justify-between flex-wrap">
                   <h2 className="text-xl sm:text-2xl font-semibold flex items-center">
-                    <StarIcon className="w-7 h-7 mb-0.5" />
-                    <span className="ml-1.5"> 4,87 · 142 Reviews</span>
+                    <StarIcon className="w-8 h-8 mb-0.5" />
+                    <span className="ml-1.5"> 4,87 - 142 Đánh giá</span>
                   </h2>
                   <SortOrderFilter
                     className="my-2"
                     data={[
-                      { name: "Sort order" },
-                      { name: "Newest rating" },
-                      { name: "Highest rating" },
-                      { name: "Lowest rating" },
+                      { name: "Tất cả" },
+                      { name: "Mới nhất" },
+                      { name: "Rating cao nhất" },
+                      { name: "Rating thấp nhất" },
                     ]}
                   />
                 </div>

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.no-ring:focus {
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: none !important;
+}

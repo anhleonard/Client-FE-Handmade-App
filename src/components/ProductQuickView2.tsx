@@ -1,10 +1,10 @@
 "use client";
 import React, { FC, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import LikeButton from "@/components/LikeButton";
+import LikeButton from "@/components/products/like-button";
 import { StarIcon } from "@heroicons/react/24/solid";
 import BagIcon from "@/components/BagIcon";
-import NcInputNumber from "@/components/NcInputNumber";
+import NcInputNumber from "@/components/product-detail/input-quantity-item";
 import { PRODUCTS } from "@/data/data";
 import {
   NoSymbolIcon,

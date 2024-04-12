@@ -1,7 +1,7 @@
 "use client";
 
 import Label from "@/components/Label/Label";
-import NcInputNumber from "@/components/NcInputNumber";
+import NcInputNumber from "@/components/product-detail/input-quantity-item";
 import Prices from "@/components/Prices";
 import { Product, PRODUCTS } from "@/data/data";
 import { useState } from "react";
