@@ -1,40 +1,40 @@
 import { COLORS } from "@/enum/colors";
-import { Checkbox } from "@mui/material";
 
 type MySingleCheckBoxProps = {
   isChecked?: boolean;
   disabled?: boolean;
-  size?: number;
-  onChanged?: () => void;
+  onChanged?: (event?: any) => void;
   checkedColor?: string;
+  value?: any;
+  width?: string;
+  height?: string;
 };
 
 const MySingleCheckBox = ({
   isChecked = false,
   disabled = false,
-  size = 24,
   onChanged,
   checkedColor,
+  value,
+  width = "w-4.5",
+  height = "h-4.5",
 }: MySingleCheckBoxProps) => {
   return (
-    <Checkbox
-      aria-label="select-item"
-      checked={isChecked}
-      onChange={() => {
-        if (onChanged) {
-          onChanged();
-        }
-      }}
-      sx={{
-        color: COLORS.grey.c700,
-        "&.Mui-checked": {
-          color: checkedColor ?? COLORS.success.c700,
-        },
-        "& .MuiSvgIcon-root": { fontSize: size },
-      }}
-      disabled={disabled}
-      style={{ padding: 0 }}
-    />
+    <>
+      <input
+        type="checkbox"
+        value={value}
+        checked={isChecked}
+        onChange={(event) => {
+          if (onChanged) {
+            onChanged(event);
+          }
+        }}
+        className={`border-2 border-grey-c700 rounded-[4px] no-ring ${width} ${height} cursor-pointer disabled:cursor-default transition duration-100`}
+        disabled={disabled}
+        style={{ color: checkedColor ?? COLORS.success.c700 }}
+      ></input>
+    </>
   );
 };
 

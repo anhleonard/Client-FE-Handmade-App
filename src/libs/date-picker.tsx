@@ -1,72 +1,75 @@
-"use client";
+// Or configure the styling elsewhere.
+import "flatpickr/dist/flatpickr.css";
 
-import { useState } from "react";
+import flatpickr from "flatpickr";
+import { Instance } from "flatpickr/dist/types/instance";
+import { MutableRefObject, useCallback, useRef, useState } from "react";
+import { DateOption } from "flatpickr/dist/types/options";
 import MyIcon from "./my-icon";
 
-interface MyTextAreaProps {
-  id: string;
-  title?: string;
+interface MyDatePickerProps {
+  label?: string;
   placeholder?: string;
-  isRequired?: boolean;
-  type?: "number" | "text" | "password";
-  disabled?: boolean;
-  disabledText?: string;
-  isError?: boolean;
-  helperText?: string | null;
-  width?: string;
-  value?: string | number;
-  defaultValue?: string | number;
-  onChange?: (value: string | number) => void;
   className?: string;
+  isRequired?: boolean;
+  disabled?: boolean;
+  isError?: boolean;
+  defaultDate?: DateOption;
+  onChange?: (value: Date[]) => void;
+  helperText?: string;
 }
 
-const MyTextArea: React.FC<MyTextAreaProps> = ({
-  id,
-  title,
+const MyDatePicker: React.FC<MyDatePickerProps> = ({
+  label,
   placeholder,
+  className = "w-full",
   isRequired = false,
-  type = "text",
   disabled = false,
-  disabledText = null,
   isError = false,
-  helperText = null,
-  width = "w-full",
-  value,
-  defaultValue,
+  defaultDate,
   onChange,
-  className = "",
+  helperText,
 }) => {
+  const [error, setError] = useState(isError);
+
+  const fp1 = useRef() as MutableRefObject<Instance>;
+
+  const inputRef = useCallback((node: any) => {
+    if (node !== null) {
+      fp1.current = flatpickr(node, {
+        onChange: function (selectedDates, dateStr, instance) {
+          if (onChange) onChange(selectedDates);
+          if (isError) {
+            setError(false);
+          }
+        },
+        defaultDate: defaultDate,
+      });
+    }
+  }, []);
+
   return (
-    <div className={`${width} ${className}`}>
-      <div className="h-full w-full">
+    <div className={className}>
+      <div>
         <label className="mb-1 block text-sm font-medium text-grey-c600 dark:text-white">
-          {title}
+          {label}
           {isRequired ? (
             <span className="text-base text-support-c500"> *</span>
           ) : null}
         </label>
-        <textarea
-          name={id}
-          id={id}
-          rows={3}
-          placeholder={placeholder}
-          onChange={(e) => {
-            if (onChange) {
-              onChange(e.target.value);
-            }
-          }}
-          value={value}
-          defaultValue={defaultValue}
+        <input
+          type="date"
           disabled={disabled}
-          className={`no-ring outline-none w-full items-center justify-between gap-1 rounded-2xl border-[2px] border-grey-c50 px-3 py-2 text-base font-normal text-grey-c900 placeholder-grey-c200 transition hover:border-primary-c200 focus:border-primary-c400 disabled:cursor-default disabled:border-grey-c200 disabled:bg-grey-c100 disabled:text-grey-c700 disabled:placeholder-grey-c500  ${
-            isError
-              ? "border-support-c500 bg-support-c10 !font-medium text-support-c500 placeholder-support-c200 hover:border-support-c500 focus:border-support-c500"
+          ref={inputRef}
+          placeholder={placeholder ?? "yyyy/mm/dd"}
+          className={`w-full cursor-pointer rounded-2xl border-[2px] border-grey-c50 px-3 py-3 text-base font-normal text-grey-c900 outline-none hover:border-primary-c200 focus:!border-primary-c400 disabled:!cursor-default disabled:border-grey-c200 disabled:bg-grey-c100 disabled:text-grey-c700 ${
+            error
+              ? "border-support-c500 !bg-support-c10 !font-medium text-support-c500 placeholder-support-c200 hover:!border-support-c500 focus:!border-support-c500"
               : ""
           }`}
-          style={{ height: "100%", boxSizing: "border-box" }}
-        ></textarea>
+        />
       </div>
-      {(isError && helperText) || (disabled && disabledText) ? (
+      {(error && helperText) || (disabled && helperText) ? (
         <div className="mt-1 flex items-center justify-start gap-1">
           <MyIcon width={3} height={3}>
             <path
@@ -76,7 +79,7 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
           </MyIcon>
           <div
             className={`text-[11px] font-medium ${
-              isError ? "text-support-c500" : "text-grey-c800"
+              error ? "text-support-c500" : "text-grey-c800"
             }`}
           >
             {helperText}
@@ -86,5 +89,4 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
     </div>
   );
 };
-
-export default MyTextArea;
+export default MyDatePicker;

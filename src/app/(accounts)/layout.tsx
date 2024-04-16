@@ -1,83 +1,100 @@
 "use client";
 
+import SectionPromo1 from "@/components/SectionPromo1";
+import DefaultLayout from "@/layout/default-layout";
 import { Route } from "@/routers/types";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { ReactNode, useState } from "react";
 import { FC } from "react";
+import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
+import AccountPage from "./account/page";
+import SideBarAccount from "@/components/account/side-bar-account";
+import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
+import AccountSavelists from "./account-savelists/page";
+import { useRouter } from "next/navigation";
+import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import AccountOrder from "./account-order/page";
+import AccountAddressPage from "./account-address/page";
 
 export interface CommonLayoutProps {
   children?: React.ReactNode;
 }
 
-const pages: {
+const accountPages: {
   name: string;
   link: Route;
+  component: ReactNode;
+  icon: ReactNode;
 }[] = [
   {
-    name: "Account info",
+    name: "Thông tin cá nhân",
     link: "/account",
+    component: <AccountPage />,
+    icon: <PersonOutlineRoundedIcon sx={{ fontSize: 24 }} />,
   },
   {
-    name: "Save lists",
+    name: "Danh sách địa chỉ",
+    link: "/account-address",
+    component: <AccountAddressPage />,
+    icon: <RoomOutlinedIcon sx={{ fontSize: 24 }} />,
+  },
+  {
+    name: "Sản phẩm yêu thích",
     link: "/account-savelists",
+    component: <AccountSavelists />,
+    icon: <FavoriteBorderRoundedIcon sx={{ fontSize: 24 }} />,
   },
   {
-    name: " My order",
+    name: "Quản lý đơn hàng",
     link: "/account-order",
+    component: <AccountOrder />,
+    icon: <FavoriteBorderRoundedIcon sx={{ fontSize: 24 }} />,
   },
   {
-    name: "Change password",
-    link: "/account-password",
-  },
-  {
-    name: "Change Billing",
+    name: "Đổi trả hàng",
     link: "/account-billing",
+    component: <AccountSavelists />,
+    icon: <FavoriteBorderRoundedIcon sx={{ fontSize: 24 }} />,
   },
 ];
 
 const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
-    <div className="nc-AccountCommonLayout container">
-      <div className="mt-14 sm:mt-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
-            <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
-              <span className="text-slate-900 dark:text-slate-200 font-semibold">
-                Enrico Cole,
-              </span>{" "}
-              ciseco@gmail.com · Los Angeles, CA
-            </span>
-          </div>
-          <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-
-          <div className="flex space-x-8 md:space-x-14 overflow-x-auto hiddenScrollbar">
-            {pages.map((item, index) => {
-              return (
-                <Link
+    <DefaultLayout>
+      <div className="space-y-10 lg:space-y-14">
+        <main>
+          {/* LOOP ITEMS */}
+          <div className="flex flex-col lg:flex-row">
+            <div className="lg:w-1/3 xl:w-1/4 flex flex-col gap-4">
+              {accountPages.map((item, index) => (
+                <SideBarAccount
                   key={index}
-                  href={item.link}
-                  className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${
-                    pathname === item.link
-                      ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
-                      : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
+                  title={item.name}
+                  icon={item.icon}
+                  selected={pathname === item.link}
+                  onClicked={() => router.push(item.link, { scroll: true })}
+                />
+              ))}
+            </div>
+            <div className="flex-shrink-0 mb-10 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
+            <div className="flex-1">{children}</div>
           </div>
-          <hr className="border-slate-200 dark:border-slate-700"></hr>
-        </div>
+        </main>
       </div>
-      <div className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
-        {children}
-      </div>
-    </div>
+
+      {/* === SECTION 5 === */}
+      <hr className="border-slate-200 dark:border-slate-700" />
+
+      <SectionSliderCollections />
+      <hr className="border-slate-200 dark:border-slate-700" />
+
+      {/* SUBCRIBES */}
+      <SectionPromo1 />
+    </DefaultLayout>
   );
 };
 

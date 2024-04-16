@@ -15,3 +15,34 @@ export enum VoucherColorState {
   progress = "bg-blue-c50 text-blue-c900 text-xs font-medium border-2 border-blue-c900",
   delivery = "bg-purple-c10 text-purple-c900 text-xs font-medium border-2 border-purple-c900",
 }
+
+export const yesNoOptions = [
+  { label: "Có", value: "YES", index: 0 },
+  { label: "Không", value: "NO", index: 1 },
+];
+
+export const addressTypes = [
+  {
+    index: 0,
+    label: "Nhà riêng",
+    value: "HOME",
+  },
+  {
+    index: 1,
+    label: "Nơi làm việc",
+    value: "WORKING_PLACE",
+  },
+];
+
+export const genderTypes = [
+  {
+    index: 0,
+    label: "Nam",
+    value: "MALE",
+  },
+  {
+    index: 1,
+    label: "Nữ",
+    value: "FEMALE",
+  },
+];

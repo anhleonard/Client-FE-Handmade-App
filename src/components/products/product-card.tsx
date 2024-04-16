@@ -12,7 +12,7 @@ import BagIcon from "../BagIcon";
 import { Transition } from "@/app/headlessui";
 import ModalQuickView from "../modals/ModalQuickView";
 import ProductStatus from "./product-status";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
@@ -21,6 +21,7 @@ import { formatCurrency } from "@/enum/functions";
 import { Rating } from "@mui/material";
 import { COLORS } from "@/enum/colors";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import MySingleCheckBox from "@/libs/single-checkbox";
 
 export interface ProductCardProps {
   className?: string;
@@ -48,7 +49,10 @@ const ProductCard: FC<ProductCardProps> = ({
   } = data;
 
   const [showModalQuickView, setShowModalQuickView] = useState(false);
-  const router = useRouter();
+
+  const [picked, setPicked] = useState(false);
+
+  const pathname = usePathname();
 
   const renderGroupButtons = () => {
     return (
@@ -71,8 +75,6 @@ const ProductCard: FC<ProductCardProps> = ({
       <div
         className={`nc-ProductCard relative flex flex-col bg-transparent ${className}`}
       >
-        <Link href={"/product-detail"} className="absolute inset-0"></Link>
-
         <div className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
           <Link href={"/product-detail"} className="block">
             <NcImage
@@ -91,9 +93,11 @@ const ProductCard: FC<ProductCardProps> = ({
 
         <div className="space-y-4 px-2.5 py-3">
           <div className="flex flex-col gap-1">
-            <h2 className="nc-ProductCard__title text-base font-semibold transition-colors truncate overflow-hidden">
-              Hoa Hướng Dương Len Sợi Hoa Hướng Dương Len Sợi
-            </h2>
+            <Link href={"/product-detail"}>
+              <h2 className="text-base font-semibold transition-colors truncate overflow-hidden hover:underline hover:text-primary-c900 hover:cursor-pointer">
+                Hoa Hướng Dương Len Sợi Hoa Hướng Dương Len Sợi
+              </h2>
+            </Link>
 
             <div className="flex flex-row gap-2 items-center">
               <div className="text-primary-c900 font-semibold text-base">
@@ -111,9 +115,16 @@ const ProductCard: FC<ProductCardProps> = ({
                 readOnly
                 sx={{ color: COLORS.yellow.c900 }}
               />
-              <div className="text-grey-c400 font-normal text-xs">
-                Đã bán 556
-              </div>
+              {!pathname.includes("/account-savelists") ? (
+                <div className="text-grey-c400 font-normal text-xs">
+                  Đã bán 556
+                </div>
+              ) : (
+                <MySingleCheckBox
+                  isChecked={picked}
+                  onChanged={(event) => setPicked(!picked)}
+                />
+              )}
             </div>
           </div>
         </div>

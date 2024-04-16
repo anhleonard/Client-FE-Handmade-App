@@ -24,10 +24,6 @@ const InputQuantityItem: FC<InputQuantityItemProps> = ({
 }) => {
   const [value, setValue] = useState(defaultValue);
 
-  useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
-
   const handleClickDecrement = () => {
     if (min >= value) return;
     setValue((state) => {

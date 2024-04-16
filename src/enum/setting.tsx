@@ -1,4 +1,5 @@
 export enum FontSize {
+  LITTLE = "text-[11px]",
   XS = "text-xs",
   SM = "text-sm",
   BASE = "text-base",

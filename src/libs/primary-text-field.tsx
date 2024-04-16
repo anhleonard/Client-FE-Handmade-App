@@ -1,72 +1,95 @@
 "use client";
-
 import { useState } from "react";
 import MyIcon from "./my-icon";
 
-interface MyTextAreaProps {
+interface MyPrimaryTextFieldProps {
   id: string;
   title?: string;
   placeholder?: string;
   isRequired?: boolean;
   type?: "number" | "text" | "password";
   disabled?: boolean;
-  disabledText?: string;
   isError?: boolean;
   helperText?: string | null;
-  width?: string;
+  className?: string;
   value?: string | number;
   defaultValue?: string | number;
+  minNumber?: number;
+  maxNumber?: number;
   onChange?: (value: string | number) => void;
-  className?: string;
+  hasInputNumber?: boolean;
 }
 
-const MyTextArea: React.FC<MyTextAreaProps> = ({
+const MyPrimaryTextField: React.FC<MyPrimaryTextFieldProps> = ({
   id,
   title,
   placeholder,
   isRequired = false,
   type = "text",
   disabled = false,
-  disabledText = null,
   isError = false,
   helperText = null,
-  width = "w-full",
+  className = "w-full",
   value,
   defaultValue,
+  minNumber,
+  maxNumber,
   onChange,
-  className = "",
+  hasInputNumber = false,
 }) => {
+  const [error, setError] = useState(isError);
+
+  const handleKeyPress = (event: any) => {
+    const isNumber = /[0-9]/i.test(event.key);
+    if (!isNumber) {
+      event.preventDefault();
+    }
+  };
+
   return (
-    <div className={`${width} ${className}`}>
-      <div className="h-full w-full">
-        <label className="mb-1 block text-sm font-medium text-grey-c600 dark:text-white">
-          {title}
-          {isRequired ? (
-            <span className="text-base text-support-c500"> *</span>
-          ) : null}
-        </label>
-        <textarea
-          name={id}
-          id={id}
-          rows={3}
-          placeholder={placeholder}
-          onChange={(e) => {
-            if (onChange) {
-              onChange(e.target.value);
-            }
-          }}
-          value={value}
-          defaultValue={defaultValue}
-          disabled={disabled}
-          className={`no-ring outline-none w-full items-center justify-between gap-1 rounded-2xl border-[2px] border-grey-c50 px-3 py-2 text-base font-normal text-grey-c900 placeholder-grey-c200 transition hover:border-primary-c200 focus:border-primary-c400 disabled:cursor-default disabled:border-grey-c200 disabled:bg-grey-c100 disabled:text-grey-c700 disabled:placeholder-grey-c500  ${
-            isError
-              ? "border-support-c500 bg-support-c10 !font-medium text-support-c500 placeholder-support-c200 hover:border-support-c500 focus:border-support-c500"
-              : ""
-          }`}
-          style={{ height: "100%", boxSizing: "border-box" }}
-        ></textarea>
+    <div className={`${className}`}>
+      <div className="hover:cursor-pointer">
+        {title ? (
+          <label className="mb-1 block text-sm font-medium text-grey-c600 dark:text-white">
+            {title}
+            {isRequired ? (
+              <span className="text-base text-support-c500"> *</span>
+            ) : null}
+          </label>
+        ) : null}
+        <div className="relative">
+          <input
+            type={type}
+            id={id}
+            placeholder={placeholder}
+            value={value}
+            defaultValue={defaultValue}
+            disabled={disabled}
+            className={`placeholder:text-grey-c200 text-grey-c900 no-ring w-full rounded-2xl border-[2px] border-grey-c50 bg-transparent px-3 py-3 outline-none hover:border-primary-c200 focus:border-primary-c400  disabled:cursor-default disabled:border-grey-c200 disabled:bg-grey-c100 disabled:text-grey-c700 disabled:placeholder-grey-c500 ${
+              error
+                ? "border-support-c500 !bg-support-c10 font-medium text-support-c500 placeholder-support-c200 hover:border-support-c500 focus:border-support-c500"
+                : ""
+            }`}
+            min={minNumber}
+            max={maxNumber}
+            onChange={(e) => {
+              if (onChange) {
+                onChange(e.target.value);
+              }
+              if (error) {
+                setError(false);
+              }
+            }}
+            ref={(input) => {
+              input &&
+                type === "text" &&
+                hasInputNumber &&
+                input.addEventListener("keypress", handleKeyPress);
+            }}
+          />
+        </div>
       </div>
-      {(isError && helperText) || (disabled && disabledText) ? (
+      {(error && helperText) || (disabled && helperText) ? (
         <div className="mt-1 flex items-center justify-start gap-1">
           <MyIcon width={3} height={3}>
             <path
@@ -76,7 +99,7 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
           </MyIcon>
           <div
             className={`text-[11px] font-medium ${
-              isError ? "text-support-c500" : "text-grey-c800"
+              error ? "text-support-c500" : "text-grey-c800"
             }`}
           >
             {helperText}
@@ -87,4 +110,4 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
   );
 };
 
-export default MyTextArea;
+export default MyPrimaryTextField;

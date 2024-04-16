@@ -3,3 +3,9 @@ export type VariantType = {
   inStock: number;
   img?: string;
 };
+
+export type RadioItem = {
+  label: string;
+  value: string;
+  index: number;
+};
