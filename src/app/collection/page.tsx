@@ -8,6 +8,7 @@ import { PRODUCTS } from "@/data/data";
 import TabFilters from "@/components/filters/tab-filters";
 import DefaultLayout from "@/layout/default-layout";
 import ChildHeading from "@/layout/child-heading";
+import { exampleItems } from "@/enum/constants";
 
 const PageCollection = ({}) => {
   return (
@@ -30,8 +31,8 @@ const PageCollection = ({}) => {
 
           {/* LOOP ITEMS */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-8 mt-8 lg:mt-10">
-            {PRODUCTS.map((item, index) => (
-              <ProductCard data={item} key={index} />
+            {exampleItems.items.map((item: any) => (
+              <ProductCard key={item.id} item={item} />
             ))}
           </div>
 

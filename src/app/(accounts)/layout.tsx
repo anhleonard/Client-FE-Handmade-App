@@ -69,7 +69,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
         <main>
           {/* LOOP ITEMS */}
           <div className="flex flex-col lg:flex-row">
-            <div className="lg:w-1/3 xl:w-1/4 flex flex-col gap-4">
+            <div className="lg:w-1/3 xl:w-1/4 flex flex-col gap-5">
               {accountPages.map((item, index) => (
                 <SideBarAccount
                   key={index}
@@ -81,7 +81,8 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
               ))}
             </div>
             <div className="flex-shrink-0 mb-10 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
-            <div className="flex-1">{children}</div>
+            {/* <div className="flex-1">{children}</div> */}
+            <div className="lg:w-2/3 xl:w-3/4">{children}</div>
           </div>
         </main>
       </div>

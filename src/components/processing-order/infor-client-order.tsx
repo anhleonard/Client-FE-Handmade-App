@@ -9,13 +9,10 @@ type InforClientOrderProps = {
   title?: string;
 };
 
-const InforClientOrder = ({
-  isEdit = true,
-  title = "THÔNG TIN GIAO HÀNG",
-}: InforClientOrderProps) => {
+const InforClientOrder = ({ isEdit = true, title }: InforClientOrderProps) => {
   return (
     <div className="space-y-4">
-      <div className="font-bold text-xl">{title}</div>
+      {title && <div className="font-bold text-xl">{title}</div>}
       <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
         <ListItem
           className="bg-white border-b-2 border-grey-c50"

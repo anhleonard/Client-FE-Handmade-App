@@ -47,7 +47,7 @@ const PaymentPage = () => {
         {/* cột bên trái */}
         <div className="w-full xl:w-[68%] space-y-10 pb-10 border-b-2 border-grey-c50 xl:border-none">
           {/* thông tin người nhận */}
-          <InforClientOrder />
+          <InforClientOrder title="THÔNG TIN GIAO HÀNG" />
 
           {/* phương thức thanh toán */}
           <div className="space-y-4">

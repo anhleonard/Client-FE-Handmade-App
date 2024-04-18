@@ -1,3 +1,15 @@
+import AllOrders from "@/components/account-orders/all-orders/all-orders";
+import { OrderStatus } from "./defined-types";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import WaitingPaymentOrders from "@/components/account-orders/waiting-payment-orders/waiting-payment-orders";
+import ProcessingOrders from "@/components/account-orders/processing-orders/processing-orders";
+import TransportOrders from "@/components/account-orders/transport-orders/transport-orders";
+import CompletedOrders from "@/components/account-orders/completed-orders/completed-orders";
+import CanceledOrders from "@/components/account-orders/canceled-orders/canceled-orders";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
   error = "bg-support-c10 text-support-c500 text-xs font-medium",
@@ -44,5 +56,126 @@ export const genderTypes = [
     index: 1,
     label: "Nữ",
     value: "FEMALE",
+  },
+];
+
+// account order tabs
+export const accountOrderTabs = [
+  {
+    label: "Tất cả đơn hàng",
+    value: 1,
+    content: <AllOrders />,
+  },
+  {
+    label: "Chờ thanh toán",
+    value: 2,
+    content: <WaitingPaymentOrders />,
+  },
+  {
+    label: "Đang xử lý",
+    value: 3,
+    content: <ProcessingOrders />,
+  },
+  {
+    label: "Đang vận chuyển",
+    value: 4,
+    content: <TransportOrders />,
+  },
+  {
+    label: "Đã giao",
+    value: 5,
+    content: <CompletedOrders />,
+  },
+  {
+    label: "Đã hủy",
+    value: 6,
+    content: <CanceledOrders />,
+  },
+];
+
+export const exampleItems = {
+  totalItems: 4,
+  items: [
+    {
+      id: "item-option-0",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 140ml",
+      price: 79000,
+      prePrice: 100000,
+      discount: 15,
+      rating: 2,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-1.jpg",
+    },
+    {
+      id: "item-option-1",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 240ml",
+      price: 80000,
+      prePrice: 120000,
+      discount: 25,
+      rating: 4,
+      sellerName: "Khoai lang thang",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-2.jpg",
+    },
+    {
+      id: "item-option-2",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
+      price: 92000,
+      prePrice: 250000,
+      discount: 30,
+      rating: 5,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-3.jpg",
+    },
+    {
+      id: "item-option-3",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
+      price: 92000,
+      prePrice: 250000,
+      discount: 30,
+      rating: 5,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-4.jpg",
+    },
+  ],
+};
+
+export const orderStatus: OrderStatus[] = [
+  {
+    label: "Chờ thanh toán",
+    value: "WAITING_PAYMENT",
+    icon: <AccessTimeRoundedIcon sx={{ fontSize: 20 }} />,
+    color: "text-primary-c600",
+  },
+  {
+    label: "Đang xử lý",
+    value: "IN_PROCESSING",
+    icon: <AccessTimeRoundedIcon sx={{ fontSize: 20 }} />,
+    color: "text-blue-c600",
+  },
+  {
+    label: "Đang vận chuyển",
+    value: "IN_TRANSPORT",
+    icon: <LocalShippingOutlinedIcon sx={{ fontSize: 20 }} />,
+    color: "text-purple-c500",
+  },
+  {
+    label: "Giao hàng thành công",
+    value: "COMPLETED_ORDER",
+    icon: <CheckCircleOutlineRoundedIcon sx={{ fontSize: 20 }} />,
+    color: "text-success-c600",
+  },
+  {
+    label: "Đã hủy",
+    value: "CANCELED_ORDER",
+    icon: <HighlightOffRoundedIcon sx={{ fontSize: 20 }} />,
+    color: "text-support-c500",
   },
 ];

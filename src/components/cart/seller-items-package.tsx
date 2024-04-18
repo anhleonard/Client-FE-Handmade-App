@@ -68,8 +68,6 @@ const SellerItemsPackage = ({
       totalPayment: updatedTotalPayment,
     };
 
-    console.log({ selected });
-
     handleUpdateListSellerPackages(updatedSellerPackage);
   }, [selected, items]);
 
