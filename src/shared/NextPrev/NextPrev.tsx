@@ -16,7 +16,7 @@ const NextPrev: FC<NextPrevProps> = ({
   className = "",
   onClickNext = () => {},
   onClickPrev = () => {},
-  btnClassName = "w-10 h-10",
+  btnClassName = "w-9 h-9",
   onlyNext = false,
   onlyPrev = false,
 }) => {

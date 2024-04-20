@@ -1,11 +1,10 @@
 "use client";
 
-import React, { FC, useEffect, useId, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import ProductCard from "./products/product-card";
-import { Product, PRODUCTS } from "@/data/data";
+import ProductCard from "../products/product-card";
 
 export interface SectionSliderProductCardProps {
   className?: string;
@@ -14,7 +13,7 @@ export interface SectionSliderProductCardProps {
   headingFontClassName?: string;
   headingClassName?: string;
   subHeading?: string;
-  data?: Product[];
+  data?: any;
 }
 
 const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
@@ -23,8 +22,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
   headingFontClassName,
   headingClassName,
   heading,
-  subHeading = "REY backpacks & bags",
-  data = PRODUCTS.filter((_, i) => i < 8 && i > 2),
+  data,
 }) => {
   const sliderRef = useRef(null);
 
@@ -34,20 +32,20 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
       // direction: document.querySelector("html")?.getAttribute("dir") || "ltr",
-      perView: 4,
+      perView: 5,
       gap: 32,
       bound: true,
       breakpoints: {
         1280: {
-          perView: 4 - 1,
+          perView: 5 - 1,
         },
         1024: {
           gap: 20,
-          perView: 4 - 1,
+          perView: 5 - 2,
         },
         768: {
           gap: 20,
-          perView: 4 - 2,
+          perView: 5 - 2,
         },
         640: {
           gap: 20,
@@ -70,21 +68,21 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
   }, [sliderRef]);
 
   return (
-    <div className={`nc-SectionSliderProductCard ${className}`}>
+    <div className={`${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         <Heading
           className={headingClassName}
           fontClass={headingFontClassName}
-          rightDescText={subHeading}
           hasNextPrev
+          isSeeAll
         >
-          {heading || `New Arrivals`}
+          {heading}
         </Heading>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {data.map((item, index) => (
-              <li key={index} className={`glide__slide ${itemClassName}`}>
-                <ProductCard data={item} />
+            {data?.map((item: any) => (
+              <li key={item.id} className={`glide__slide ${itemClassName}`}>
+                <ProductCard key={item.id} item={item} />
               </li>
             ))}
           </ul>

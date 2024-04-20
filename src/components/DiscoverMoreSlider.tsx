@@ -54,19 +54,16 @@ const DiscoverMoreSlider = () => {
   return (
     <div
       ref={sliderRef}
-      className={`nc-DiscoverMoreSlider nc-p-l-container ${
-        isShow ? "" : "invisible"
-      }`}
+      className={`${isShow ? "" : "invisible"} flex flex-col gap-4`}
     >
       <Heading
-        className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 nc-p-r-container "
+        className="text-neutral-900 dark:text-neutral-50"
         desc=""
-        rightDescText="Good things are waiting for you"
         hasNextPrev
       >
-        Discover more
+        Theo dòng sự kiện
       </Heading>
-      <div className="" data-glide-el="track">
+      <div className="overflow-hidden" data-glide-el="track">
         <ul className="glide__slides">
           {CATS_DISCOVER.map((item, index) => (
             <li key={index} className={`glide__slide`}>

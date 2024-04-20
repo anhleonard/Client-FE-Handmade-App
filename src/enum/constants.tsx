@@ -144,6 +144,30 @@ export const exampleItems = {
       sold: 556,
       image: "/images/bags/bag-4.jpg",
     },
+    {
+      id: "item-option-4",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
+      price: 92000,
+      prePrice: 250000,
+      discount: 30,
+      rating: 5,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-4.jpg",
+    },
+    {
+      id: "item-option-5",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
+      price: 92000,
+      prePrice: 250000,
+      discount: 30,
+      rating: 5,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-4.jpg",
+    },
   ],
 };
 
@@ -177,5 +201,29 @@ export const orderStatus: OrderStatus[] = [
     value: "CANCELED_ORDER",
     icon: <HighlightOffRoundedIcon sx={{ fontSize: 20 }} />,
     color: "text-support-c500",
+  },
+];
+
+// store seller tabs
+export const storeSellerTabs = [
+  {
+    label: "Cửa hàng",
+    value: 1,
+    content: <div>Cửa hàng</div>,
+  },
+  {
+    label: "Tất cả sản phẩm",
+    value: 2,
+    content: <div>Tất cả sản phẩm</div>,
+  },
+  {
+    label: "Bộ sưu tập",
+    value: 3,
+    content: <div>Bộ sưu tập</div>,
+  },
+  {
+    label: "Hồ sơ cửa hàng",
+    value: 4,
+    content: <div>Hồ sơ cửa hàng</div>,
   },
 ];

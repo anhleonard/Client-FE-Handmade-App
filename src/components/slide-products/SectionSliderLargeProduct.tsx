@@ -4,9 +4,9 @@ import React, { FC, useEffect, useId, useRef, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import CollectionCard from "./CollectionCard";
-import CollectionCard2 from "./CollectionCard2";
-import { DEMO_LARGE_PRODUCTS } from "./SectionSliderLargeProduct2";
+import CollectionCard from "../CollectionCard";
+import CollectionCard2 from "../CollectionCard2";
+import { DEMO_LARGE_PRODUCTS } from "../SectionSliderLargeProduct2";
 import Link from "next/link";
 
 export interface SectionSliderLargeProductProps {
@@ -80,7 +80,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
               </li>
             ))}
 
-            <li className={`glide__slide   `}>
+            <li className={`glide__slide`}>
               <Link href={"/search"} className="block relative group">
                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                   <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>

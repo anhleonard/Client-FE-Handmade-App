@@ -1,5 +1,6 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import NextPrev from "@/shared/NextPrev/NextPrev";
+import Button from "@/libs/button";
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   fontClass?: string;
@@ -8,6 +9,7 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   desc?: ReactNode;
   hasNextPrev?: boolean;
   isCenter?: boolean;
+  isSeeAll?: boolean;
 }
 
 const solutions = [
@@ -28,17 +30,18 @@ const solutions = [
 const Heading: React.FC<HeadingProps> = ({
   children,
   desc = "",
-  className = "mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50",
+  className = "mb-4 text-neutral-900 dark:text-neutral-50",
   isCenter = false,
   hasNextPrev = false,
-  fontClass = "text-3xl md:text-4xl font-semibold",
+  fontClass = "text-2xl font-semibold",
   rightDescText,
   rightPopoverOptions = solutions,
+  isSeeAll = false,
   ...args
 }) => {
   return (
     <div
-      className={`nc-Section-Heading relative flex flex-col sm:flex-row sm:items-end justify-between ${className}`}
+      className={`relative flex flex-col sm:flex-row sm:items-end justify-between ${className}`}
     >
       <div
         className={
@@ -67,11 +70,16 @@ const Heading: React.FC<HeadingProps> = ({
           </span>
         )}
       </div>
-      {hasNextPrev && !isCenter && (
-        <div className="mt-4 flex justify-end sm:ms-2 sm:mt-0 flex-shrink-0">
-          <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
-        </div>
-      )}
+      <div className="flex items-center gap-5">
+        {hasNextPrev && !isCenter && (
+          <div className="mt-4 flex justify-end sm:ms-2 sm:mt-0 flex-shrink-0">
+            <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
+          </div>
+        )}
+        {isSeeAll && (
+          <Button className="!text-sm !px-3 !py-2">Xem tất cả</Button>
+        )}
+      </div>
     </div>
   );
 };

@@ -20,26 +20,34 @@ const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
 
   return (
     <div className={`flex flex-col relative ${className}`}>
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <Nav
           className="sm:space-x-2"
           containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar"
         >
-          {["All items", "Women", "Man", "Jewels", "Kids"].map(
-            (item, index) => (
-              <NavItem
-                key={index}
-                isActive={tabActive === item}
-                onClick={() => setTabActive(item)}
-              >
-                {item}
-              </NavItem>
-            )
-          )}
+          {[
+            "All items",
+            "Women",
+            "Man",
+            "Jewels",
+            "Kids",
+            "Sách",
+            "Hộp quà",
+            "Khăn choàng",
+            "Túi đeo",
+          ].map((item, index) => (
+            <NavItem
+              key={index}
+              isActive={tabActive === item}
+              onClick={() => setTabActive(item)}
+            >
+              {item}
+            </NavItem>
+          ))}
         </Nav>
         <span className="block flex-shrink-0 text-right">
           <ButtonPrimary
-            className="w-auto !pr-16"
+            className="w-auto !pr-16 !bg-blue-c900 !text-white hover:opacity-80"
             sizeClass="pl-4 py-2.5 sm:pl-6"
             onClick={() => {
               setIsOpen(!isOpen);
@@ -74,7 +82,7 @@ const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
               />
             </svg>
 
-            <span className="block truncate ml-2.5">Filter</span>
+            <span className="block truncate ml-2.5">Lọc</span>
             <span className="absolute top-1/2 -translate-y-1/2 right-5">
               <ChevronDownIcon
                 className={`w-4 h-4 sm:w-5 sm:h-5 ${
@@ -96,7 +104,10 @@ const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="w-full border-b border-neutral-200/70 dark:border-neutral-700 my-8"></div>
+        {/* divider */}
+        <div className="w-full border-b border-neutral-200/70 dark:border-neutral-700 my-6"></div>
+
+        {/* tab filters */}
         <TabFilters />
       </Transition>
     </div>

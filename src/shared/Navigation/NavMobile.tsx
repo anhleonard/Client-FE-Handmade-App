@@ -118,8 +118,8 @@ const NavMobile: React.FC<NavMobileProps> = ({
   const renderMagnifyingGlassIcon = () => {
     return (
       <svg
-        width={22}
-        height={22}
+        width={18}
+        height={18}
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +153,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
           {renderMagnifyingGlassIcon()}
           <input
             type="search"
-            placeholder="Type and press enter"
+            placeholder="Tìm kiếm mặt hàng của bạn"
             className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-sm "
           />
         </div>

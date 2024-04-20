@@ -20,7 +20,7 @@ import NcInputNumber from "@/components/product-detail/input-quantity-item";
 import BagIcon from "@/components/BagIcon";
 import toast from "react-hot-toast";
 import { StarIcon } from "@heroicons/react/24/solid";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
+import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
 import NotifyAddTocart from "@/components/NotifyAddTocart";
 import Image, { StaticImageData } from "next/image";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
@@ -202,7 +202,7 @@ const ProductDetailPage2 = ({}) => {
         </div>
       );
     }
-    if (status === "50% Discount") {
+    if (status === "30% Discount") {
       return (
         <div className={CLASSES}>
           <IconDiscount className="w-3.5 h-3.5" />

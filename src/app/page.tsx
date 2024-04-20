@@ -2,9 +2,9 @@ import React from "react";
 import SectionHowItWork from "@/components/SectionHowItWork/SectionHowItWork";
 import BackgroundSection from "@/components/BackgroundSection/BackgroundSection";
 import SectionPromo1 from "@/components/SectionPromo1";
-import SectionHero2 from "@/components/SectionHero/SectionHero2";
-import SectionSliderLargeProduct from "@/components/SectionSliderLargeProduct";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
+import SectionHero2 from "@/components/section-heros/SectionHero2";
+import SectionSliderLargeProduct from "@/components/slide-products/SectionSliderLargeProduct";
+import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
 import DiscoverMoreSlider from "@/components/DiscoverMoreSlider";
 import SectionGridMoreExplore from "@/components/SectionGridMoreExplore/SectionGridMoreExplore";
 import SectionPromo2 from "@/components/SectionPromo2";
@@ -16,33 +16,29 @@ import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import { PRODUCTS, SPORT_PRODUCTS } from "@/data/data";
 import SectionGridFeatureItems from "@/components/SectionGridFeatureItems";
 import SectionMagazine5 from "@/app/blog/SectionMagazine5";
+import { exampleItems } from "@/enum/constants";
+import DefaultLayout from "@/layout/default-layout";
 
 function PageHome() {
   return (
-    <div className="nc-PageHome relative overflow-hidden">
+    <div className="relative overflow-hidden">
       <SectionHero2 />
 
-      <div className="mt-24 lg:mt-32">
+      <DefaultLayout>
         <DiscoverMoreSlider />
-      </div>
 
-      <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
         <SectionSliderProductCard
-          data={[
-            PRODUCTS[4],
-            SPORT_PRODUCTS[5],
-            PRODUCTS[7],
-            SPORT_PRODUCTS[1],
-            PRODUCTS[6],
-          ]}
+          data={exampleItems.items}
+          heading="Hàng len bán chạy"
         />
 
-        <div className="py-24 lg:py-32 border-t border-b border-slate-200 dark:border-slate-700">
+        <div className="border-t border-b border-slate-200 dark:border-slate-700 py-10">
           <SectionHowItWork />
         </div>
+
         <SectionPromo1 />
 
-        <div className="relative py-24 lg:py-32">
+        <div className="relative">
           <BackgroundSection />
           <SectionGridMoreExplore />
         </div>
@@ -62,7 +58,7 @@ function PageHome() {
 
         <SectionGridFeatureItems />
 
-        <div className="relative py-24 lg:py-32">
+        <div className="relative">
           <BackgroundSection />
           <div>
             <Heading rightDescText="From the Ciseco blog">
@@ -75,7 +71,7 @@ function PageHome() {
           </div>
         </div>
         <SectionClientSay />
-      </div>
+      </DefaultLayout>
     </div>
   );
 }

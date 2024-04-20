@@ -19,8 +19,8 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
   const renderMagnifyingGlassIcon = () => {
     return (
       <svg
-        width={22}
-        height={22}
+        width={18}
+        height={18}
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -46,20 +46,20 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
   const renderSearchForm = () => {
     return (
       <form
-        className="flex-1 py-2 text-slate-900 dark:text-slate-100"
+        className="flex-1 text-grey-900 dark:text-slate-100"
         onSubmit={(e) => {
           e.preventDefault();
           router.push("/search");
           inputRef.current?.blur();
         }}
       >
-        <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1.5 px-5 h-full rounded">
+        <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1.5 px-4.5 py-1.5 h-full rounded-2xl">
           {renderMagnifyingGlassIcon()}
           <input
             ref={inputRef}
             type="text"
-            placeholder="Type and press enter"
-            className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base"
+            placeholder="Tìm kiếm mặt hàng của bạn"
+            className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base placeholder:text-grey-c300"
             autoFocus
           />
           <button type="button" onClick={() => setShowSearchForm(false)}>
@@ -73,7 +73,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
 
   const renderContent = () => {
     return (
-      <div className="flex justify-between py-2">
+      <div className="flex justify-between">
         <div className="flex items-center lg:hidden flex-1">
           <MenuBar />
         </div>
@@ -103,7 +103,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
   };
 
   return (
-    <div className="relative z-10 bg-white dark:bg-neutral-900 border-b border-slate-100 dark:border-slate-700">
+    <div className="relative z-10 bg-white dark:bg-neutral-900 border-b border-slate-100 dark:border-slate-700 py-3.5 md:px-15 lg:px-30 px-8">
       {renderContent()}
     </div>
   );

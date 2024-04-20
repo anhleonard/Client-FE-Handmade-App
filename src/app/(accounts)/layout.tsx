@@ -6,7 +6,7 @@ import { Route } from "@/routers/types";
 import { usePathname } from "next/navigation";
 import React, { ReactNode, useState } from "react";
 import { FC } from "react";
-import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
+import SectionSliderCollections from "@/components/slide-products/SectionSliderLargeProduct";
 import AccountPage from "./account/page";
 import SideBarAccount from "@/components/account/side-bar-account";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
