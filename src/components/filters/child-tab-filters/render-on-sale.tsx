@@ -55,7 +55,7 @@ const RenderTabIsOnsale = ({
         />
       </svg>
 
-      <span className="ml-2">On sale</span>
+      <span className="ml-2">Giảm giá</span>
       {isOnSale && <RenderXClear />}
     </div>
   );

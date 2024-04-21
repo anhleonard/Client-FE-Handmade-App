@@ -43,7 +43,7 @@ const CardCategory4: FC<CardCategory4Props> = ({
               height={80}
             />
             <span className="text-xs text-slate-700 dark:text-neutral-300 font-medium">
-              {count} products
+              {count} sản phẩm
             </span>
           </div>
 
@@ -58,15 +58,15 @@ const CardCategory4: FC<CardCategory4Props> = ({
 
           <Link
             href={"/collection"}
-            className="flex items-center text-sm font-medium group-hover:text-primary-500 transition-colors"
+            className="flex items-center text-sm font-medium group-hover:text-primary-500 transition-colors hover:bg-grey-c100 w-fit px-4 py-2 rounded-3xl"
           >
-            <span>See Collection</span>
+            <span>Xem chi tiết</span>
             <ArrowRightIcon className="w-4 h-4 ml-2.5" />
           </Link>
         </div>
       </div>
 
-      <Link href={"/collection"}></Link>
+      {/* <Link href={"/collection"}></Link> */}
     </div>
   );
 };

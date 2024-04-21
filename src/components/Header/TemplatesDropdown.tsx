@@ -4,7 +4,7 @@ import { Popover, Transition } from "@/app/headlessui";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Fragment } from "react";
 import { MEGAMENU_TEMPLATES } from "@/data/navigation";
-import CardCategory3 from "@/components/CardCategories/CardCategory3";
+import CardCategory3 from "@/components/card-categories/CardCategory3";
 import { NavItemType } from "@/shared/Navigation/NavigationItem";
 import Link from "next/link";
 

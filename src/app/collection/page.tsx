@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import Pagination from "@/shared/Pagination/Pagination";
+import Pagination from "@/shared/pagination/pagination";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import SectionSliderCollections from "@/components/slide-products/SectionSliderLargeProduct";
+import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/products/product-card";
 import { PRODUCTS } from "@/data/data";

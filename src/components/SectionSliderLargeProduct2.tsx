@@ -54,6 +54,27 @@ export const DEMO_LARGE_PRODUCTS = [
     desc: "3 Sizes Available",
     price: 60,
   },
+  {
+    id: 4,
+    images: [full3Img, full31Img, full32Img, full33Img],
+    name: "Cader Leather Sneakers",
+    desc: "3 Sizes Available",
+    price: 60,
+  },
+  {
+    id: 5,
+    images: [full3Img, full31Img, full32Img, full33Img],
+    name: "Cader Leather Sneakers",
+    desc: "3 Sizes Available",
+    price: 60,
+  },
+  {
+    id: 6,
+    images: [full2Img, full21Img, full22Img, full23Img],
+    name: "Downtown Pet Tote",
+    desc: "Black and Orange",
+    price: 88,
+  },
 ];
 
 const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
@@ -68,7 +89,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
 
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: 3,
+      perView: 4,
       gap: 32,
       bound: true,
       breakpoints: {

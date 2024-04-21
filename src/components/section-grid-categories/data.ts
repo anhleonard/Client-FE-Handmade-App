@@ -85,7 +85,7 @@ export const DEMO_MORE_EXPLORE_DATA_2: ExploreType[] = [
     count: 122,
   },
 ];
-export const DEMO_MORE_EXPLORE_DATA: ExploreType[] = [
+export const DEMO_MORE_CATEGORIES: ExploreType[] = [
   {
     id: 1,
     name: "Backpack",

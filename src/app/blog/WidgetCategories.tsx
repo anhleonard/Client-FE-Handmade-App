@@ -1,4 +1,4 @@
-import CardCategory1 from "@/components/CardCategories/CardCategory1";
+import CardCategory1 from "@/components/card-categories/CardCategory1";
 import React, { FC } from "react";
 import WidgetHeading1 from "./WidgetHeading1";
 

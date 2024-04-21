@@ -9,6 +9,11 @@ import CanceledOrders from "@/components/account-orders/canceled-orders/canceled
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import StoreHomePage from "@/app/(stores)/store-homepage/page";
+import StoreItemsScreen from "@/app/(stores)/store-items/page";
+import SingleStoreCollection from "@/components/store/single-store-collection";
+import StoreCollection from "@/app/(stores)/store-collection/page";
+import StoreHistory from "@/app/(stores)/store-history/page";
 
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
@@ -168,6 +173,30 @@ export const exampleItems = {
       sold: 556,
       image: "/images/bags/bag-4.jpg",
     },
+    {
+      id: "item-option-6",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
+      price: 92000,
+      prePrice: 250000,
+      discount: 30,
+      rating: 5,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-4.jpg",
+    },
+    {
+      id: "item-option-7",
+      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
+      price: 92000,
+      prePrice: 250000,
+      discount: 30,
+      rating: 5,
+      sellerName: "Tiệm nhà len",
+      isLiked: true,
+      sold: 556,
+      image: "/images/bags/bag-4.jpg",
+    },
   ],
 };
 
@@ -209,21 +238,52 @@ export const storeSellerTabs = [
   {
     label: "Cửa hàng",
     value: 1,
-    content: <div>Cửa hàng</div>,
+    content: <StoreHomePage />,
   },
   {
     label: "Tất cả sản phẩm",
     value: 2,
-    content: <div>Tất cả sản phẩm</div>,
+    content: <StoreItemsScreen />,
   },
   {
     label: "Bộ sưu tập",
     value: 3,
-    content: <div>Bộ sưu tập</div>,
+    content: <StoreCollection />,
   },
   {
     label: "Hồ sơ cửa hàng",
     value: 4,
-    content: <div>Hồ sơ cửa hàng</div>,
+    content: <StoreHistory />,
+  },
+];
+
+// collection store seller tabs
+export const collectionStoreTabs = [
+  {
+    label: "Collection 1",
+    value: 1,
+    content: (
+      <SingleStoreCollection title="Hoa len" subTitle="Tổng cộng 54 sản phẩm" />
+    ),
+  },
+  {
+    label: "Collection 2",
+    value: 2,
+    content: (
+      <SingleStoreCollection
+        title="Búp bê len"
+        subTitle="Tổng cộng 50 sản phẩm"
+      />
+    ),
+  },
+  {
+    label: "Collection 3",
+    value: 3,
+    content: <div>Collection 3</div>,
+  },
+  {
+    label: "Collection 4",
+    value: 4,
+    content: <div>Collection 4</div>,
   },
 ];

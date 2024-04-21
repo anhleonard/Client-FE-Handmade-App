@@ -1,14 +1,14 @@
 import React, { FC } from "react";
-import Pagination from "@/shared/Pagination/Pagination";
+import Pagination from "@/shared/pagination/pagination";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import SectionSliderCollections from "@/components/slide-products/SectionSliderLargeProduct";
-import SectionPromo1 from "@/components/SectionPromo1";
+import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
 import HeaderFilterSearchPage from "@/components/filters/header-filter-search-page";
 import Input from "@/shared/Input/Input";
 import ButtonCircle from "@/shared/Button/ButtonCircle";
 import ProductCard from "@/components/products/product-card";
-import { PRODUCTS } from "@/data/data";
 import DefaultLayout from "@/layout/default-layout";
+import { exampleItems } from "@/enum/constants";
+import PaginationExample from "@/shared/pagination/pagination-example";
 
 const PageSearch = ({}) => {
   return (
@@ -53,32 +53,29 @@ const PageSearch = ({}) => {
         </span>
       </header>
 
-      <div className="space-y-16 lg:space-y-28">
+      <div className="flex flex-col gap-8">
         <main>
           {/* FILTER */}
           <HeaderFilterSearchPage />
 
           {/* LOOP ITEMS */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-            {PRODUCTS.map((item, index) => (
-              <ProductCard data={item} key={index} />
+            {exampleItems.items.map((item: any) => (
+              <ProductCard key={item.id} item={item} />
             ))}
           </div>
 
           {/* PAGINATION */}
-          <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
-            <Pagination />
-            <ButtonPrimary loading>Show me more</ButtonPrimary>
+          <div className="flex flex-col mt-8 lg:mt-10 items-end border-t-[1px] border-b-[1px] border-grey-c100">
+            <PaginationExample />
           </div>
         </main>
 
         {/* === SECTION 5 === */}
-        <hr className="border-slate-200 dark:border-slate-700" />
         <SectionSliderCollections />
-        <hr className="border-slate-200 dark:border-slate-700" />
 
         {/* SUBCRIBES */}
-        <SectionPromo1 />
+        {/* <SectionPromo1 /> */}
       </div>
     </DefaultLayout>
   );

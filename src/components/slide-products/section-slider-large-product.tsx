@@ -65,7 +65,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
     <div className={`nc-SectionSliderLargeProduct ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         <Heading isCenter={false} hasNextPrev>
-          Chosen by our experts
+          Bộ sưu tập nổi bật (chỉ để 6 thôi)
         </Heading>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
@@ -79,43 +79,6 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
                 />
               </li>
             ))}
-
-            <li className={`glide__slide`}>
-              <Link href={"/search"} className="block relative group">
-                <div className="relative rounded-2xl overflow-hidden h-[410px]">
-                  <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
-                  <div className="absolute inset-y-6 inset-x-10  flex flex-col items-center justify-center">
-                    <div className="flex items-center justify-center relative">
-                      <span className="text-xl font-semibold">More items</span>
-                      <svg
-                        className="absolute left-full w-5 h-5 ml-2 rotate-45 group-hover:scale-110 transition-transform"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M18.0701 9.57L12.0001 3.5L5.93005 9.57"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 20.4999V3.66992"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                    <span className="text-sm mt-1">Show me more</span>
-                  </div>
-                </div>
-              </Link>
-            </li>
           </ul>
         </div>
       </div>

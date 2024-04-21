@@ -1,5 +1,5 @@
 import React from "react";
-import CardCategory2 from "./CardCategories/CardCategory2";
+import CardCategory2 from "./card-categories/CardCategory2";
 import Heading from "./Heading/Heading";
 import img1 from "@/images/discover-more-1.png";
 import img2 from "@/images/discover-more-2.png";

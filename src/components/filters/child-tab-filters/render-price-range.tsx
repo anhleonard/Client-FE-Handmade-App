@@ -25,7 +25,12 @@ const RenderTabsPriceRage = ({
               open
                 ? "!border-primary-c500 bg-primary-c50 text-primary-c900"
                 : "border-grey-c50 text-grey-c900 hover:border-grey-c100"
-            } font-medium flex items-center justify-center px-4 py-2 text-sm rounded-full border-2 focus:outline-none `}
+            } font-medium flex items-center justify-center px-4 py-2 text-sm rounded-full border-2 focus:outline-none ${
+              rangePrices[0] !== PRICE_RANGE[0] ||
+              rangePrices[1] !== PRICE_RANGE[1]
+                ? "!border-primary-c500 bg-primary-c50 text-primary-c900"
+                : "border-grey-c50 dark:border-neutral-700 text-grey-c900 dark:text-neutral-300 hover:border-grey-c100 dark:hover:border-neutral-500"
+            }`}
           >
             <svg
               className="w-4 h-4"
@@ -56,15 +61,18 @@ const RenderTabsPriceRage = ({
               />
             </svg>
 
-            <span className="ml-2 min-w-[90px]">{`${formatCurrency(
-              rangePrices[0]
-            )} - ${formatCurrency(rangePrices[1])}`}</span>
-            {rangePrices[0] === PRICE_RANGE[0] &&
-            rangePrices[1] === PRICE_RANGE[1] ? null : (
+            {rangePrices.length !== 0 && (
+              <span className="ml-2 min-w-[90px]">{`${formatCurrency(
+                rangePrices[0]
+              )} - ${formatCurrency(rangePrices[1])}`}</span>
+            )}
+
+            {rangePrices[0] !== PRICE_RANGE[0] ||
+            rangePrices[1] !== PRICE_RANGE[1] ? (
               <span onClick={() => setRangePrices(PRICE_RANGE)}>
                 <RenderXClear />
               </span>
-            )}
+            ) : null}
           </Popover.Button>
           <Transition
             as={Fragment}
@@ -87,9 +95,12 @@ const RenderTabsPriceRage = ({
                       step={1000}
                       defaultValue={[rangePrices[0], rangePrices[1]]}
                       allowCross={false}
-                      onChange={(_input: number | number[]) =>
-                        setRangePrices(_input as number[])
-                      }
+                      onChange={(_input: number | number[]) => {
+                        // if(Array.isArray(_input) && _input.includes(null)){
+
+                        // }
+                        setRangePrices(_input as number[]);
+                      }}
                     />
                   </div>
 
@@ -102,16 +113,15 @@ const RenderTabsPriceRage = ({
                         Thấp nhất
                       </label>
                       <div className="mt-1 relative rounded-md">
-                        <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                          đ
-                        </span>
                         <input
                           type="text"
                           name="minPrice"
                           disabled
                           id="minPrice"
                           className="block w-full sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
-                          value={rangePrices[0]}
+                          value={
+                            rangePrices[0] && formatCurrency(rangePrices[0])
+                          }
                         />
                       </div>
                     </div>
@@ -123,16 +133,15 @@ const RenderTabsPriceRage = ({
                         Cao nhất
                       </label>
                       <div className="mt-1 relative rounded-md">
-                        <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                          đ
-                        </span>
                         <input
                           type="text"
                           disabled
                           name="maxPrice"
                           id="maxPrice"
                           className="block w-full sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
-                          value={rangePrices[1]}
+                          value={
+                            rangePrices[1] && formatCurrency(rangePrices[1])
+                          }
                         />
                       </div>
                     </div>

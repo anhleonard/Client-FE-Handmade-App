@@ -1,23 +1,20 @@
 import React from "react";
 import SectionHowItWork from "@/components/SectionHowItWork/SectionHowItWork";
 import BackgroundSection from "@/components/BackgroundSection/BackgroundSection";
-import SectionPromo1 from "@/components/SectionPromo1";
 import SectionHero2 from "@/components/section-heros/SectionHero2";
-import SectionSliderLargeProduct from "@/components/slide-products/SectionSliderLargeProduct";
+import SectionSliderLargeProduct from "@/components/slide-products/section-slider-large-product";
 import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
 import DiscoverMoreSlider from "@/components/DiscoverMoreSlider";
-import SectionGridMoreExplore from "@/components/SectionGridMoreExplore/SectionGridMoreExplore";
-import SectionPromo2 from "@/components/SectionPromo2";
 import SectionSliderCategories from "@/components/SectionSliderCategories/SectionSliderCategories";
 import SectionPromo3 from "@/components/SectionPromo3";
 import SectionClientSay from "@/components/SectionClientSay/SectionClientSay";
 import Heading from "@/components/Heading/Heading";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import { PRODUCTS, SPORT_PRODUCTS } from "@/data/data";
 import SectionGridFeatureItems from "@/components/SectionGridFeatureItems";
 import SectionMagazine5 from "@/app/blog/SectionMagazine5";
 import { exampleItems } from "@/enum/constants";
 import DefaultLayout from "@/layout/default-layout";
+import SectionGridCategories from "@/components/section-grid-categories/section-grid-categories";
 
 function PageHome() {
   return (
@@ -36,25 +33,26 @@ function PageHome() {
           <SectionHowItWork />
         </div>
 
-        <SectionPromo1 />
+        <SectionSliderLargeProduct cardStyle="style2" />
+
+        {/* <SectionPromo1 /> */}
 
         <div className="relative">
           <BackgroundSection />
-          <SectionGridMoreExplore />
+          <SectionGridCategories />
         </div>
 
         <SectionSliderProductCard
+          data={exampleItems.items}
           heading="Best Sellers"
           subHeading="Best selling of the month"
         />
 
-        <SectionPromo2 />
-
-        <SectionSliderLargeProduct cardStyle="style2" />
+        {/* <SectionPromo2 /> */}
 
         <SectionSliderCategories />
 
-        <SectionPromo3 />
+        {/* <SectionPromo3 /> */}
 
         <SectionGridFeatureItems />
 

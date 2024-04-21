@@ -6,10 +6,10 @@ import React from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
-import AccountOrderTabs from "@/components/account-orders/account-order-tabs";
 import { storeSellerTabs } from "@/enum/constants";
 import { renderSearchIcon } from "@/enum/icons";
 import { useRouter } from "next/navigation";
+import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
 
 const SingleStoreScreen = () => {
   const router = useRouter();
@@ -90,12 +90,7 @@ const SingleStoreScreen = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-5 gap-[30px] items-start">
-        <div className="col-span-3">
-          <AccountOrderTabs tabs={storeSellerTabs} />
-        </div>
-        <div className="col-span-2">{renderSearchForm()}</div>
-      </div>
+      <ScrollTabs tabs={storeSellerTabs} hasSearchTab />
     </DefaultLayout>
   );
 };

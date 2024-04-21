@@ -1,10 +1,10 @@
 import React from "react";
 import SectionHowItWork from "@/components/SectionHowItWork/SectionHowItWork";
 import BackgroundSection from "@/components/BackgroundSection/BackgroundSection";
-import SectionSliderLargeProduct from "@/components/slide-products/SectionSliderLargeProduct";
+import SectionSliderLargeProduct from "@/components/slide-products/section-slider-large-product";
 import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
-import SectionGridMoreExplore from "@/components/SectionGridMoreExplore/SectionGridMoreExplore";
-import { DEMO_MORE_EXPLORE_DATA_2 } from "@/components/SectionGridMoreExplore/data";
+import SectionGridMoreExplore from "@/components/section-grid-categories/section-grid-categories";
+import { DEMO_MORE_EXPLORE_DATA_2 } from "@/components/section-grid-categories/data";
 import SectionPromo2 from "@/components/SectionPromo2";
 import SectionHero3 from "@/components/section-heros/SectionHero3";
 import SectionPromo1 from "@/components/SectionPromo1";

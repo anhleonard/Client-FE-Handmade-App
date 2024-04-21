@@ -1,6 +1,8 @@
 import { COLORS } from "@/enum/colors";
 import { CustomTab } from "@/enum/defined-types";
-import { Box, Tab, Tabs, tabsClasses } from "@mui/material";
+import { renderSearchIcon } from "@/enum/icons";
+import { Box, Tab, Tabs, Typography, tabsClasses } from "@mui/material";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface TabPanelProps {
@@ -10,11 +12,16 @@ interface TabPanelProps {
   value: number;
 }
 
-type AccountOrderTabsProps = {
+type VerticalScrollTabsProps = {
   tabs: CustomTab[];
+  hasSearchTab?: boolean;
 };
 
-const AccountOrderTabs = ({ tabs }: AccountOrderTabsProps) => {
+const VerticalScrollTabs = ({
+  tabs,
+  hasSearchTab = false,
+}: VerticalScrollTabsProps) => {
+  const router = useRouter();
   const [value, setValue] = useState(1);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -28,8 +35,8 @@ const AccountOrderTabs = ({ tabs }: AccountOrderTabsProps) => {
       <div
         role="tabpanel"
         hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
+        id={`vertical-tabpanel-${index}`}
+        aria-labelledby={`vertical-tab-${index}`}
         {...other}
       >
         {value === index && <div>{children}</div>}
@@ -39,24 +46,14 @@ const AccountOrderTabs = ({ tabs }: AccountOrderTabsProps) => {
 
   return (
     <div className="w-full">
-      <Box
-        sx={{
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{
-            width: "100%",
-          }}
-        >
+      <div className="w-full md:grid md:grid-cols-4 gap-8">
+        <div className="md:col-span-1 w-full">
           <Tabs
+            orientation="vertical"
             value={value}
             onChange={handleChange}
             aria-label="product-screen-tabs"
-            variant="scrollable"
-            scrollButtons
             sx={{
-              backgroundColor: COLORS.grey.c10,
               [`& .${tabsClasses.scrollButtons}`]: {
                 "&.Mui-disabled": { opacity: 0.2 },
                 "&.Mui-selected": {
@@ -66,11 +63,14 @@ const AccountOrderTabs = ({ tabs }: AccountOrderTabsProps) => {
                 },
               },
               width: "100%",
+              "& .MuiTabs-flexContainer": {
+                gap: "16px",
+              },
+              maxWidth: "none",
             }}
             TabIndicatorProps={{
               sx: {
-                backgroundColor: COLORS.primary.c900,
-                height: 0,
+                width: 0,
               },
             }}
           >
@@ -81,31 +81,31 @@ const AccountOrderTabs = ({ tabs }: AccountOrderTabsProps) => {
                   label={item.label}
                   value={item.value}
                   sx={{
-                    color: COLORS.grey.c900,
                     textTransform: "none",
-                    width: "175px",
                     "&.Mui-selected": {
                       color: COLORS.primary.c900,
                       backgroundColor: COLORS.primary.c100,
                       borderRadius: "16px",
                     },
                   }}
-                  className="duration-500 text-[14px] font-semibold"
+                  className="duration-500 text-[14px] font-semibold bg-grey-c10 rounded-2xl"
                 />
               );
             })}
           </Tabs>
-        </Box>
-        {tabs.map((item) => {
-          return (
-            <TabPanel key={item.value} value={value} index={item.value}>
-              <div className="my-6">{item.content}</div>
-            </TabPanel>
-          );
-        })}
-      </Box>
+        </div>
+        <div className="md:col-span-3">
+          {tabs.map((item) => {
+            return (
+              <TabPanel key={item.value} value={value} index={item.value}>
+                <div className="my-6 md:my-0">{item.content}</div>
+              </TabPanel>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default AccountOrderTabs;
+export default VerticalScrollTabs;

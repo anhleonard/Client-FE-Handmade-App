@@ -42,12 +42,20 @@ export const DATA_sizes = [
   { name: "2XL" },
 ];
 
+// export const DATA_sortOrderRadios = [
+//   { name: "Most Popular", id: "Most-Popular" },
+//   { name: "Best Rating", id: "Best-Rating" },
+//   { name: "Newest", id: "Newest" },
+//   { name: "Price Low - Hight", id: "Price-low-hight" },
+//   { name: "Price Hight - Low", id: "Price-hight-low" },
+// ];
+
 export const DATA_sortOrderRadios = [
-  { name: "Most Popular", id: "Most-Popular" },
-  { name: "Best Rating", id: "Best-Rating" },
-  { name: "Newest", id: "Newest" },
-  { name: "Price Low - Hight", id: "Price-low-hight" },
-  { name: "Price Hight - Low", id: "Price-hight-low" },
+  { name: "Phổ biến", id: "MOST_POPULAR" },
+  { name: "Hàng mới", id: "NEWEST" },
+  { name: "Đánh giá cao", id: "BEST_RATING" },
+  { name: "Giá thấp đến cao", id: "PRICE_LOW_HIGH" },
+  { name: "Giá cao đến thấp", id: "PRICE_HIGH_LOW" },
 ];
 
-export const PRICE_RANGE = [5000, 100000000];
+export const PRICE_RANGE = [5000, 10000000];

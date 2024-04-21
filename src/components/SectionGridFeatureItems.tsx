@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import HeaderFilterSection from "@/components/HeaderFilterSection";
+import StoreFilterSection from "@/components/filters/store-filter-section";
 import ProductCard from "@/components/products/product-card";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import { Product, PRODUCTS } from "@/data/data";
@@ -14,7 +14,7 @@ const SectionGridFeatureItems: FC<SectionGridFeatureItemsProps> = ({
 }) => {
   return (
     <div className="nc-SectionGridFeatureItems relative">
-      <HeaderFilterSection />
+      <StoreFilterSection />
       <div
         className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 `}
       >

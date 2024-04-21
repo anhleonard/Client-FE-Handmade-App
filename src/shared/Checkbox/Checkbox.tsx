@@ -16,26 +16,23 @@ const Checkbox: FC<CheckboxProps> = ({
   label = "",
   name,
   className = "",
-  sizeClassName = "w-6 h-6",
+  sizeClassName = "w-5 h-5",
   labelClassName = "",
   defaultChecked,
   onChange,
 }) => {
   return (
-    <div className={`flex text-sm sm:text-base ${className}`}>
+    <div className={`flex items-center text-sm sm:text-base ${className}`}>
       <input
         id={name}
         name={name}
         type="checkbox"
-        className={`focus:ring-action-primary text-primary-500 rounded border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-500 focus:ring-primary-500 ${sizeClassName}`}
+        className={`block no-ring focus:ring-action-primary transition duration-200 text-primary-c800 rounded border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-c800 focus:ring-primary-c800 ${sizeClassName}`}
         defaultChecked={defaultChecked}
         onChange={(e) => onChange && onChange(e.target.checked)}
       />
       {label && (
-        <label
-          htmlFor={name}
-          className="pl-2.5 sm:pl-3.5 flex flex-col flex-1 justify-center select-none"
-        >
+        <div className="pl-2.5 sm:pl-3.5 flex flex-col flex-1 justify-center select-none">
           <span
             className={`text-slate-900 dark:text-slate-100 ${labelClassName} ${
               !!subLabel ? "-mt-0.5" : ""
@@ -48,7 +45,7 @@ const Checkbox: FC<CheckboxProps> = ({
               {subLabel}
             </p>
           )}
-        </label>
+        </div>
       )}
     </div>
   );

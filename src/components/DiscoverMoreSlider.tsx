@@ -2,10 +2,10 @@
 
 import React, { useEffect, useId, useRef, useState } from "react";
 import Heading from "./Heading/Heading";
-import CardCategory3 from "./CardCategories/CardCategory3";
+import CardCategory3 from "./card-categories/CardCategory3";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import { CATS_DISCOVER } from "./CardCategories/data";
+import { CATS_DISCOVER } from "./card-categories/data";
 
 const DiscoverMoreSlider = () => {
   const sliderRef = useRef(null);
