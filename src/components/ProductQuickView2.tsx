@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import detail1JPG from "@/images/products/detail1.jpg";
 import detail2JPG from "@/images/products/detail2.jpg";
 import detail3JPG from "@/images/products/detail3.jpg";
-import NotifyAddTocart from "./NotifyAddTocart";
+import NotifyAddTocart from "./cart/notify-add-to-cart";
 import Image from "next/image";
 import Link from "next/link";
 

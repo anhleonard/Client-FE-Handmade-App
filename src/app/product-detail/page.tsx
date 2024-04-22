@@ -24,7 +24,7 @@ import ReviewItem from "@/components/reviews/review-item";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import SectionPromo2 from "@/components/SectionPromo2";
 import ModalViewAllReviews from "../../components/reviews/all-reviews-modal";
-import NotifyAddTocart from "@/components/NotifyAddTocart";
+import NotifyAddTocart from "@/components/cart/notify-add-to-cart";
 import Image from "next/image";
 import AccordionInfo from "@/components/product-detail/accordio-info";
 import { formatCurrency } from "@/enum/functions";
@@ -36,6 +36,8 @@ import { COLORS } from "@/enum/colors";
 import ProductReviews from "@/components/reviews/product-reviews";
 import { types } from "@/enum/fake-datas";
 import DefaultLayout from "@/layout/default-layout";
+import { Avatar } from "@mui/material";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
 
 const colors = [
   { name: "Xanh lá", isSoldOut: false },
@@ -58,7 +60,7 @@ const ProductDetailPage = () => {
 
   //initial for variants
   const initialSelectedVariants = types.map((type) => ({
-    [type.label]: "",
+    [type.label]: type.variants[0].name,
   }));
 
   const [selectedVariants, setSelectedVariants] = useState(
@@ -79,8 +81,6 @@ const ProductDetailPage = () => {
   };
   //end variants
 
-  const { sizes, variants, status, allOfSizes, image } = PRODUCTS[0];
-  //
   const [qualitySelected, setQualitySelected] = useState(1);
 
   //
@@ -88,7 +88,7 @@ const ProductDetailPage = () => {
     toast.custom(
       (t) => (
         <NotifyAddTocart
-          productImage={image}
+          productImage={currentImage}
           qualitySelected={qualitySelected}
           show={t.visible}
           selectedVariants={selectedVariants}
@@ -138,7 +138,7 @@ const ProductDetailPage = () => {
           <div className="flex flex-col gap-4">
             {types.map((type, index) => (
               <RenderVariants
-                key={index}
+                key={type.label}
                 label={type.label}
                 variants={type.variants}
                 onChanged={(item) =>
@@ -207,9 +207,9 @@ const ProductDetailPage = () => {
     <DefaultLayout>
       <div className="md:flex md:gap-10">
         {/* CONTENT */}
-        <div className="w-full lg:w-[40%] mb-10 md:mb-0">
-          {/* HEADING */}
-          <div className="relative">
+        <div className="w-full lg:w-[40%] mb-10 md:mb-0 space-y-8">
+          {/* RENDER IMAGES */}
+          <div>
             <div className="aspect-w-16 aspect-h-16 relative">
               <Image
                 fill
@@ -219,29 +219,42 @@ const ProductDetailPage = () => {
                 alt="product detail 1"
               />
             </div>
+            <div className="grid grid-cols-8 gap-2.5 mt-2.5">
+              {imageUrls.map((url, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`transition duration-300 aspect-w-1 aspect-h-1 relative hover:cursor-pointer hover:scale-105 hover:opacity-80 overflow-hidden rounded-lg ${
+                      currentImage === imageUrls[index]
+                        ? "border-2 border-primary-c600"
+                        : ""
+                    }`}
+                    onClick={() => setCurrentImage(imageUrls[index])}
+                  >
+                    <Image
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                      fill
+                      src={url}
+                      className="w-full object-cover absolute"
+                      alt="product detail 1"
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <div className="grid grid-cols-8 gap-2.5 mt-2.5">
-            {imageUrls.map((url, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`transition duration-300 aspect-w-1 aspect-h-1 relative hover:cursor-pointer hover:scale-105 hover:opacity-80 overflow-hidden rounded-lg ${
-                    currentImage === imageUrls[index]
-                      ? "border-2 border-primary-c600"
-                      : ""
-                  }`}
-                  onClick={() => setCurrentImage(imageUrls[index])}
-                >
-                  <Image
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                    fill
-                    src={url}
-                    className="w-full object-cover absolute"
-                    alt="product detail 1"
-                  />
-                </div>
-              );
-            })}
+          <hr className="border-slate-200 dark:border-slate-700" />
+          <div className="flex items-center gap-3">
+            <Avatar src={imageUrls[0]} sx={{ width: 50, height: 50 }}></Avatar>
+            <div>
+              <div className="font-bold">Tiệm nhà len</div>
+              <div className="flex items-center gap-1 font-medium">
+                <div className="text-sm">4.7/5</div>
+                <StarRoundedIcon
+                  sx={{ fontSize: 18, color: COLORS.primary.c900 }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 

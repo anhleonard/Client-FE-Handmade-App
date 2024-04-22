@@ -6,6 +6,7 @@ import Image, { StaticImageData } from "next/image";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import { COLORS } from "@/enum/colors";
 import { formatCurrency } from "@/enum/functions";
+import { useRouter } from "next/navigation";
 
 interface Props {
   show: boolean;
@@ -14,7 +15,7 @@ interface Props {
   selectedVariants: any;
 }
 
-const NotifyAddTocart: FC<Props> = ({
+const NotifyAddToCart: FC<Props> = ({
   show,
   productImage,
   qualitySelected,
@@ -26,10 +27,12 @@ const NotifyAddTocart: FC<Props> = ({
     (item: any) => Object.values(item)[0]
   );
 
+  const router = useRouter();
+
   const renderProductCartOnNotify = () => {
     return (
       <div className="flex">
-        <div className="h-24 w-24 overflow-hidden rounded-lg bg-grey-c10">
+        <div className="h-19 w-19 rounded-lg overflow-hidden">
           <Image
             width={80}
             height={80}
@@ -68,7 +71,8 @@ const NotifyAddTocart: FC<Props> = ({
             <div className="flex">
               <button
                 type="button"
-                className="font-medium text-primary-6000 dark:text-primary-500 hover:bg-grey-c50 px-2.5 py-1 rounded-full"
+                className="font-medium text-primary-6000 dark:text-primary-500 hover:bg-grey-c50 px-2.5 py-1.5 rounded-full transition duration-200"
+                onClick={() => router.push("/cart")}
               >
                 Xem giỏ hàng
               </button>
@@ -103,4 +107,4 @@ const NotifyAddTocart: FC<Props> = ({
   );
 };
 
-export default NotifyAddTocart;
+export default NotifyAddToCart;

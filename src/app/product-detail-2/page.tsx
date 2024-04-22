@@ -21,7 +21,7 @@ import BagIcon from "@/components/BagIcon";
 import toast from "react-hot-toast";
 import { StarIcon } from "@heroicons/react/24/solid";
 import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
-import NotifyAddTocart from "@/components/NotifyAddTocart";
+import NotifyAddTocart from "@/components/cart/notify-add-to-cart";
 import Image, { StaticImageData } from "next/image";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
 import AccordionInfo from "@/components/product-detail/accordio-info";
