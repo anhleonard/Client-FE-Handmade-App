@@ -71,7 +71,7 @@ const CATEGORIES: SolutionItem[] = [
 
 export default function DropdownCategories() {
   return (
-    <div className="DropdownCategories">
+    <div>
       <Popover className="relative">
         {({ open, close }) => (
           <>
@@ -81,7 +81,7 @@ export default function DropdownCategories() {
             >
               <span>Shops</span>
               <ChevronDownIcon
-                className={`${open ? "-rotate-180" : "text-opacity-70 "}
+                className={`${open ? "-rotate-180" : "text-opacity-70"}
                   ml-2 h-5 w-5 text-neutral-700 group-hover:text-opacity-80 transition ease-in-out duration-150 `}
                 aria-hidden="true"
               />
@@ -95,9 +95,9 @@ export default function DropdownCategories() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute z-40 w-80 mt-3.5 transform -translate-x-1/2 left-1/2 sm:px-0">
-                <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid grid-cols-1 gap-5 bg-white dark:bg-neutral-800 p-7 ">
+              <Popover.Panel className="absolute z-40 mt-1 transform -translate-x-1/2 left-1/2 sm:px-0">
+                <div className="overflow-hidden rounded-lg shadow-lg">
+                  <div className="relative bg-white dark:bg-neutral-800">
                     {CATEGORIES.map((item, index) => (
                       <Link
                         key={index}
@@ -109,10 +109,10 @@ export default function DropdownCategories() {
                       >
                         <div
                           dangerouslySetInnerHTML={{ __html: item.icon }}
-                          className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-primary-50 rounded-md text-primary-500 sm:h-12 sm:w-12"
+                          className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-primary-c50 rounded-md text-primary-c500 sm:h-12 sm:w-12"
                         ></div>
                         <div className="ml-4 space-y-0.5">
-                          <p className="text-sm font-medium ">{item.name}</p>
+                          <p className="text-sm font-medium">{item.name}</p>
                           <p className="text-xs text-neutral-500 dark:text-neutral-300">
                             {item.description}
                           </p>
@@ -127,7 +127,7 @@ export default function DropdownCategories() {
                       className="flow-root px-2 py-2 space-y-0.5 transition duration-150 ease-in-out rounded-md focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                     >
                       <div className="flex items-center">
-                        <span className="text-sm font-medium ">
+                        <span className="text-sm font-medium">
                           Go to our shop
                         </span>
                       </div>

@@ -14,10 +14,10 @@ export default function AvatarDropdown() {
         {({ open, close }) => (
           <>
             <Popover.Button
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`}
+              className={`w-10 h-10 sm:w-12 sm:h-12 text-black rounded-full dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`}
             >
               <svg
-                className=" w-6 h-6"
+                className=" w-4.5 h-4.5"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -48,13 +48,13 @@ export default function AvatarDropdown() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
-                <div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="overflow-hidden rounded-xl shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
                     <div className="flex items-center space-x-3">
-                      <Avatar imgUrl={avatarImgs[7]} sizeClass="w-12 h-12" />
+                      <Avatar imgUrl={avatarImgs[7]} sizeClass="w-11 h-11" />
 
                       <div className="flex-grow">
-                        <h4 className="font-semibold">Eden Smith</h4>
+                        <h4 className="font-semibold">Anh Leonard</h4>
                         <p className="text-xs mt-0.5">Los Angeles, CA</p>
                       </div>
                     </div>
@@ -92,13 +92,15 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"My Account"}</p>
+                        <p className="text-sm font-medium ">
+                          {"Tài khoản của tôi"}
+                        </p>
                       </div>
                     </Link>
 
                     {/* ------------------ 2 --------------------- */}
                     <Link
-                      href={"/checkout"}
+                      href={"/account-order"}
                       className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                       onClick={() => close()}
                     >
@@ -144,7 +146,9 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"My Order"}</p>
+                        <p className="text-sm font-medium ">
+                          {"Đơn hàng của tôi"}
+                        </p>
                       </div>
                     </Link>
 
@@ -171,7 +175,9 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"Wishlist"}</p>
+                        <p className="text-sm font-medium ">
+                          {"Sản phẩm yêu thích"}
+                        </p>
                       </div>
                     </Link>
 
@@ -277,7 +283,9 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"Help"}</p>
+                        <p className="text-sm font-medium ">
+                          {"Trung tâm hỗ trợ"}
+                        </p>
                       </div>
                     </Link>
 
@@ -319,7 +327,7 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"Log out"}</p>
+                        <p className="text-sm font-medium ">{"Đăng xuất"}</p>
                       </div>
                     </Link>
                   </div>

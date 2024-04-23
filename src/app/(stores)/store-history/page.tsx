@@ -15,7 +15,7 @@ const StoreHistory = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8">
+    <div className="grid md:grid-cols-2 gap-8 md:pt-4">
       <div className="grid md:grid-cols-2 border-b-[1px] md:border-r-[1px] md:border-b-0 border-grey-c50 gap-6 pb-6 md:gap-0 md:pb-0">
         <div className="flex flex-col gap-1 col-span-1 items-center justify-center">
           <div className="font-medium text-lg text-grey-c900 flex flex-row items-center gap-2">

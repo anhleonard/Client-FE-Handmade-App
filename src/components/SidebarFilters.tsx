@@ -150,7 +150,7 @@ const SidebarFilters = () => {
   // OK
   const renderTabsPriceRage = () => {
     return (
-      <div className="relative flex flex-col py-8 space-y-5 pr-3">
+      <div className="relative flex flex-col py-8 space-y-5">
         <div className="space-y-5">
           <span className="font-semibold">Price range</span>
           <Slider
@@ -166,7 +166,7 @@ const SidebarFilters = () => {
           />
         </div>
 
-        <div className="flex justify-between space-x-5">
+        <div className="flex justify-between">
           <div>
             <label
               htmlFor="minPrice"
@@ -175,15 +175,12 @@ const SidebarFilters = () => {
               Min price
             </label>
             <div className="mt-1 relative rounded-md">
-              <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                $
-              </span>
               <input
                 type="text"
                 name="minPrice"
                 disabled
                 id="minPrice"
-                className="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                className="block sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
                 value={rangePrices[0]}
               />
             </div>
@@ -196,15 +193,12 @@ const SidebarFilters = () => {
               Max price
             </label>
             <div className="mt-1 relative rounded-md">
-              <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                $
-              </span>
               <input
                 type="text"
                 disabled
                 name="maxPrice"
                 id="maxPrice"
-                className="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                className="block sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
                 value={rangePrices[1]}
               />
             </div>

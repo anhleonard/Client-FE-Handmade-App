@@ -3,13 +3,17 @@
 import React, { createRef, FC, useState } from "react";
 import Logo from "@/shared/Logo/Logo";
 import MenuBar from "@/shared/MenuBar/MenuBar";
-import AvatarDropdown from "./AvatarDropdown";
+import AvatarDropdown from "./avatar-dropdown";
 import Navigation from "@/shared/Navigation/Navigation";
-import CartDropdown from "./CartDropdown";
+import CartDropdown from "./cart-dropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { renderSearchIcon } from "@/enum/icons";
+import { Badge } from "@mui/material";
 
 export interface MainNav2LoggedProps {}
+
+//không sử dụng
 
 const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
   const inputRef = createRef<HTMLInputElement>();
@@ -54,7 +58,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
         }}
       >
         <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1.5 px-4.5 py-1.5 h-full rounded-2xl">
-          {renderMagnifyingGlassIcon()}
+          {renderSearchIcon()}
           <input
             ref={inputRef}
             type="text"
@@ -97,6 +101,9 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
           )}
           <AvatarDropdown />
           <CartDropdown />
+          {/* <Badge color="secondary" badgeContent={100}>
+            hello
+          </Badge> */}
         </div>
       </div>
     );

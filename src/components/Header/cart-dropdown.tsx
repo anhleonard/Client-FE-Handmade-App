@@ -72,11 +72,11 @@ export default function CartDropdown() {
                 ${open ? "" : "text-opacity-90"}
                  group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}
           >
-            <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-              <span className="mt-[1px]">3</span>
+            <div className="w-5 h-5 bg-support-c500 text-white flex items-center justify-center bg-primary-500 absolute top-0 right-0 rounded-full text-[10px] leading-none font-medium">
+              <span>3</span>
             </div>
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +115,7 @@ export default function CartDropdown() {
               />
             </svg>
 
-            <Link className="block md:hidden absolute inset-0" href={"/cart"} />
+            <Link className="block absolute inset-0" href={"/cart"} />
           </Popover.Button>
           <Transition
             as={Fragment}

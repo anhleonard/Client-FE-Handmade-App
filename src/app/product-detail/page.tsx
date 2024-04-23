@@ -38,6 +38,8 @@ import { types } from "@/enum/fake-datas";
 import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import { exampleItems } from "@/enum/constants";
+import Link from "next/link";
 
 const colors = [
   { name: "Xanh lá", isSoldOut: false },
@@ -244,15 +246,37 @@ const ProductDetailPage = () => {
             </div>
           </div>
           <hr className="border-slate-200 dark:border-slate-700" />
-          <div className="flex items-center gap-3">
-            <Avatar src={imageUrls[0]} sx={{ width: 50, height: 50 }}></Avatar>
+          <div className="flex items-start gap-3">
+            {/* seller avatar */}
+            <Avatar src={imageUrls[0]} sx={{ width: 45, height: 45 }}></Avatar>
+
             <div>
-              <div className="font-bold">Tiệm nhà len</div>
-              <div className="flex items-center gap-1 font-medium">
-                <div className="text-sm">4.7/5</div>
-                <StarRoundedIcon
-                  sx={{ fontSize: 18, color: COLORS.primary.c900 }}
-                />
+              {/* store information */}
+              <Link href={"/store/id"} className="hover:underline">
+                <div className="font-bold">Tiệm nhà len</div>
+              </Link>
+              <div className="flex items-center gap-6 font-medium text-sm">
+                <div className="flex items-center gap-1">
+                  <div>4.7/5</div>
+                  <StarRoundedIcon
+                    sx={{ fontSize: 18, color: COLORS.primary.c900 }}
+                  />
+                </div>
+                <div>Lượt theo dõi: 1234</div>
+                <div>Điểm uy tín: 1200</div>
+              </div>
+
+              {/* store action buttons */}
+              <div className="flex items-center gap-4 mt-3">
+                <Button
+                  className="!py-1.5 !px-3 !text-xs !font-normal !rounded-xl"
+                  color="info"
+                >
+                  Chat ngay
+                </Button>
+                <Button className="!py-1.5 !px-3 !text-xs !font-normal !rounded-xl">
+                  Theo dõi
+                </Button>
               </div>
             </div>
           </div>
@@ -276,16 +300,14 @@ const ProductDetailPage = () => {
 
         {/* OTHER SECTION */}
         <SectionSliderProductCard
-          heading="Customers also purchased"
-          subHeading=""
-          headingFontClassName="text-2xl font-semibold"
-          headingClassName="mb-10 text-neutral-900 dark:text-neutral-50"
+          data={exampleItems.items}
+          heading="Bán chạy nhất của shop"
         />
 
         {/* SECTION */}
-        <div className="pb-20 xl:pb-28 lg:pt-14">
+        {/* <div className="pb-20 xl:pb-28 lg:pt-14">
           <SectionPromo2 />
-        </div>
+        </div> */}
       </div>
     </DefaultLayout>
   );
