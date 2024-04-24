@@ -25,7 +25,7 @@ const Radio: FC<RadioProps> = ({
         id={id}
         name={name}
         type="radio"
-        className={`no-ring transition duration-200 focus:ring-action-primary text-primary-c800 rounded-full border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-c800 focus:ring-primary-c800 ${sizeClassName}`}
+        className={`no-ring cursor-pointer transition duration-200 focus:ring-action-primary text-primary-c800 rounded-full border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-c800 focus:ring-primary-c800 ${sizeClassName}`}
         onChange={(e) => onChange && onChange(e.target.value)}
         defaultChecked={defaultChecked}
         value={id}
@@ -33,7 +33,7 @@ const Radio: FC<RadioProps> = ({
       {label && (
         <label
           htmlFor={id}
-          className="pl-2.5 sm:pl-3 block text-slate-900 dark:text-slate-100 select-none"
+          className="pl-2.5 sm:pl-3 block text-slate-900 dark:text-slate-100 select-none cursor-pointer"
           dangerouslySetInnerHTML={{ __html: label }}
         ></label>
       )}

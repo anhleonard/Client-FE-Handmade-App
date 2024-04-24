@@ -110,7 +110,7 @@ const MyTextField: React.FC<MyTextFieldProps> = ({
               value={value}
               defaultValue={defaultValue}
               disabled={disabled}
-              className="no-ring w-full bg-transparent outline-none border-none p-0"
+              className="no-ring w-full bg-transparent outline-none border-none p-0 placeholder:text-grey-c200"
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
               min={minNumber}

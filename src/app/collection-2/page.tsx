@@ -3,7 +3,7 @@ import SectionSliderCollections from "@/components/slide-products/section-slider
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/products/product-card";
 import { PRODUCTS } from "@/data/data";
-import SidebarFilters from "@/components/SidebarFilters";
+import SidebarFilters from "@/components/filters/sidebar-auction-filters";
 import DefaultLayout from "@/layout/default-layout";
 import ChildHeading from "@/layout/child-heading";
 

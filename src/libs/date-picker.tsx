@@ -62,7 +62,7 @@ const MyDatePicker: React.FC<MyDatePickerProps> = ({
           disabled={disabled}
           ref={inputRef}
           placeholder={placeholder ?? "yyyy/mm/dd"}
-          className={`w-full cursor-pointer rounded-2xl border-[2px] border-grey-c50 px-3 py-3 text-base font-normal text-grey-c900 outline-none hover:border-primary-c200 focus:!border-primary-c400 disabled:!cursor-default disabled:border-grey-c200 disabled:bg-grey-c100 disabled:text-grey-c700 ${
+          className={`no-ring w-full cursor-pointer rounded-2xl border-[2px] border-grey-c50 px-3 py-3 text-base font-normal text-grey-c900 outline-none hover:border-primary-c200 focus:!border-primary-c400 disabled:!cursor-default disabled:border-grey-c200 disabled:bg-grey-c100 disabled:text-grey-c700 ${
             error
               ? "border-support-c500 !bg-support-c10 !font-medium text-support-c500 placeholder-support-c200 hover:!border-support-c500 focus:!border-support-c500"
               : ""

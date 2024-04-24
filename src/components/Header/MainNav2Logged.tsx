@@ -9,7 +9,6 @@ import CartDropdown from "./cart-dropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { renderSearchIcon } from "@/enum/icons";
-import { Badge } from "@mui/material";
 
 export interface MainNav2LoggedProps {}
 

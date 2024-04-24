@@ -1,11 +1,15 @@
-import React, { FC } from "react";
+"use client";
+import React from "react";
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
-import Input from "@/shared/Input/Input";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
+import MyPrimaryTextField from "@/libs/primary-text-field";
+import MyRadioButtonsGroup from "@/libs/radio-button-group";
+import { genderTypes } from "@/enum/constants";
+import MyDatePicker from "@/libs/date-picker";
+import Button from "@/libs/button";
 
 const loginSocials = [
   {
@@ -27,66 +31,61 @@ const loginSocials = [
 
 const PageSignUp = () => {
   return (
-    <div className={`nc-PageSignUp `} data-nc-id="PageSignUp">
-      <div className="container mb-24 lg:mb-32">
-        <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-          Signup
-        </h2>
-        <div className="max-w-md mx-auto space-y-6 ">
-          <div className="grid gap-3">
-            {loginSocials.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                className=" flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
-              >
-                <Image
-                  sizes="40px"
-                  className="flex-shrink-0"
-                  src={item.icon}
-                  alt={item.name}
-                />
-                <h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
-                  {item.name}
-                </h3>
-              </a>
-            ))}
+    <div className="bg-primary-c50 flex items-center justify-center py-10">
+      <div className="md:px-26 lg:px-16 w-[80vw] h-[80vh]">
+        <div className="grid lg:grid-cols-2 w-full h-full rounded-lg overflow-hidden">
+          <div className="lg:block hidden relative col-span-1 w-full h-full">
+            <Image
+              src="/images/bg-sign-up.svg"
+              alt="bg-signup"
+              fill
+              objectFit="cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-l from-white to-transparent"></div>
           </div>
-          {/* OR */}
-          <div className="relative text-center">
-            <span className="relative z-10 inline-block px-4 font-medium text-sm bg-white dark:text-neutral-400 dark:bg-neutral-900">
-              OR
-            </span>
-            <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
-          </div>
-          {/* FORM */}
-          <form className="grid grid-cols-1 gap-6" action="#" method="post">
-            <label className="block">
-              <span className="text-neutral-800 dark:text-neutral-200">
-                Email address
-              </span>
-              <Input
-                type="email"
-                placeholder="example@example.com"
-                className="mt-1"
+          <div className="bg-white px-12">
+            <h2 className="my-20 flex items-center text-2xl leading-[115%] md:text-3xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+              Đăng ký
+            </h2>
+            <div className="space-y-6 ">
+              <MyPrimaryTextField
+                id={Math.random().toString()}
+                placeholder="Họ"
               />
-            </label>
-            <label className="block">
-              <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
-                Password
-              </span>
-              <Input type="password" className="mt-1" />
-            </label>
-            <ButtonPrimary type="submit">Continue</ButtonPrimary>
-          </form>
 
-          {/* ==== */}
-          <span className="block text-center text-neutral-700 dark:text-neutral-300">
-            Already have an account? {` `}
-            <Link className="text-green-600" href="/login">
-              Sign in
-            </Link>
-          </span>
+              <MyPrimaryTextField
+                id={Math.random().toString()}
+                placeholder="Tên"
+              />
+
+              <MyRadioButtonsGroup
+                options={genderTypes}
+                defaultValue={genderTypes[0].value}
+              />
+
+              <MyDatePicker placeholder="yyyy/mm/dd" />
+
+              <MyPrimaryTextField
+                id={Math.random().toString()}
+                placeholder="Email"
+                type="email"
+              />
+
+              <MyPrimaryTextField
+                id={Math.random().toString()}
+                placeholder="Mật khẩu"
+              />
+
+              <Button className="!w-full">Đăng ký</Button>
+
+              <span className="block text-center text-neutral-700 dark:text-neutral-300">
+                Already have an account? {` `}
+                <Link className="text-green-600" href="/login">
+                  Sign in
+                </Link>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ interface MyPrimaryTextFieldProps {
   title?: string;
   placeholder?: string;
   isRequired?: boolean;
-  type?: "number" | "text" | "password";
+  type?: "number" | "text" | "password" | "email";
   disabled?: boolean;
   isError?: boolean;
   helperText?: string | null;
