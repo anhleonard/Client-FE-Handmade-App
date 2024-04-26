@@ -43,22 +43,13 @@ const AddAddressPage = () => {
             <div className="whitespace-nowrap">Đặt làm địa chỉ mặc định</div>
           </div>
         </div>
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-          <MyPrimaryTextField
-            id={Math.random().toString()}
-            title="Họ"
-            placeholder="Nguyễn"
-            className="w-full"
-            isRequired
-          />
-          <MyPrimaryTextField
-            id={Math.random().toString()}
-            title="Tên"
-            placeholder="Ngọc Anh"
-            className="w-full"
-            isRequired
-          />
-        </div>
+        <MyPrimaryTextField
+          id={Math.random().toString()}
+          title="Họ và tên"
+          placeholder="Nguyễn Văn A"
+          className="w-full"
+          isRequired
+        />
         <MyPrimaryTextField
           id={Math.random().toString()}
           title="Số điện thoại"

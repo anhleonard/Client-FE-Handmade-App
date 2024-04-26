@@ -11,51 +11,38 @@ import { genderTypes } from "@/enum/constants";
 import MyDatePicker from "@/libs/date-picker";
 import Button from "@/libs/button";
 
-const loginSocials = [
-  {
-    name: "Continue with Facebook",
-    href: "#",
-    icon: facebookSvg,
-  },
-  {
-    name: "Continue with Twitter",
-    href: "#",
-    icon: twitterSvg,
-  },
-  {
-    name: "Continue with Google",
-    href: "#",
-    icon: googleSvg,
-  },
-];
-
 const PageSignUp = () => {
   return (
-    <div className="bg-primary-c50 flex items-center justify-center py-10">
-      <div className="md:px-26 lg:px-16 w-[80vw] h-[80vh]">
+    <div className="bg-primary-c50 flex items-center justify-center py-8">
+      <div className="md:px-26 lg:px-16 w-[80vw] h-[90vh]">
         <div className="grid lg:grid-cols-2 w-full h-full rounded-lg overflow-hidden">
+          {/* left content */}
           <div className="lg:block hidden relative col-span-1 w-full h-full">
+            {/* image */}
             <Image
               src="/images/bg-sign-up.svg"
               alt="bg-signup"
               fill
               objectFit="cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-l from-white to-transparent"></div>
+
+            {/* lớp phủ trắng */}
+            <div className="w-1/2 absolute h-full top-0 right-0">
+              <div className="relative w-full h-full">
+                <div className="absolute inset-0 bg-gradient-to-l from-white to-transparent"></div>
+              </div>
+            </div>
           </div>
-          <div className="bg-white px-12">
-            <h2 className="my-20 flex items-center text-2xl leading-[115%] md:text-3xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+
+          {/* right content */}
+          <div className="bg-white px-12 flex flex-col gap-8 md:gap-6 justify-center">
+            <h2 className="flex items-center text-xl leading-[115%] md:text-2xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
               Đăng ký
             </h2>
-            <div className="space-y-6 ">
+            <div className="space-y-6">
               <MyPrimaryTextField
                 id={Math.random().toString()}
-                placeholder="Họ"
-              />
-
-              <MyPrimaryTextField
-                id={Math.random().toString()}
-                placeholder="Tên"
+                placeholder="Họ và tên"
               />
 
               <MyRadioButtonsGroup
@@ -73,17 +60,25 @@ const PageSignUp = () => {
 
               <MyPrimaryTextField
                 id={Math.random().toString()}
+                placeholder="Số điện thoại"
+                hasInputNumber
+                type="text"
+              />
+
+              <MyPrimaryTextField
+                id={Math.random().toString()}
                 placeholder="Mật khẩu"
               />
 
-              <Button className="!w-full">Đăng ký</Button>
-
-              <span className="block text-center text-neutral-700 dark:text-neutral-300">
-                Already have an account? {` `}
-                <Link className="text-green-600" href="/login">
-                  Sign in
+              <div className="flex flex-col gap-2 items-end">
+                <Button className="!w-full !py-3">Đăng ký</Button>
+                <Link
+                  href={"/login"}
+                  className="font-medium text-grey-c700 text-xs underline"
+                >
+                  Bạn đã có tài khoản?
                 </Link>
-              </span>
+              </div>
             </div>
           </div>
         </div>

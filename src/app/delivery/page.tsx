@@ -32,22 +32,13 @@ const DeliveryPage = () => {
               options={addressTypes}
               defaultValue={addressTypes[0].value}
             />
-            <div className="flex flex-row gap-5">
-              <MyPrimaryTextField
-                id={Math.random().toString()}
-                title="Họ"
-                placeholder="Nguyễn"
-                isRequired
-                className="w-1/2"
-              />
-              <MyPrimaryTextField
-                id={Math.random().toString()}
-                title="Tên"
-                placeholder="Ngọc Anh"
-                isRequired
-                className="w-1/2"
-              />
-            </div>
+            <MyPrimaryTextField
+              id={Math.random().toString()}
+              title="Họ và tên"
+              placeholder="Nguyễn Văn A"
+              isRequired
+              className="w-full"
+            />
             <MyPrimaryTextField
               id={Math.random().toString()}
               type="text"

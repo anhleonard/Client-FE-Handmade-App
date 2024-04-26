@@ -1,50 +1,117 @@
-import React from "react";
-import Input from "@/shared/Input/Input";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import MyPrimaryTextField from "@/libs/primary-text-field";
+import Button from "@/libs/button";
+import { useRouter } from "next/navigation";
 
-const PageForgotPass = ({}) => {
+const ForgotPassPage = () => {
+  const router = useRouter();
+  const [isSend, setIsSend] = useState(false);
+
   return (
-    <div className="container mb-24 lg:mb-32">
-      <header className="text-center max-w-2xl mx-auto - mb-14 sm:mb-16 lg:mb-20">
-        <h2 className="mt-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-          Forgot password
-        </h2>
-        <span className="block text-sm mt-4 text-neutral-700 sm:text-base dark:text-neutral-200">
-          Welcome to our Community
-        </span>
-      </header>
-
-      <div className="max-w-md mx-auto space-y-6">
-        {/* FORM */}
-        <form className="grid grid-cols-1 gap-6" action="#" method="post">
-          <label className="block">
-            <span className="text-neutral-800 dark:text-neutral-200">
-              Email address
-            </span>
-            <Input
-              type="email"
-              placeholder="example@example.com"
-              className="mt-1"
+    <div className="bg-primary-c50 flex items-center justify-center py-8">
+      <div className="md:px-26 lg:px-16 w-[80vw] h-[90vh]">
+        <div className="grid lg:grid-cols-2 w-full h-full rounded-lg overflow-hidden">
+          {/* left content */}
+          <div className="lg:block hidden relative col-span-1 w-full h-full">
+            {/* image */}
+            <Image
+              src="/images/bg-login.svg"
+              alt="bg-signup"
+              fill
+              objectFit="cover"
             />
-          </label>
-          <ButtonPrimary type="submit">Continue</ButtonPrimary>
-        </form>
 
-        {/* ==== */}
-        <span className="block text-center text-neutral-700 dark:text-neutral-300">
-          Go back for {` `}
-          <Link href="/login" className="text-green-600">
-            Sign in
-          </Link>
-          {` / `}
-          <Link href="/signup" className="text-green-600">
-            Sign up
-          </Link>
-        </span>
+            {/* lớp phủ trắng */}
+            <div className="w-1/2 absolute h-full top-0 right-0">
+              <div className="relative w-full h-full">
+                <div className="absolute inset-0 bg-gradient-to-l from-white to-transparent"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* right content */}
+          {!isSend && (
+            <div className="bg-white px-12 flex flex-col gap-8 md:gap-6 pt-16">
+              <h2 className="flex items-center text-xl leading-[115%] md:text-2xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+                Quên mật khẩu?
+              </h2>
+              <div className="space-y-6">
+                <MyPrimaryTextField
+                  id={Math.random().toString()}
+                  placeholder="Email"
+                  type="email"
+                />
+
+                <div className="flex flex-col gap-4 items-center pt-2 text-xs">
+                  <Button
+                    className="!w-full !py-3"
+                    onClick={() => setIsSend(true)}
+                  >
+                    Lấy lại mật khẩu
+                  </Button>
+                  <div className="flex flex-row items-center gap-1.5">
+                    <div>Quay lại trang</div>
+                    <Link
+                      href={"/signup"}
+                      className="font-medium text-blue-c900 text-xs underline"
+                    >
+                      Đăng ký
+                    </Link>
+                    <div>hoặc</div>
+                    <Link
+                      href={"/login"}
+                      className="font-medium text-blue-c900 text-xs underline"
+                    >
+                      Đăng nhập
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isSend && (
+            <div className="bg-white px-12 flex flex-col gap-8 md:gap-6 pt-16">
+              <h2 className="flex items-center text-xl leading-[115%] md:text-2xl md:leading-[115%] font-semibold text-success-c600 dark:text-neutral-100 justify-center">
+                Mật khẩu mới đã được gửi đến email
+              </h2>
+              <div className="text-center">anhleonard2022002@gmail.com</div>
+              <div className="space-y-6">
+                <div className="flex flex-col gap-4 items-center pt-2 text-xs">
+                  <Button
+                    className="!w-full !py-3"
+                    color="info"
+                    onClick={() => router.back()}
+                  >
+                    Đóng
+                  </Button>
+                  <div className="flex flex-row items-center gap-1.5">
+                    <div>Quay lại trang</div>
+                    <Link
+                      href={"/signup"}
+                      className="font-medium text-blue-c900 text-xs underline"
+                    >
+                      Đăng ký
+                    </Link>
+                    <div>hoặc</div>
+                    <Link
+                      href={"/login"}
+                      className="font-medium text-blue-c900 text-xs underline"
+                    >
+                      Đăng nhập
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default PageForgotPass;
+export default ForgotPassPage;

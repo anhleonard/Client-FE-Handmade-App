@@ -55,22 +55,13 @@ const EditAccountPage = () => {
             defaultValue={genderTypes[0].value}
           />
         </div>
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-          <MyPrimaryTextField
-            id={Math.random().toString()}
-            title="Họ"
-            placeholder="Nguyễn"
-            defaultValue={"Anh"}
-            className="w-full"
-          />
-          <MyPrimaryTextField
-            id={Math.random().toString()}
-            title="Tên"
-            placeholder="Ngọc Anh"
-            defaultValue={"Leonard"}
-            className="w-full"
-          />
-        </div>
+        <MyPrimaryTextField
+          id={Math.random().toString()}
+          title="Họ và tên"
+          placeholder="Nguyễn Văn A"
+          defaultValue={"Anh"}
+          className="w-full"
+        />
         <MyDatePicker
           label="Ngày tháng năm sinh"
           placeholder="yyyy/mm/dd"

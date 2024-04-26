@@ -77,7 +77,25 @@ const MainTabsHeader: FC<MainTabsHeaderProps> = ({ className = "" }) => {
 
           <div className="flex-1 flex items-center justify-end ">
             {!showSearchForm && <TemplatesDropdown />}
-            {/* {!showSearchForm && <LangDropdown />} */}
+
+            <div className="flex flex-row gap-2 items-center">
+              <div className="hidden md:block">
+                <Link href="/signup">
+                  <div className="text-sm font-semibold text-primary-c900 hover:cursor-pointer hover:text-blue-c900 transition duration-150 hover:bg-slate-100 px-3 py-2 rounded-full">
+                    Đăng ký
+                  </div>
+                </Link>
+              </div>
+
+              <div className="hidden md:block">
+                <Link href="/login">
+                  <div className="text-sm font-semibold text-blue-c900 hover:cursor-pointer hover:text-blue-c900 transition duration-150 hover:bg-slate-100 px-3 py-2 rounded-full">
+                    Đăng nhập
+                  </div>
+                </Link>
+              </div>
+            </div>
+
             {!showSearchForm && (
               <button
                 className="hidden lg:flex w-10 h-10 sm:w-12 sm:h-12 rounded-full text-black dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none items-center justify-center"
