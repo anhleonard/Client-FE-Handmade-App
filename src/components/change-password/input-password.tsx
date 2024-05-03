@@ -8,6 +8,7 @@ type InputPasswordProps = {
   title?: string;
   placeholder?: string;
   isError?: boolean;
+  isRequired?: boolean;
   helperText?: string | null;
   value?: string | number;
   onChange?: (value: string | number) => void;
@@ -17,6 +18,7 @@ const InputPassword = ({
   title,
   placeholder,
   isError,
+  isRequired = true,
   helperText,
   onChange,
 }: InputPasswordProps) => {
@@ -29,7 +31,7 @@ const InputPassword = ({
       className="!w-full"
       id={Math.random().toString()}
       title={title}
-      isRequired
+      isRequired={isRequired}
       placeholder={placeholder}
       isError={isError}
       helperText={helperText}

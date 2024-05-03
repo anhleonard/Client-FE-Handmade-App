@@ -10,6 +10,7 @@ import MyRadioButtonsGroup from "@/libs/radio-button-group";
 import { genderTypes } from "@/enum/constants";
 import MyDatePicker from "@/libs/date-picker";
 import Button from "@/libs/button";
+import InputPassword from "@/components/change-password/input-password";
 
 const PageSignUp = () => {
   return (
@@ -41,7 +42,7 @@ const PageSignUp = () => {
             </h2>
             <div className="space-y-6">
               <MyPrimaryTextField
-                id={Math.random().toString()}
+                id={Math.random().toString()} 
                 placeholder="Họ và tên"
               />
 
@@ -65,9 +66,9 @@ const PageSignUp = () => {
                 type="text"
               />
 
-              <MyPrimaryTextField
-                id={Math.random().toString()}
+              <InputPassword
                 placeholder="Mật khẩu"
+                onChange={(value) => console.log({ value })}
               />
 
               <div className="flex flex-col gap-2 items-end">

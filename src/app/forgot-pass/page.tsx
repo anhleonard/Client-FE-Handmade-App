@@ -81,11 +81,7 @@ const ForgotPassPage = () => {
               <div className="text-center">anhleonard2022002@gmail.com</div>
               <div className="space-y-6">
                 <div className="flex flex-col gap-4 items-center pt-2 text-xs">
-                  <Button
-                    className="!w-full !py-3"
-                    color="info"
-                    onClick={() => router.back()}
-                  >
+                  <Button className="!w-full !py-3" color="info">
                     Đóng
                   </Button>
                   <div className="flex flex-row items-center gap-1.5">
