@@ -389,7 +389,7 @@ const MySelect = forwardRef<HTMLDivElement, Props>(function Select(
             className={`
                                 absolute
                                 z-50
-                                max-h-48 
+                                max-h-[240px] 
                                 overflow-auto
                                 rounded-md border-[1px]
                                 bg-white 

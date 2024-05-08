@@ -1,20 +1,23 @@
 "use client";
+import storage from "@/apis/storage";
 import AccountCard from "@/components/account/account_card";
+import { getCurrentUser } from "@/enum/functions";
 import MyLabel from "@/libs/label";
 import MyTextAction from "@/libs/text-action";
 import { useRouter } from "next/navigation";
 
 const AccountPage = () => {
   const router = useRouter();
+  const user = getCurrentUser();
 
   const contentPerson = () => {
     return (
       <>
-        <div className="text-grey-c900 font-medium space-y-2">
-          <div>Tên: Anh Leonard</div>
-          <div>Số điện thoại: 0394356433</div>
-          <div>Email: anhleonard@gmail.com</div>
-          <div className="flex flex-row items-center justify-between">
+        <div className="text-grey-c900 font-medium space-y-2 w-full">
+          <div>Tên: {user?.name}</div>
+          <div>Số điện thoại: {user?.phoneNumber}</div>
+          <div>Email: {user?.email}</div>
+          <div className="flex flex-row items-center justify-between w-full">
             <MyTextAction
               label="Chỉnh sửa"
               onClick={() => router.push("/edit-account")}
@@ -33,7 +36,7 @@ const AccountPage = () => {
   const contentAddress = () => {
     return (
       <>
-        <div className="text-grey-c900 font-medium flex flex-col justify-between gap-2">
+        <div className="text-grey-c900 font-medium flex flex-col justify-between gap-2 w-full">
           <div>Bạn không có thiết lập địa chỉ vận chuyển mặc định.</div>
           <div className="invisible">
             Bạn không có thiết lập địa chỉ vận chuyển mặc định.
@@ -41,7 +44,7 @@ const AccountPage = () => {
           <div className="invisible">
             Bạn không có thiết lập địa chỉ vận chuyển mặc định.
           </div>
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-between w-full">
             <MyTextAction label="Thêm địa chỉ mới" />
             <MyTextAction label="Danh sách địa chỉ" color="text-blue-c900" />
           </div>

@@ -49,7 +49,7 @@ export default function MyRadioButtonsGroup({
         )}
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue={defaultValue}
+          value={defaultValue}
           name="radio-buttons-group"
           onChange={(e, value) => {
             if (onChanged) {
@@ -61,6 +61,7 @@ export default function MyRadioButtonsGroup({
           {options?.map((item) => {
             return (
               <FormControlLabel
+                key={item.value}
                 value={item.value}
                 disabled={disabled}
                 control={

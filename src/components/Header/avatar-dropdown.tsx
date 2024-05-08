@@ -2,12 +2,15 @@
 
 import { Popover, Transition } from "@/app/headlessui";
 import { avatarImgs } from "@/contains/fakeData";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import Avatar from "@/shared/Avatar/Avatar";
 import SwitchDarkMode2 from "@/shared/SwitchDarkMode/SwitchDarkMode2";
 import Link from "next/link";
+import { getCurrentUser } from "@/enum/functions";
 
 export default function AvatarDropdown() {
+  const user = getCurrentUser();
+
   return (
     <div className="AvatarDropdown ">
       <Popover className="relative">
@@ -54,7 +57,7 @@ export default function AvatarDropdown() {
                       <Avatar imgUrl={avatarImgs[7]} sizeClass="w-11 h-11" />
 
                       <div className="flex-grow">
-                        <h4 className="font-semibold">Anh Leonard</h4>
+                        <h4 className="font-semibold">{user?.name}</h4>
                         <p className="text-xs mt-0.5">Los Angeles, CA</p>
                       </div>
                     </div>

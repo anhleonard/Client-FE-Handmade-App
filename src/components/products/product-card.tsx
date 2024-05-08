@@ -63,7 +63,7 @@ const ProductCard: FC<ProductCardProps> = ({
           <Link href={"/product-detail"} className="block">
             <NcImage
               containerClassName="flex aspect-w-1 aspect-h-1 w-full h-0"
-              src={item?.image}
+              src={item?.image ? item?.image : "/images/bags/bag-1.jpg"}
               className="object-cover w-full h-full drop-shadow-xl"
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"

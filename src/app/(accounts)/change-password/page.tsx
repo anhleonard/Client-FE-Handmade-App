@@ -25,19 +25,19 @@ const EditPasswordPage = () => {
       </div>
       <div className="space-y-4">
         <InputPassword
+          id=""
           title="Mật khẩu hiện tại"
           placeholder="Nhập mật khẩu"
-          onChange={(value) => console.log({ value })}
         />
         <InputPassword
+          id=""
           title="Mật khẩu mới"
           placeholder="Nhập mật khẩu mới"
-          onChange={(value) => console.log({ value })}
         />
         <InputPassword
+          id=""
           title="Nhập lại mật khẩu mới"
           placeholder="Nhập lại mật khẩu vừa tạo"
-          onChange={(value) => console.log({ value })}
         />
         <div className="grid md:grid-cols-2 gap-6 md:gap-8 pt-2">
           <Button color="black" className="!w-full !py-3">

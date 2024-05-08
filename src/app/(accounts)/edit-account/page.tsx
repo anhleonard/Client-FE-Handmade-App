@@ -63,6 +63,8 @@ const EditAccountPage = () => {
           className="w-full"
         />
         <MyDatePicker
+          id=""
+          name=""
           label="Ngày tháng năm sinh"
           placeholder="yyyy/mm/dd"
           defaultDate={"2002/02/20"}

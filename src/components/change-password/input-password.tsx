@@ -5,22 +5,26 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { COLORS } from "@/enum/colors";
 
 type InputPasswordProps = {
+  id: string;
+  name?: string;
   title?: string;
   placeholder?: string;
   isError?: boolean;
   isRequired?: boolean;
   helperText?: string | null;
   value?: string | number;
-  onChange?: (value: string | number) => void;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement & HTMLInputElement>;
 };
 
 const InputPassword = ({
+  id,
+  name,
   title,
   placeholder,
   isError,
   isRequired = true,
   helperText,
-  onChange,
+  onChange = () => null,
 }: InputPasswordProps) => {
   const [type, setType] = useState<"number" | "password" | "text" | undefined>(
     "password"
@@ -29,18 +33,15 @@ const InputPassword = ({
   return (
     <MyTextField
       className="!w-full"
-      id={Math.random().toString()}
+      id={id}
+      name={name}
       title={title}
       isRequired={isRequired}
       placeholder={placeholder}
       isError={isError}
       helperText={helperText}
       type={type}
-      onChange={(value) => {
-        if (onChange) {
-          onChange(value);
-        }
-      }}
+      onChange={onChange}
       endIcon={
         type === "password" ? (
           <div onClick={() => setType("text")}>

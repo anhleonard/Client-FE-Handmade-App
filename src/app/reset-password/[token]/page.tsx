@@ -38,11 +38,15 @@ const ResetPasswordPage = () => {
             </h2>
             <div className="space-y-6">
               <InputPassword
+                id=""
+                name=""
                 placeholder="Nhập mật khẩu mới"
                 onChange={(value) => console.log({ value })}
               />
 
               <InputPassword
+                id=""
+                name=""
                 placeholder="Xác nhận mật khẩu mới"
                 onChange={(value) => console.log({ value })}
               />

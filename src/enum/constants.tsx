@@ -288,3 +288,7 @@ export const collectionStoreTabs = [
     content: <div>Collection 4</div>,
   },
 ];
+
+export enum AlertStatus {
+  ERROR = "error",
+}

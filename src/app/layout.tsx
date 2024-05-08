@@ -7,8 +7,12 @@ import "rc-slider/assets/index.css";
 import Footer from "@/shared/Footer/Footer";
 import SiteHeader from "@/app/SiteHeader";
 import CommonClient from "./CommonClient";
+import Loading from "@/components/modals/loading";
 import localFont from "next/font/local";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
+import AlertModal from "@/components/modals/alert";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -84,10 +88,14 @@ export default function RootLayout({
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <SiteHeader />
-          {children}
-          <CommonClient />
-          <Footer />
+          <Provider store={store}>
+            <SiteHeader />
+            {children}
+            <CommonClient />
+            <Footer />
+            <Loading></Loading>
+            <AlertModal></AlertModal>
+          </Provider>
         </ThemeProvider>
       </body>
     </html>

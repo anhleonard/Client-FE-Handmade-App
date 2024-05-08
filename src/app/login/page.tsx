@@ -4,8 +4,59 @@ import Image from "next/image";
 import Link from "next/link";
 import MyPrimaryTextField from "@/libs/primary-text-field";
 import Button from "@/libs/button";
+import { useDispatch } from "react-redux";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { getAllPosts, loginUser } from "@/apis/services/authentication";
+import * as yup from "yup";
+import { LoginFormValues } from "@/apis/types";
+import { Form, Formik, getIn } from "formik";
+import InputPassword from "@/components/change-password/input-password";
+import { AlertState } from "@/enum/defined-types";
+import { AlertStatus } from "@/enum/constants";
+import { openAlert } from "@/redux/slices/alertSlice";
+import storage from "@/apis/storage";
+import { useRouter } from "next/navigation";
+
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .email("Vui lòng nhập email đúng định dạng.")
+    .required("Vui lòng không để trống email."),
+  password: yup.string().required("Vui lòng không để trống mật khẩu."),
+});
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const initialValues: LoginFormValues = { email: "", password: "" };
+
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      dispatch(openLoading());
+      const variables = {
+        email: values.email,
+        password: values.password,
+      };
+      const responseLogin = await loginUser(variables);
+      const user = JSON.stringify(responseLogin?.user);
+      storage.updateLocalAccessToken(responseLogin?.accessToken);
+      storage.updateLocalUser(user);
+
+      router.push("/");
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
   return (
     <div className="bg-primary-c50 flex items-center justify-center py-8">
       <div className="md:px-26 lg:px-16 w-[80vw] h-[90vh]">
@@ -29,40 +80,85 @@ const LoginPage = () => {
           </div>
 
           {/* right content */}
-          <div className="bg-white px-12 flex flex-col gap-8 md:gap-6 pt-16">
+          <div className="bg-white px-10 flex flex-col gap-8 md:gap-6 pt-16">
             <h2 className="flex items-center text-xl leading-[115%] md:text-2xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
               Đăng nhập
             </h2>
-            <div className="space-y-6">
-              <MyPrimaryTextField
-                id={Math.random().toString()}
-                placeholder="Email"
-                type="email"
-              />
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={onSubmit}
+            >
+              {(formik) => (
+                <Form>
+                  <div className="space-y-6">
+                    <MyPrimaryTextField
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="Email"
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      isError={
+                        getIn(formik.touched, "email") &&
+                        Boolean(getIn(formik.errors, "email"))
+                      }
+                      helperText={
+                        getIn(formik.touched, "email") &&
+                        getIn(formik.errors, "email")
+                      }
+                    />
 
-              <div className="flex flex-col gap-2 items-start">
-                <MyPrimaryTextField
-                  id={Math.random().toString()}
-                  placeholder="Mật khẩu"
-                />
-                <Link
-                  href={"/forgot-pass"}
-                  className="font-medium text-grey-c700 text-xs underline"
-                >
-                  Quên mật khẩu?
-                </Link>
-              </div>
+                    <div className="flex flex-col gap-2 items-start">
+                      <InputPassword
+                        id="password"
+                        name="password"
+                        placeholder="Mật khẩu"
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
+                        isError={
+                          getIn(formik.touched, "password") &&
+                          Boolean(getIn(formik.errors, "password"))
+                        }
+                        helperText={
+                          getIn(formik.touched, "password") &&
+                          getIn(formik.errors, "password")
+                        }
+                      />
+                      <Link
+                        href={"/forgot-pass"}
+                        className="font-medium text-grey-c700 text-xs underline"
+                      >
+                        Quên mật khẩu?
+                      </Link>
+                    </div>
 
-              <div className="flex flex-col gap-2 items-end pt-2">
-                <Button className="!w-full !py-3">Đăng nhập</Button>
-                <Link
-                  href={"/signup"}
-                  className="font-medium text-grey-c700 text-xs underline"
-                >
-                  Bạn chưa có tài khoản?
-                </Link>
-              </div>
-            </div>
+                    <div className="flex flex-col gap-2 items-end pt-2">
+                      <Button
+                        type="submit"
+                        className="!w-full !py-3"
+                        onClick={() => {
+                          if (
+                            getIn(formik.touched, "email") &&
+                            Boolean(getIn(formik.errors, "email"))
+                          ) {
+                            console.log(formik.errors.email);
+                          }
+                        }}
+                      >
+                        Đăng nhập
+                      </Button>
+                      <Link
+                        href={"/signup"}
+                        className="font-medium text-grey-c700 text-xs underline"
+                      >
+                        Bạn chưa có tài khoản?
+                      </Link>
+                    </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { AlertStatus } from "./constants";
 
 export enum OrderStatusTypes {
   WAITING_PAYMENT = "WAITING_PAYMENT",
@@ -31,4 +32,11 @@ export type OrderStatus = {
   value: string;
   icon: ReactNode;
   color: string;
+};
+
+export type AlertState = {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  type: AlertStatus;
 };
