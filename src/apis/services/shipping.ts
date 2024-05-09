@@ -77,3 +77,15 @@ export const updateShipping = async (
     .put(`${headerUrl}/shippings/update/${shippingId}`, variables, config)
     .then((res) => res.data);
 };
+
+export const getSingleShipping = async (shippingId: number, token: string) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .get(`${headerUrl}/shippings/${shippingId}`, config)
+    .then((res) => res.data);
+};

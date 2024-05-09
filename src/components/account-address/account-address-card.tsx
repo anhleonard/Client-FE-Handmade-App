@@ -10,6 +10,7 @@ import React, { ReactNode } from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { COLORS } from "@/enum/colors";
 import MyTextAction from "@/libs/text-action";
+import { useRouter } from "next/navigation";
 
 type AccountAdressCardProps = {
   title?: ReactNode;
@@ -22,6 +23,8 @@ const AccountAdressCard = ({
   content,
   radioValue,
 }: AccountAdressCardProps) => {
+  const router = useRouter();
+
   return (
     <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
       <ListItem className="bg-white border-b-2 border-grey-c50" disablePadding>
@@ -35,7 +38,10 @@ const AccountAdressCard = ({
           <div className="flex flex-col gap-1 items-end">
             <div className="flex flex-row gap-3 items-center">
               <MyTextAction label="Xóa" color="text-blue-c900" />
-              <MyTextAction label="Chỉnh sửa" />
+              <MyTextAction
+                label="Chỉnh sửa"
+                onClick={() => router.push(`/update-address/${radioValue}`)}
+              />
             </div>
             <div className="flex flex-row gap-3 items-center">
               <FormControlLabel
@@ -43,7 +49,6 @@ const AccountAdressCard = ({
                 control={<Radio size="small" />}
                 label={"Đặt làm địa chỉ mặc định"}
                 labelPlacement="start"
-                // checked={radioChecked}
               />
             </div>
           </div>
