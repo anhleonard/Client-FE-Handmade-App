@@ -34,3 +34,9 @@ export function getCurrentUser() {
     return null;
   }
 }
+
+export function formatShippingAddress(data: any) {
+  if (data?.companyName)
+    return `${data?.companyName}, ${data?.detailAddress}, ${data?.ward}, ${data?.district}, ${data?.province}, Việt Nam`;
+  return `${data?.detailAddress}, ${data?.ward}, ${data?.district}, ${data?.province}, Việt Nam`;
+}

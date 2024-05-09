@@ -40,6 +40,7 @@ const LoginPage = () => {
       };
       const responseLogin = await loginUser(variables);
       const user = JSON.stringify(responseLogin?.user);
+      storage.updateLocalUserId(responseLogin?.user?.id);
       storage.updateLocalAccessToken(responseLogin?.accessToken);
       storage.updateLocalUser(user);
 

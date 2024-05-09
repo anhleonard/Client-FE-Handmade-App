@@ -22,6 +22,8 @@ import Typography from "./typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { COLORS } from "@/enum/colors";
+import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 
 export type Item = {
   value: string | number | boolean;
@@ -291,11 +293,7 @@ const MySelect = forwardRef<HTMLDivElement, Props>(function Select(
                                   disabled
                                     ? `${colorAttitude["disable"]} cursor-default`
                                     : error
-                                    ? `${colorAttitude["error"]} ${
-                                        !open
-                                          ? HOVER.BorderColor.SUPPORT
-                                          : BorderColor.SUPPORT_700
-                                      } cursor-pointer`
+                                    ? `${colorAttitude["error"]} ${BorderColor.SUPPORT_500} cursor-pointer`
                                     : `${colorAttitude["normal"]} ${
                                         !open
                                           ? HOVER.BorderColor.PRIMARY
@@ -357,14 +355,18 @@ const MySelect = forwardRef<HTMLDivElement, Props>(function Select(
           </div>
         </fieldset>
         {error && (
-          <Typography
-            className="px-2"
-            textColor={TextColor.SUPPORT_900}
-            fontSize={FontSize.LITTLE}
-            fontFamily={FontFamily.NORMAL}
-          >
-            {helperText}
-          </Typography>
+          <div className="mt-1 flex items-center justify-start gap-1">
+            <WarningAmberRoundedIcon
+              sx={{ color: COLORS.support.c500, fontSize: 14 }}
+            />
+            <Typography
+              textColor={TextColor.SUPPORT_500}
+              fontSize={FontSize.XS}
+              fontFamily={FontFamily.MEDIUM}
+            >
+              {helperText}
+            </Typography>
+          </div>
         )}
       </div>
       {!hidden && (

@@ -37,3 +37,43 @@ export const getWards = async (districtId: number) => {
     )
     .then((res) => res.data);
 };
+
+export const createShipping = async (variables: any, token: string) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .post(`${headerUrl}/shippings/create`, variables, config)
+    .then((res) => res.data);
+};
+
+export const getShippingByUserId = async (variables: any, token: string) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .post(`${headerUrl}/shippings`, variables, config)
+    .then((res) => res.data);
+};
+
+export const updateShipping = async (
+  shippingId: number,
+  variables: any,
+  token: string
+) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .put(`${headerUrl}/shippings/update/${shippingId}`, variables, config)
+    .then((res) => res.data);
+};

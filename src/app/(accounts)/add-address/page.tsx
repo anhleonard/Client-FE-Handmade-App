@@ -12,9 +12,17 @@ import MySingleCheckBox from "@/libs/single-checkbox";
 import MySelect, { Item } from "@/libs/select";
 import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { getDistricts, getProvinces, getWards } from "@/apis/services/shipping";
+import {
+  createShipping,
+  getDistricts,
+  getProvinces,
+  getWards,
+} from "@/apis/services/shipping";
 import { AlertState } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
+import * as yup from "yup";
+import { Form, Formik, getIn } from "formik";
+import storage from "@/apis/storage";
 
 const AddAddressPage = () => {
   const router = useRouter();
@@ -27,6 +35,38 @@ const AddAddressPage = () => {
   const [selectedWard, setSelectedWard] = useState<Item | null>(null);
   const [receivePlace, setReceivePlace] = useState(addressTypes[0].value);
   const [isDefaultAddress, setIsDefaultAddress] = useState(false);
+
+  const [provinceError, setProvinceError] = useState(false);
+  const [districtError, setDistrictError] = useState(false);
+  const [wardError, setWardError] = useState(false);
+
+  const [clickSubmit, setClickSubmit] = useState(false);
+
+  const validationSchema = yup.object({
+    name: yup.string().required("Vui lòng không để trống trường này."),
+    phone: yup
+      .string()
+      .required("Vui lòng không để trống trường này.")
+      .matches(
+        /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/,
+        "Vui lòng nhập đúng số điện thoại"
+      ),
+    detailAddress: yup.string().required("Vui lòng không để trống trường này."),
+    companyName: yup.lazy((value) => {
+      if (receivePlace === addressTypes[1].value) {
+        return yup.string().required("Vui lòng không để trống trường này.");
+      } else {
+        return yup.string().nullable(); // Không bắt buộc
+      }
+    }),
+  });
+
+  const initialValues = {
+    name: "",
+    phone: "",
+    detailAddress: "",
+    companyName: "",
+  };
 
   const getAllProvinces = async () => {
     try {
@@ -120,13 +160,107 @@ const AddAddressPage = () => {
     if (selectedProvince) {
       getAllDistricts(parseInt(selectedProvince.value as string));
     }
+    setSelectedDistrict(null);
   }, [selectedProvince]);
 
   useEffect(() => {
     if (selectedDistrict) {
       getAllWards(parseInt(selectedDistrict.value as string));
     }
+    setSelectedWard(null);
   }, [selectedDistrict]);
+
+  useEffect(() => {
+    if (clickSubmit) {
+      if (!selectedProvince) {
+        setProvinceError(true);
+      } else {
+        setProvinceError(false);
+      }
+
+      if (!selectedDistrict) {
+        setDistrictError(true);
+      } else {
+        setDistrictError(false);
+      }
+
+      if (!selectedWard) {
+        setWardError(true);
+      } else {
+        setWardError(false);
+      }
+    }
+  }, [clickSubmit, selectedProvince, selectedDistrict, selectedWard]);
+
+  const onSubmit = async (values: any, actions: any) => {
+    try {
+      dispatch(openLoading());
+
+      let variables = {};
+
+      if (receivePlace === addressTypes[0].value) {
+        variables = {
+          receivePlace: receivePlace,
+          isDefaultAddress: isDefaultAddress,
+          name: values.name,
+          phone: values.phone,
+          province: selectedProvince?.label,
+          district: selectedDistrict?.label,
+          ward: selectedWard?.label,
+          detailAddress: values.detailAddress,
+          companyName: null,
+        };
+      } else {
+        variables = {
+          receivePlace: receivePlace,
+          isDefaultAddress: isDefaultAddress,
+          name: values.name,
+          phone: values.phone,
+          province: selectedProvince?.label,
+          district: selectedDistrict?.label,
+          ward: selectedWard?.label,
+          detailAddress: values.detailAddress,
+          companyName: values.companyName,
+        };
+      }
+
+      const token = storage.getLocalAccessToken();
+
+      await createShipping(variables, token);
+
+      let alert: AlertState = {
+        isOpen: true,
+        title: "THÀNH CÔNG",
+        message: "Bạn đã tạo địa chỉ thành công",
+        type: AlertStatus.SUCCESS,
+      };
+
+      dispatch(openAlert(alert));
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      actions.resetForm();
+
+      setClickSubmit(false);
+
+      setIsDefaultAddress(false);
+
+      setSelectedProvince(null);
+      setSelectedDistrict(null);
+      setSelectedWard(null);
+
+      setDistricts([]);
+      setWards([]);
+
+      dispatch(closeLoading());
+    }
+  };
 
   return (
     <div className="space-y-4 text-grey-c900">
@@ -159,72 +293,154 @@ const AddAddressPage = () => {
             <div className="whitespace-nowrap">Đặt làm địa chỉ mặc định</div>
           </div>
         </div>
-        <MyPrimaryTextField
-          id={Math.random().toString()}
-          title="Họ và tên"
-          placeholder="Nguyễn Văn A"
-          className="w-full"
-          isRequired
-        />
-        <MyPrimaryTextField
-          id={Math.random().toString()}
-          title="Số điện thoại"
-          type="text"
-          hasInputNumber
-          placeholder="Nhập số điện thoại của bạn"
-          className="w-full"
-          isRequired
-        />
-        <div className="grid md:grid-cols-3 gap-5">
-          <MySelect
-            options={provinces}
-            onSelectItem={(value) => {
-              setSelectedProvince(value);
-            }}
-            title="Tỉnh/ Thành phố"
-            isRequired
-            placeholder="-- Lựa chọn --"
-            wrapClassName="!w-full"
-          />
-          <MySelect
-            options={districts}
-            onSelectItem={(value) => {
-              setSelectedDistrict(value);
-            }}
-            title="Quận/ Huyện"
-            isRequired
-            placeholder="-- Lựa chọn --"
-            wrapClassName="!w-full"
-          />
-          <MySelect
-            options={wards}
-            onSelectItem={(value) => {
-              setSelectedWard(value);
-            }}
-            title="Phường/ Xã"
-            isRequired
-            placeholder="-- Lựa chọn --"
-            wrapClassName="!w-full"
-          />
-        </div>
-        <MyPrimaryTextField
-          id={Math.random().toString()}
-          title="Nơi làm việc"
-          placeholder="Nhập nơi làm của bạn"
-          isRequired
-        />
-        <MyPrimaryTextField
-          id={Math.random().toString()}
-          title="Địa chỉ chi tiết"
-          placeholder="Nhập địa chỉ chi tiết số nhà, ngõ, ..."
-          isRequired
-        />
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 pt-2">
-          <Button color="black" className="!w-full !py-3">
-            HỦY
-          </Button>
-          <Button className="!w-full !py-3">LƯU</Button>
-        </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => (
+            <Form>
+              <div className="space-y-4">
+                <MyPrimaryTextField
+                  id="name"
+                  name="name"
+                  title="Họ và tên"
+                  placeholder="Nguyễn Văn A"
+                  className="w-full"
+                  isRequired
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
+                  isError={
+                    getIn(formik.touched, "name") &&
+                    Boolean(getIn(formik.errors, "name"))
+                  }
+                  helperText={
+                    getIn(formik.touched, "name") &&
+                    getIn(formik.errors, "name")
+                  }
+                />
+                <MyPrimaryTextField
+                  id="phone"
+                  name="phone"
+                  title="Số điện thoại"
+                  type="text"
+                  hasInputNumber
+                  placeholder="Nhập số điện thoại của bạn"
+                  className="w-full"
+                  isRequired
+                  onChange={formik.handleChange}
+                  value={formik.values.phone}
+                  isError={
+                    getIn(formik.touched, "phone") &&
+                    Boolean(getIn(formik.errors, "phone"))
+                  }
+                  helperText={
+                    getIn(formik.touched, "phone") &&
+                    getIn(formik.errors, "phone")
+                  }
+                />
+                <div className="grid md:grid-cols-3 gap-5">
+                  <MySelect
+                    options={provinces}
+                    selected={selectedProvince?.value ?? null}
+                    onSelectItem={(item) => {
+                      setSelectedProvince(item);
+                    }}
+                    title="Tỉnh/ Thành phố"
+                    isRequired
+                    placeholder="-- Lựa chọn --"
+                    wrapClassName="!w-full"
+                    error={provinceError}
+                    helperText={
+                      provinceError ? "Vui lòng không để trống trường này." : ""
+                    }
+                  />
+                  <MySelect
+                    options={districts}
+                    selected={selectedDistrict?.value ?? null}
+                    onSelectItem={(item) => {
+                      setSelectedDistrict(item);
+                    }}
+                    title="Quận/ Huyện"
+                    isRequired
+                    placeholder="-- Lựa chọn --"
+                    wrapClassName="!w-full"
+                    error={districtError}
+                    helperText={
+                      districtError ? "Vui lòng không để trống trường này." : ""
+                    }
+                  />
+                  <MySelect
+                    options={wards}
+                    onSelectItem={(item) => {
+                      setSelectedWard(item);
+                    }}
+                    selected={selectedWard?.value ?? null}
+                    title="Phường/ Xã"
+                    isRequired
+                    placeholder="-- Lựa chọn --"
+                    wrapClassName="!w-full"
+                    error={wardError}
+                    helperText={
+                      wardError ? "Vui lòng không để trống trường này." : ""
+                    }
+                  />
+                </div>
+                {receivePlace === addressTypes[1].value && (
+                  <MyPrimaryTextField
+                    id="companyName"
+                    name="companyName"
+                    title="Nơi làm việc"
+                    placeholder="Nhập nơi làm của bạn"
+                    isRequired
+                    onChange={formik.handleChange}
+                    value={formik.values.companyName}
+                    isError={
+                      getIn(formik.touched, "companyName") &&
+                      Boolean(getIn(formik.errors, "companyName"))
+                    }
+                    helperText={
+                      getIn(formik.touched, "companyName") &&
+                      getIn(formik.errors, "companyName")
+                    }
+                  />
+                )}
+                <MyPrimaryTextField
+                  id="detailAddress"
+                  name="detailAddress"
+                  title="Địa chỉ chi tiết"
+                  placeholder="Nhập địa chỉ chi tiết số nhà, ngõ, ..."
+                  isRequired
+                  onChange={formik.handleChange}
+                  value={formik.values.detailAddress}
+                  isError={
+                    getIn(formik.touched, "detailAddress") &&
+                    Boolean(getIn(formik.errors, "detailAddress"))
+                  }
+                  helperText={
+                    getIn(formik.touched, "detailAddress") &&
+                    getIn(formik.errors, "detailAddress")
+                  }
+                />
+                <div className="grid md:grid-cols-2 gap-6 md:gap-8 pt-2">
+                  <Button color="black" className="!w-full !py-3">
+                    HỦY
+                  </Button>
+                  <Button
+                    className="!w-full !py-3"
+                    type="submit"
+                    onClick={() => {
+                      console.log(formik.values);
+                      setClickSubmit(true);
+                    }}
+                  >
+                    LƯU
+                  </Button>
+                </div>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

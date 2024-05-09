@@ -86,7 +86,7 @@ const MyPrimaryTextField: React.FC<MyPrimaryTextFieldProps> = ({
       {(isError && helperText) || (disabled && helperText) ? (
         <div className="mt-1 flex items-center justify-start gap-1">
           <WarningAmberRoundedIcon
-            sx={{ color: COLORS.support.c500, fontSize: 14, marginTop: "2px" }}
+            sx={{ color: COLORS.support.c500, fontSize: 14 }}
           />
           <div
             className={`text-xs font-medium ${

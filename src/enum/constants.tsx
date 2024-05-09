@@ -48,7 +48,7 @@ export const addressTypes = [
   {
     index: 1,
     label: "Nơi làm việc",
-    value: "WORKING_PLACE",
+    value: "WORKING",
   },
 ];
 
@@ -291,4 +291,7 @@ export const collectionStoreTabs = [
 
 export enum AlertStatus {
   ERROR = "error",
+  SUCCESS = "success",
+  INFO = "info",
+  WARNING = "warning",
 }

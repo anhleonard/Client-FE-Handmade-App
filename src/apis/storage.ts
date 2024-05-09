@@ -19,12 +19,12 @@ class Storage {
     return this.localStorage.getItem("user");
   }
 
-  getLocalUserId() {
-    return this.localStorage.getItem("userId");
-  }
-
   updateLocalUserId(userId: string) {
     this.localStorage.setItem("userId", userId);
+  }
+
+  getLocalUserId() {
+    return this.localStorage.getItem("userId");
   }
 
   removeAccessToken() {

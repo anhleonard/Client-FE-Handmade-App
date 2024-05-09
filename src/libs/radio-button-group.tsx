@@ -64,6 +64,7 @@ export default function MyRadioButtonsGroup({
                 key={item.value}
                 value={item.value}
                 disabled={disabled}
+                onClick={() => console.log(item.value)}
                 control={
                   <Radio
                     sx={{
