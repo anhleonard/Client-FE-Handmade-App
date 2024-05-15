@@ -38,7 +38,7 @@ export type AlertState = {
   isOpen: boolean;
   title: string;
   message: string;
-  type: AlertStatus;
+  type: AlertStatus | string;
 };
 
 export type Product = {
@@ -70,6 +70,7 @@ export type Product = {
   editHint: string;
   averageRating: string;
   totalReviews: number;
+  store: Store;
 };
 
 export type VariantCategory = {
@@ -96,4 +97,31 @@ export type Category = {
   id: number;
   title: string;
   description: string;
+};
+
+export type Store = {
+  id: number;
+  name: string;
+  avatar: string;
+  isBanned: boolean;
+  description: string;
+  mainBusiness: string;
+  productAmount: number;
+  avgStoreRating: number;
+  followerAmount: number;
+};
+
+export type OrderProduct = {
+  id: number;
+  code: string;
+  productUnitPrice: number;
+  productQuantity: number;
+  isSelected: boolean;
+  variant: Variant;
+  product: Product;
+};
+
+export type SellerPackage = {
+  store: Store;
+  orderProducts: OrderProduct[];
 };

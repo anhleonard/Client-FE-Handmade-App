@@ -19,75 +19,21 @@ import SellerItemsPackage from "@/components/cart/seller-items-package";
 import axios from "axios";
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import { useRouter } from "next/navigation";
-
-const allListItems = [
-  {
-    sellerId: "1",
-    name: "Tiệm nhà len",
-    totalItemsInCart: 3,
-    selectedItems: ["item-option-0", "item-option-1"],
-    totalPayment: 859000,
-    items: [
-      {
-        id: "item-option-0",
-        name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 140ml",
-        price: 79000,
-        numberSelectedItem: 1,
-        amountMoney: 79000,
-      },
-      {
-        id: "item-option-1",
-        name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 240ml",
-        price: 80000,
-        numberSelectedItem: 4,
-        amountMoney: 80000 * 4,
-      },
-      {
-        id: "item-option-2",
-        name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-        price: 92000,
-        numberSelectedItem: 5,
-        amountMoney: 92000 * 5,
-      },
-    ],
-  },
-  {
-    sellerId: "2",
-    name: "Khoai lang thang",
-    totalItemsInCart: 3,
-    selectedItems: ["store-2-0", "store-2-2"],
-    totalPayment: 859000,
-    items: [
-      {
-        id: "store-2-0",
-        name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 1",
-        price: 79000,
-        numberSelectedItem: 1,
-        amountMoney: 79000,
-      },
-      {
-        id: "store-2-1",
-        name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 2",
-        price: 80000,
-        numberSelectedItem: 4,
-        amountMoney: 80000 * 4,
-      },
-      {
-        id: "store-2-2",
-        name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 3",
-        price: 92000,
-        numberSelectedItem: 5,
-        amountMoney: 92000 * 5,
-      },
-    ],
-  },
-];
+import { AlertState, SellerPackage } from "@/enum/defined-types";
+import { AlertStatus } from "@/enum/constants";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { useDispatch } from "react-redux";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import storage from "@/apis/storage";
+import { orderProductsByUser } from "@/apis/services/order-products";
 
 const CartPage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const [listSellerPackages, setListSellerPackages] = useState<any>([]);
-  // const [data, setData] = useState([]);
+  const [listSellerPackages, setListSellerPackages] = useState<SellerPackage[]>(
+    []
+  );
 
   const handleUpdateListSellerPackages = (sellerPackage: any) => {
     const index = listSellerPackages.findIndex(
@@ -96,22 +42,35 @@ const CartPage = () => {
     if (index !== -1) {
       const updatedItems = [...listSellerPackages];
       updatedItems[index] = sellerPackage;
+
       setListSellerPackages(updatedItems);
     }
   };
 
-  // const getData = async () => {
-  //   try {
-  //     const response = await axios.get("https://dummyjson.com/products");
-  //     setData(response.data.products);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const getListSellerPackages = async () => {
+    try {
+      dispatch(openLoading());
+      const token = storage.getLocalAccessToken();
+      const res = await orderProductsByUser(token);
+      if (res) {
+        setListSellerPackages(res);
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
 
-  // useEffect(() => {
-  //   getData();
-  // }, [allListItems]);
+  useEffect(() => {
+    getListSellerPackages();
+  }, []);
 
   const renderStatusSoldout = () => {
     return (
@@ -158,17 +117,19 @@ const CartPage = () => {
       <div className="flex flex-col lg:flex-row gap-[30px]">
         <div className="w-full lg:w-[68%] divide-y divide-slate-200 dark:divide-slate-700 ">
           <div className="space-y-8">
-            {allListItems.map((sellerPackage: any, index: number) => {
-              return (
-                <SellerItemsPackage
-                  key={index}
-                  sellerPackage={sellerPackage}
-                  handleUpdateListSellerPackages={
-                    handleUpdateListSellerPackages
-                  }
-                />
-              );
-            })}
+            {listSellerPackages?.map(
+              (sellerPackage: SellerPackage, index: number) => {
+                return (
+                  <SellerItemsPackage
+                    key={index}
+                    sellerPackage={sellerPackage}
+                    handleUpdateListSellerPackages={
+                      handleUpdateListSellerPackages
+                    }
+                  />
+                );
+              }
+            )}
           </div>
         </div>
         <div className="flex-1">

@@ -59,8 +59,6 @@ const TabFilters = () => {
       : setSizesState(sizesState.filter((i) => i !== name));
   };
 
-  console.log({ categoriesState });
-
   // OK
   const renderMoreFilterItem = (
     data: {

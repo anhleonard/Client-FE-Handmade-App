@@ -1,5 +1,6 @@
 import storage from "@/apis/storage";
 import { VariantItem } from "./defined-types";
+import moment from "moment";
 
 export function formatCurrency(price: number) {
   const formatter = new Intl.NumberFormat("vi", {
@@ -48,4 +49,9 @@ export function formatVariant(data: Array<VariantItem>) {
 
 export function formatPickedVariant(data: Array<VariantItem>) {
   return data.map((item) => item.name).join(", ");
+}
+
+export function formatDate(timestamp: Date) {
+  const date = moment(timestamp).format("DD-MM-YYYY HH:mm:ss");
+  return date;
 }

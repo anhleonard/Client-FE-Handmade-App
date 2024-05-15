@@ -11,3 +11,9 @@ export type SignUpFormValues = {
   password: string;
   confirmPassword: string;
 };
+
+export type OrderProductValues = {
+  productId: number;
+  productQuantity: number;
+  variantId?: number;
+};

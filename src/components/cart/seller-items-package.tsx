@@ -1,20 +1,16 @@
 import { COLORS } from "@/enum/colors";
 import { formatCurrency } from "@/enum/functions";
-import MyDisplayImage from "@/libs/display-image";
 import MyLabel from "@/libs/label";
 import MySingleCheckBox from "@/libs/single-checkbox";
-import MyTextAction from "@/libs/text-action";
 import { Collapse, Divider, List, ListItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import InputQuantityItem from "../product-detail/input-quantity-item";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import Button from "@/libs/button";
-import MyVoucherLabel from "@/libs/voucher-label";
 import MyTextArea from "@/libs/text-area";
 import BuyingItem from "./buying-item";
+import { OrderProduct, SellerPackage } from "@/enum/defined-types";
 
 type SellerItemsPackageProps = {
-  sellerPackage: any;
+  sellerPackage: SellerPackage;
   handleUpdateListSellerPackages: (sellerPackage: any) => void;
 };
 
@@ -23,17 +19,20 @@ const SellerItemsPackage = ({
   handleUpdateListSellerPackages,
 }: SellerItemsPackageProps) => {
   const [selected, setSelected] = useState<string[]>(
-    sellerPackage.selectedItems
+    sellerPackage?.orderProducts
+      .filter((item) => item.isSelected)
+      .map((item) => item.code)
   );
 
-  const [items, setItems] = useState(sellerPackage.items);
+  const [items, setItems] = useState(sellerPackage.orderProducts);
 
-  const allItemIds = items.map((item: any) => item.id);
+  const allItemCodes = items.map((item: OrderProduct) => item.code);
 
   const handleChange = (event: any) => {
     const value = event.target.value;
+    console.log({ value });
     if (value === "all") {
-      setSelected(selected.length === items.length ? [] : allItemIds);
+      setSelected(selected.length === items.length ? [] : allItemCodes);
       return;
     }
     // added below code to update selected options
@@ -54,7 +53,7 @@ const SellerItemsPackage = ({
 
   useEffect(() => {
     const updatedTotalPayment = items.reduce((total: number, item: any) => {
-      if (selected.includes(item.id)) {
+      if (selected.includes(item.code)) {
         return total + item.amountMoney;
       } else {
         return total;
@@ -80,16 +79,16 @@ const SellerItemsPackage = ({
               sx={{ fontSize: 24, color: COLORS.grey.c900 }}
             />
             <div className="text-base font-bold text-grey-c900">
-              {sellerPackage.name}
+              {sellerPackage?.store?.name}
             </div>
             <MyLabel type="warning">
-              {sellerPackage.totalItemsInCart} sản phẩm
+              {sellerPackage.orderProducts.length} sản phẩm
             </MyLabel>
           </div>
           <div className="flex flex-row gap-2 items-center">
             <MySingleCheckBox
               value="all"
-              isChecked={selected.length === sellerPackage.totalItemsInCart}
+              isChecked={selected.length === sellerPackage.orderProducts.length}
               checkedColor={COLORS.primary.c900}
               onChanged={(event) => {
                 handleChange(event);
@@ -102,21 +101,25 @@ const SellerItemsPackage = ({
       <Collapse in={true}>
         <List disablePadding className="flex flex-col">
           {/* các items có trong giỏ hàng của seller đó */}
-          {sellerPackage.items.map((item: any, index: number) => (
-            <BuyingItem
-              key={index}
-              item={item}
-              handleChecked={(event) => {
-                handleChange(event);
-              }}
-              getBuyingItem={(value, amount) => console.log({ value, amount })}
-              selected={selected}
-              handleUpdateSelectedNumberItem={handleUpdateSelectedNumberItem}
-            />
-          ))}
+          {sellerPackage?.orderProducts.map(
+            (item: OrderProduct, index: number) => (
+              <BuyingItem
+                key={index}
+                item={item}
+                handleChecked={(event) => {
+                  handleChange(event);
+                }}
+                getBuyingItem={(value, amount) =>
+                  console.log({ value, amount })
+                }
+                selected={selected}
+                handleUpdateSelectedNumberItem={handleUpdateSelectedNumberItem}
+              />
+            )
+          )}
 
           {/* list applied voucher */}
-          <ListItem
+          {/* <ListItem
             className="block w-full px-4 py-4 border-b-2 border-grey-c50 space-y-4"
             disablePadding
           >
@@ -135,7 +138,7 @@ const SellerItemsPackage = ({
               <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
               <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
             </div>
-          </ListItem>
+          </ListItem> */}
 
           {/* payment */}
           <ListItem className="block w-full px-4 py-4" disablePadding>
@@ -157,7 +160,8 @@ const SellerItemsPackage = ({
                 <div className="flex flex-row justify-between items-center">
                   <div className="text-grey-c700 font-semibold">Tạm tính</div>
                   <div className="font-bold">
-                    {formatCurrency(sellerPackage.totalPayment)}
+                    {/* {formatCurrency(sellerPackage.totalPayment)} */}
+                    {formatCurrency(500000)}
                   </div>
                 </div>
                 <div className="flex flex-row justify-between items-center">
@@ -176,11 +180,11 @@ const SellerItemsPackage = ({
                 <div className="flex flex-row justify-between items-center">
                   <div className="text-grey-c700 font-semibold">Thành tiền</div>
                   <div className="font-bold text-primary-c900">
-                    {formatCurrency(
+                    {/* {formatCurrency(
                       sellerPackage.totalPayment - 30000 >= 0
                         ? sellerPackage.totalPayment - 30000
                         : 0
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>

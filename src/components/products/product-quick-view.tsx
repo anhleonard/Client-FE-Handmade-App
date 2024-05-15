@@ -35,6 +35,9 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { headerUrl } from "@/apis/services/authentication";
+import storage from "@/apis/storage";
+import { OrderProductValues } from "@/apis/types";
+import { createOrderProduct } from "@/apis/services/order-products";
 
 export interface ProductQuickViewProps {
   className?: string;
@@ -58,18 +61,18 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
       dispatch(openLoading());
       const res = await singleProduct(productId);
       if (res) {
-        setProduct(res);
-        if (res?.variants) {
+        if (res?.variants?.length) {
           const images = res?.variants?.map((item: Variant) => item?.image);
           setProductImages(images);
           setSelectedVariant(res?.variants[0]);
           setPrice(res?.variants[0]?.unitPrice);
           setCurrentImage(res?.variants[0]?.image);
         } else {
+          setCurrentImage(res?.images[0]);
           setProductImages(res?.images);
           setPrice(res?.price);
-          setCurrentImage(res?.images[0]);
         }
+        setProduct(res);
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -140,6 +143,35 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
         ),
         { position: "top-right", id: "nc-product-notify", duration: 3000 }
       );
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (product?.id) {
+      try {
+        dispatch(openLoading());
+        const token = storage.getLocalAccessToken();
+
+        let variables: OrderProductValues = {
+          productId: product?.id,
+          productQuantity: qualitySelected,
+          ...(selectedVariant?.id && { variantId: selectedVariant.id }),
+        };
+        const res = await createOrderProduct(variables, token);
+        if (res) {
+          notifyAddTocart();
+        }
+      } catch (error: any) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: error?.response?.data?.message,
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+      } finally {
+        dispatch(closeLoading());
+      }
     }
   };
 
@@ -227,11 +259,16 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
             <InputQuantityItem
               defaultValue={qualitySelected}
               onChange={setQualitySelected}
+              max={
+                product?.variants?.length
+                  ? selectedVariant?.inventoryNumber
+                  : product?.inventoryNumber
+              }
             />
           </div>
           <Button
             className="!flex-1 hover:!scale-100 hover:!opacity-80"
-            onClick={notifyAddTocart}
+            onClick={() => handleAddToCart()}
             startIcon={
               <ShoppingBagOutlinedIcon
                 sx={{ color: COLORS.white, fontSize: 22 }}

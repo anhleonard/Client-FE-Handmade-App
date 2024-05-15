@@ -4,35 +4,19 @@ import React, { useEffect, useState } from "react";
 import LikeButton from "@/components/products/like-button";
 import { StarIcon } from "@heroicons/react/24/solid";
 import InputQuantityItem from "@/components/product-detail/input-quantity-item";
-import { PRODUCTS } from "@/data/data";
-import {
-  NoSymbolIcon,
-  ClockIcon,
-  SparklesIcon,
-} from "@heroicons/react/24/outline";
-import IconDiscount from "@/components/IconDiscount";
-import Prices from "@/components/Prices";
 import toast from "react-hot-toast";
 import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
-import detail1JPG from "@/images/products/detail1.jpg";
-import detail2JPG from "@/images/products/detail2.jpg";
-import detail3JPG from "@/images/products/detail3.jpg";
 import Policy from "../../../components/product-detail/product-policy";
-import ReviewItem from "@/components/reviews/review-item";
-import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import SectionPromo2 from "@/components/SectionPromo2";
-import ModalViewAllReviews from "../../../components/reviews/all-reviews-modal";
 import NotifyAddTocart from "@/components/cart/notify-add-to-cart";
 import Image from "next/image";
 import AccordionInfo from "@/components/product-detail/accordio-info";
-import { formatCurrency } from "@/enum/functions";
+import { formatCurrency, formatDate } from "@/enum/functions";
 import MyLabel from "@/libs/label";
 import RenderVariants from "@/components/product-detail/render-variants";
 import Button from "@/libs/button";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { COLORS } from "@/enum/colors";
 import ProductReviews from "@/components/reviews/product-reviews";
-import { types } from "@/enum/fake-datas";
 import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
@@ -45,11 +29,9 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { singleProduct } from "@/apis/services/products";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { headerUrl } from "@/apis/services/authentication";
-
-const colors = [
-  { name: "Xanh lá", isSoldOut: false },
-  { name: "Xanh ngọc", isSoldOut: true },
-];
+import { createOrderProduct } from "@/apis/services/order-products";
+import storage from "@/apis/storage";
+import { OrderProductValues } from "@/apis/types";
 
 const imageUrls = [
   "/images/bags/bag-1.jpg",
@@ -82,7 +64,7 @@ const ProductDetailPage = () => {
         const res = await singleProduct(parseInt(productId));
         if (res) {
           setProduct(res);
-          if (res?.variants) {
+          if (res?.variants?.length) {
             const images = res?.variants?.map((item: Variant) => item?.image);
             setProductImages(images);
             setSelectedVariant(res?.variants[0]);
@@ -167,6 +149,35 @@ const ProductDetailPage = () => {
     }
   };
 
+  const handleAddToCart = async () => {
+    if (productId && typeof productId === "string") {
+      try {
+        dispatch(openLoading());
+        const token = storage.getLocalAccessToken();
+
+        let variables: OrderProductValues = {
+          productId: parseInt(productId),
+          productQuantity: qualitySelected,
+          ...(selectedVariant?.id && { variantId: selectedVariant.id }),
+        };
+        const res = await createOrderProduct(variables, token);
+        if (res) {
+          notifyAddTocart();
+        }
+      } catch (error: any) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: error?.response?.data?.message,
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+      } finally {
+        dispatch(closeLoading());
+      }
+    }
+  };
+
   const renderSectionContent = () => {
     return (
       <div className="space-y-7 2xl:space-y-8">
@@ -235,10 +246,15 @@ const ProductDetailPage = () => {
             <InputQuantityItem
               defaultValue={qualitySelected}
               onChange={setQualitySelected}
+              max={
+                product?.variants?.length
+                  ? selectedVariant?.inventoryNumber
+                  : product?.inventoryNumber
+              }
             />
             <Button
               className="!flex-1 hover:!scale-[1.02]"
-              onClick={notifyAddTocart}
+              onClick={() => handleAddToCart()}
               startIcon={
                 <ShoppingBagOutlinedIcon
                   sx={{ color: COLORS.white, fontSize: 22 }}
@@ -259,11 +275,16 @@ const ProductDetailPage = () => {
 
         {/* ---------- 5 ----------  */}
         <div className="flex flex-col gap-4">
-          <AccordionInfo title="Chất liệu" content="Neon flex, Acrylic sheet" />
+          <AccordionInfo title="Chất liệu" content={product?.materials} />
+          <AccordionInfo
+            title="Màu sắc chủ đạo"
+            content={product?.mainColors}
+          />
           <AccordionInfo
             title="Mô tả chi tiết"
-            content="Don't get confused as the displayed price is for 1 letter only. Get in touch before placing your order to get a mock-up of your sign along the calculated price. The price can only be calculated on the account of all details submitted i.e Text, Font, Color and Acrylic shape. We have the best neon quality along quick customer service. Write us and receive price for your sign and a free mockup."
+            content={product?.description}
           />
+          <AccordionInfo title="Công dụng" content={product?.uses} />
           <AccordionInfo
             title="Chính sách vận chuyển & hoàn trả"
             content={
@@ -273,8 +294,20 @@ const ProductDetailPage = () => {
               </ul>
             }
           />
-          <AccordionInfo title="Ngày sản xuất" content="08/04/2024" isOpen />
-          <AccordionInfo title="Hạn sử dụng" content="12/04/2024" isOpen />
+          {product?.productionDate && (
+            <AccordionInfo
+              title="Ngày sản xuất"
+              content={formatDate(product?.productionDate)}
+              isOpen
+            />
+          )}
+          {product?.expirationDate && (
+            <AccordionInfo
+              title="Hạn sử dụng"
+              content={formatDate(product?.expirationDate)}
+              isOpen
+            />
+          )}
         </div>
 
         {/* ---------- 6 ----------  */}
@@ -316,7 +349,7 @@ const ProductDetailPage = () => {
                       fill
                       src={`${headerUrl}/products/${url}`}
                       className="w-full object-cover absolute"
-                      alt="product detail 1"
+                      alt="product detail"
                     />
                   </div>
                 );
@@ -330,8 +363,11 @@ const ProductDetailPage = () => {
 
             <div>
               {/* store information */}
-              <Link href={"/store/id"} className="hover:underline">
-                <div className="font-bold">Tiệm nhà len</div>
+              <Link
+                href={`/store/${product?.store?.id}`}
+                className="hover:underline"
+              >
+                <div className="font-bold">{product?.store?.name}</div>
               </Link>
               <div className="flex items-center gap-6 font-medium text-sm">
                 <div className="flex items-center gap-1">
