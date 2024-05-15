@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import LikeButton from "@/components/products/like-button";
 import { StarIcon } from "@heroicons/react/24/solid";
@@ -28,53 +28,119 @@ import Button from "@/libs/button";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { COLORS } from "@/enum/colors";
 import { imageUrls, types } from "@/enum/fake-datas";
+import { AlertState, Product, Variant } from "@/enum/defined-types";
+import { useDispatch } from "react-redux";
+import { singleProduct } from "@/apis/services/products";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { AlertStatus } from "@/enum/constants";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { headerUrl } from "@/apis/services/authentication";
 
 export interface ProductQuickViewProps {
   className?: string;
+  productId: number;
 }
 
-const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "" }) => {
-  const initialSelectedVariants = types.map((type) => ({
-    [type.label]: "",
-  }));
+const ProductQuickView: FC<ProductQuickViewProps> = ({
+  className = "",
+  productId,
+}) => {
+  const dispatch = useDispatch();
+  const [qualitySelected, setQualitySelected] = useState(1);
+  const [product, setProduct] = useState<Product>();
+  const [selectedVariant, setSelectedVariant] = useState<Variant>();
+  const [price, setPrice] = useState<number>();
+  const [currentImage, setCurrentImage] = useState<string>();
+  const [productImages, setProductImages] = useState<string[]>([]);
 
-  const [selectedVariants, setSelectedVariants] = useState(
-    initialSelectedVariants
-  );
-
-  // Hàm này được gọi khi người dùng chọn một variant
-  const handleVariantSelect = (typeLabel: string, variantName: string) => {
-    setSelectedVariants((prevState) => {
-      const updatedState = [...prevState];
-      const typeIndex = types.findIndex((type) => type.label === typeLabel);
-      updatedState[typeIndex] = {
-        ...prevState[typeIndex],
-        [typeLabel]: variantName,
+  const getSingleProduct = async () => {
+    try {
+      dispatch(openLoading());
+      const res = await singleProduct(productId);
+      if (res) {
+        setProduct(res);
+        if (res?.variants) {
+          const images = res?.variants?.map((item: Variant) => item?.image);
+          setProductImages(images);
+          setSelectedVariant(res?.variants[0]);
+          setPrice(res?.variants[0]?.unitPrice);
+          setCurrentImage(res?.variants[0]?.image);
+        } else {
+          setProductImages(res?.images);
+          setPrice(res?.price);
+          setCurrentImage(res?.images[0]);
+        }
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
       };
-      return updatedState;
-    });
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
   };
 
-  //
-  const [currentImage, setCurrentImage] = useState(imageUrls[0]);
+  useEffect(() => {
+    getSingleProduct();
+  }, []);
 
-  const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
-  const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
+  const handleVariantSelect = (variant: Variant) => {
+    setSelectedVariant(variant);
+  };
 
-  const [qualitySelected, setQualitySelected] = useState(1);
+  const checkAndUpdateImage = (selectedVariant: Variant) => {
+    const foundImage = productImages.find(
+      (image) => image === selectedVariant.image
+    );
+
+    if (foundImage) {
+      // Nếu tìm thấy, cập nhật state currentImage
+      setCurrentImage(foundImage);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedVariant) {
+      checkAndUpdateImage(selectedVariant);
+    }
+    setPrice(selectedVariant?.unitPrice);
+  }, [selectedVariant]);
+
+  const findVariantByImage = (variants: Variant[], currentImage: string) => {
+    return variants.find((item) => item.image === currentImage);
+  };
+
+  useEffect(() => {
+    if (product?.variants && currentImage) {
+      const currentVariant = findVariantByImage(
+        product?.variants,
+        currentImage
+      );
+
+      if (currentVariant) {
+        setSelectedVariant(currentVariant);
+      }
+    }
+  }, [currentImage]);
 
   const notifyAddTocart = () => {
-    toast.custom(
-      (t: any) => (
-        <NotifyAddTocart
-          productImage={LIST_IMAGES_DEMO[0]}
-          qualitySelected={qualitySelected}
-          show={t.visible}
-          selectedVariants={selectedVariants}
-        />
-      ),
-      { position: "top-right", id: "nc-product-notify", duration: 3000 }
-    );
+    if (product) {
+      toast.custom(
+        (t: any) => (
+          <NotifyAddTocart
+            qualitySelected={qualitySelected}
+            show={t.visible}
+            selectedVariant={selectedVariant}
+            product={product}
+          />
+        ),
+        { position: "top-right", id: "nc-product-notify", duration: 3000 }
+      );
+    }
   };
 
   const renderStatus = () => {
@@ -99,49 +165,61 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "" }) => {
       <div className="space-y-4">
         {/* ---------- 1 HEADING ----------  */}
         <div className="flex flex-col gap-3">
-          <div className="text-xl font-bold">
-            Nước Tẩy Trang Dưỡng Ẩm Cho Da Thường, Khô L'Oreal Paris Micellar
-            Water 3-In-1 Moisturizing Even For Sensitive Skin 400Ml
-          </div>
+          <div className="text-xl font-bold">{product?.productName}</div>
           <div className="flex items-center">
             <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
             <div className="ml-1.5 flex text-sm">
-              <span>4.9</span>
+              <span>
+                {product?.averageRating &&
+                  parseFloat(product?.averageRating).toFixed(1)}
+              </span>
               <span className="block mx-2">·</span>
               <span className="text-primary-c900 dark:text-slate-400">
-                142 Đánh giá
+                {product?.totalReviews ?? 0} Đánh giá
               </span>
             </div>
           </div>
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row gap-2 items-center">
               <div className="text-primary-c900 font-semibold text-xl">
-                {formatCurrency(200000)}
+                {price //giá bán
+                  ? product?.discount
+                    ? formatCurrency((price * (100 - product?.discount)) / 100)
+                    : formatCurrency(price)
+                  : "-- --"}
               </div>
-              <div className="text-grey-c400 font-normal text-sm line-through">
-                {formatCurrency(250000)}
-              </div>
-              <MyLabel>
-                <span className="text-xs text-white font-bold">-30%</span>
-              </MyLabel>
+              {product?.discount && (
+                <div className="text-grey-c400 font-normal text-xs line-through">
+                  {price && formatCurrency(price)}
+                </div>
+              )}
+              {product?.discount && (
+                <MyLabel>
+                  <span className="text-xs text-white font-bold">
+                    -{product?.discount}%
+                  </span>
+                </MyLabel>
+              )}
             </div>
             <LikeButton />
           </div>
         </div>
 
         {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
-        <div className="flex flex-col gap-4">
-          {types.map((type, index) => (
+        {product?.variants && selectedVariant && (
+          <div className="flex flex-col gap-4">
             <RenderVariants
-              key={index}
-              label={type.label}
-              variants={type.variants}
-              onChanged={(item) =>
-                handleVariantSelect(item.label, item.variant.name)
-              }
+              label={"Phân loại"}
+              variants={product.variants}
+              selectedVariant={selectedVariant}
+              onChanged={(item: Variant) => {
+                if (item) {
+                  handleVariantSelect(item);
+                }
+              }}
             />
-          ))}
-        </div>
+          </div>
+        )}
 
         {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
         <div className="flex flex-col justify-between gap-6">
@@ -175,10 +253,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "" }) => {
         {/*  */}
 
         {/* ---------- 5 ----------  */}
-        <AccordionInfo
-          title="Mô tả chi tiết"
-          content="Don't get confused as the displayed price is for 1 letter only. Get in touch before placing your order to get a mock-up of your sign along the calculated price. The price can only be calculated on the account of all details submitted i.e Text, Font, Color and Acrylic shape. We have the best neon quality along quick customer service. Write us and receive price for your sign and a free mockup."
-        />
+        <AccordionInfo title="Mô tả chi tiết" content={product?.description} />
       </div>
     );
   };
@@ -195,7 +270,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "" }) => {
               <Image
                 fill
                 sizes="(max-width: 640px) 100vw, 33vw"
-                src={currentImage}
+                src={`${headerUrl}/products/${currentImage}`}
                 className="w-full rounded-xl object-cover"
                 alt="product detail 1"
               />
@@ -205,21 +280,19 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "" }) => {
             {renderStatus()}
           </div>
           <div className="hidden lg:grid grid-cols-4 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
-            {imageUrls.map((url, index) => {
+            {productImages?.map((url, index) => {
               return (
                 <div
                   key={index}
                   className={`transition duration-300 aspect-w-1 aspect-h-1 relative hover:cursor-pointer hover:scale-105 hover:opacity-80 overflow-hidden rounded-lg ${
-                    currentImage === imageUrls[index]
-                      ? "border-2 border-primary-c600"
-                      : ""
+                    currentImage === url ? "border-2 border-primary-c600" : ""
                   }`}
-                  onClick={() => setCurrentImage(imageUrls[index])}
+                  onClick={() => setCurrentImage(url)}
                 >
                   <Image
                     sizes="(max-width: 640px) 100vw, 33vw"
                     fill
-                    src={url}
+                    src={`${headerUrl}/products/${url}`}
                     className="w-full object-cover absolute"
                     alt="product detail 1"
                   />

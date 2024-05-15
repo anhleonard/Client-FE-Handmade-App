@@ -1,16 +1,47 @@
-import React, { FC } from "react";
-import Pagination from "@/shared/pagination/pagination";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+"use client";
+import React, { useEffect, useState } from "react";
 import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
 import HeaderFilterSearchPage from "@/components/filters/header-filter-search-page";
 import Input from "@/shared/Input/Input";
 import ButtonCircle from "@/shared/Button/ButtonCircle";
 import ProductCard from "@/components/products/product-card";
 import DefaultLayout from "@/layout/default-layout";
-import { exampleItems } from "@/enum/constants";
+import { AlertStatus, exampleItems } from "@/enum/constants";
 import PaginationExample from "@/shared/pagination/pagination-example";
+import { AlertState, Product } from "@/enum/defined-types";
+import { useDispatch } from "react-redux";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { getProducts } from "@/apis/services/products";
+import { openAlert } from "@/redux/slices/alertSlice";
 
 const PageSearch = ({}) => {
+  const dispatch = useDispatch();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const getAllProducts = async () => {
+    try {
+      dispatch(openLoading());
+      const res = await getProducts();
+      if (res) {
+        setProducts(res?.data);
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
   return (
     <DefaultLayout>
       <header className="max-w-2xl mx-auto relative">
@@ -59,10 +90,11 @@ const PageSearch = ({}) => {
           <HeaderFilterSearchPage />
 
           {/* LOOP ITEMS */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-            {exampleItems.items.map((item: any) => (
-              <ProductCard key={item.id} item={item} />
-            ))}
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 mt-8 lg:mt-10">
+            {products.length &&
+              products.map((product: Product) => (
+                <ProductCard key={product.id} item={product} />
+              ))}
           </div>
 
           {/* PAGINATION */}

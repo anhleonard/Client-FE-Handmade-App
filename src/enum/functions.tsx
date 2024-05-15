@@ -1,4 +1,5 @@
 import storage from "@/apis/storage";
+import { VariantItem } from "./defined-types";
 
 export function formatCurrency(price: number) {
   const formatter = new Intl.NumberFormat("vi", {
@@ -39,4 +40,12 @@ export function formatShippingAddress(data: any) {
   if (data?.companyName)
     return `${data?.companyName}, ${data?.detailAddress}, ${data?.ward}, ${data?.district}, ${data?.province}, Việt Nam`;
   return `${data?.detailAddress}, ${data?.ward}, ${data?.district}, ${data?.province}, Việt Nam`;
+}
+
+export function formatVariant(data: Array<VariantItem>) {
+  return data.map((item) => item.name).join(" - ");
+}
+
+export function formatPickedVariant(data: Array<VariantItem>) {
+  return data.map((item) => item.name).join(", ");
 }

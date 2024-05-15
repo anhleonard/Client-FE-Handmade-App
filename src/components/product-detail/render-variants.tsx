@@ -1,19 +1,21 @@
-import { VariantType } from "@/enum/defined-types";
+import { Variant, VariantType } from "@/enum/defined-types";
+import { formatVariant } from "@/enum/functions";
 import Button from "@/libs/button";
 import React, { useState } from "react";
 
 type RenderVariantsProps = {
-  label: string;
-  variants: Array<VariantType>;
-  onChanged?: (item: any) => void;
+  label?: string;
+  variants: Array<Variant>;
+  selectedVariant: Variant;
+  onChanged?: (item: Variant) => void;
 };
 
 const RenderVariants = ({
   label,
   variants,
+  selectedVariant,
   onChanged,
 }: RenderVariantsProps) => {
-  const [variantActive, setVariantActive] = useState(0);
   if (!variants || !variants.length) {
     return null;
   }
@@ -21,25 +23,24 @@ const RenderVariants = ({
   return (
     <div>
       <div className="text-sm mb-2 font-semibold text-grey-c900">{label} :</div>
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-2 items-center flex-wrap">
         {variants.map((variant, index) => (
           <>
-            {!(variant.inStock === 0) ? (
+            {!(variant.inventoryNumber === 0) ? (
               <div
                 key={index}
                 onClick={() => {
                   if (onChanged) {
-                    onChanged({ label: label, variant: variants[index] });
+                    onChanged(variant);
                   }
-                  setVariantActive(index);
                 }}
                 className={`max-w-[200px] rounded-full border-2 cursor-pointer text-sm font-medium px-4 py-2 ${
-                  variantActive === index
+                  variant?.id === selectedVariant?.id
                     ? "border-primary-c600 dark:border-primary-500 text-primary-c900"
                     : "border-grey-c100 text-grey-c800"
                 } `}
               >
-                {variant.name}
+                {formatVariant(variant?.variantItems)}
               </div>
             ) : (
               <button
@@ -47,7 +48,7 @@ const RenderVariants = ({
                 className="max-w-[200px] rounded-full border-2 border-transparent cursor-default text-sm font-medium px-4 py-2 disabled:bg-grey-c50 disabled:text-grey-c300"
                 disabled
               >
-                {variant.name}
+                {formatVariant(variant?.variantItems)}
               </button>
             )}
           </>

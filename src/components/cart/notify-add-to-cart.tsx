@@ -5,29 +5,31 @@ import { PRODUCTS } from "@/data/data";
 import Image, { StaticImageData } from "next/image";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import { COLORS } from "@/enum/colors";
-import { formatCurrency } from "@/enum/functions";
+import {
+  formatCurrency,
+  formatPickedVariant,
+  formatVariant,
+} from "@/enum/functions";
 import { useRouter } from "next/navigation";
+import { Product, Variant } from "@/enum/defined-types";
+import { headerUrl } from "@/apis/services/authentication";
 
 interface Props {
   show: boolean;
-  productImage: string | StaticImageData;
   qualitySelected: number;
-  selectedVariants: any;
+  selectedVariant?: Variant;
+  product: Product;
 }
 
 const NotifyAddToCart: FC<Props> = ({
   show,
-  productImage,
   qualitySelected,
-  selectedVariants,
+  selectedVariant,
+  product,
 }) => {
-  const { name, price } = PRODUCTS[0];
-
-  const allSelectedVariants = selectedVariants.map(
-    (item: any) => Object.values(item)[0]
-  );
-
   const router = useRouter();
+
+  console.log({ selectedVariant });
 
   const renderProductCartOnNotify = () => {
     return (
@@ -36,8 +38,10 @@ const NotifyAddToCart: FC<Props> = ({
           <Image
             width={80}
             height={80}
-            src={productImage}
-            alt={name}
+            src={`${headerUrl}/products/${
+              selectedVariant ? selectedVariant?.image : product?.images[0]
+            }`}
+            alt={"demo-image"}
             className="object-cover object-center"
           />
         </div>
@@ -46,22 +50,22 @@ const NotifyAddToCart: FC<Props> = ({
           <div>
             <div className="flex justify-between ">
               <div>
-                <h3 className="text-base font-medium">{name}</h3>
                 <h3 className="text-base font-medium truncate overflow-hidden w-[220px]">
-                  Nước Tẩy Trang Dưỡng Ẩm Cho Da Thường, Khô L'Oreal Paris
-                  Micellar Water 3-In-1 Moisturizing Even For Sensitive Skin
-                  400Ml
+                  {product?.productName}
                 </h3>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                  {allSelectedVariants.map((variant: string, index: number) => {
-                    if (index === allSelectedVariants.length - 1) {
-                      return <span>{`${variant}`}</span>;
-                    } else return <span>{`${variant},  `}</span>;
-                  })}
+                  {selectedVariant?.variantItems &&
+                    formatPickedVariant(selectedVariant?.variantItems)}
                 </p>
               </div>
               <div className="text-sm font-bold text-primary-c900">
-                {formatCurrency(250000)}
+                {formatCurrency(
+                  selectedVariant
+                    ? selectedVariant?.unitPrice * qualitySelected
+                    : product?.price
+                    ? product?.price * qualitySelected
+                    : 0
+                )}
               </div>
             </div>
           </div>

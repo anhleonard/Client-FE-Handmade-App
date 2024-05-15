@@ -3,36 +3,36 @@
 import React, { FC, useState } from "react";
 import LikeButton from "./like-button";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
-import { Product, PRODUCTS } from "@/data/data";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import ModalQuickView from "../modals/ModalQuickView";
+import ModalQuickView from "../modals/modal-quick-view";
 import ProductStatus from "./product-status";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
 import { formatCurrency } from "@/enum/functions";
 import { Rating } from "@mui/material";
-import { COLORS } from "@/enum/colors";
 import MySingleCheckBox from "@/libs/single-checkbox";
+import { Product } from "@/enum/defined-types";
+import { headerUrl } from "@/apis/services/authentication";
 
 export interface ProductCardProps {
   className?: string;
-  data?: Product;
   isLiked?: boolean;
-  item?: any;
+  item: Product;
   selectedItems?: string[];
   handleChecked?: (event: any) => void;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
   className = "",
-  data = PRODUCTS[0],
   isLiked,
   item,
   selectedItems,
   handleChecked,
 }) => {
-  const { status } = data;
+  let productImage = item?.images
+    ? `${headerUrl}/products/${item?.images[0]}`
+    : "/images/bags/bag-1.jpg";
 
   const [showModalQuickView, setShowModalQuickView] = useState(false);
 
@@ -60,10 +60,10 @@ const ProductCard: FC<ProductCardProps> = ({
     <>
       <div className={`relative flex flex-col bg-transparent ${className}`}>
         <div className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
-          <Link href={"/product-detail"} className="block">
+          <Link href={`/product-detail/${item.id}`} className="block">
             <NcImage
               containerClassName="flex aspect-w-1 aspect-h-1 w-full h-0"
-              src={item?.image ? item?.image : "/images/bags/bag-1.jpg"}
+              src={productImage} // change default image
               className="object-cover w-full h-full drop-shadow-xl"
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"
@@ -77,30 +77,44 @@ const ProductCard: FC<ProductCardProps> = ({
 
         <div className="space-y-4 px-2.5 py-3">
           <div className="flex flex-col gap-1">
-            <Link href={"/product-detail"}>
+            <Link href={`/product-detail/${item.id}`}>
               <h2 className="text-base font-semibold transition-colors truncate overflow-hidden hover:underline hover:text-primary-c900 hover:cursor-pointer">
-                {item?.name}
+                {item?.productName}
               </h2>
             </Link>
 
             <div className="flex flex-row gap-2 items-center">
               <div className="text-primary-c900 font-semibold text-base">
-                {formatCurrency(item?.price)}
+                {item?.price //giá bán
+                  ? item?.discount
+                    ? formatCurrency(
+                        (item?.price * (100 - item?.discount)) / 100
+                      )
+                    : formatCurrency(item?.price)
+                  : "-- --"}
               </div>
-              <div className="text-grey-c400 font-normal text-xs line-through">
-                {formatCurrency(item?.prePrice)}
-              </div>
-              <div className="text-primary-c900 font-normal text-sm">
-                -{item?.discount}%
-              </div>
+              {item?.discount && (
+                <div className="text-grey-c400 font-normal text-xs line-through">
+                  {item?.price && formatCurrency(item?.price)}
+                </div>
+              )}
+              {item?.discount && (
+                <div className="text-primary-c900 font-normal text-sm">
+                  -{item?.discount}%
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-center">
               {/* rating item */}
-              <Rating size="small" value={item?.rating} readOnly />
+              <Rating
+                size="small"
+                value={Math.round(parseFloat(item.averageRating))}
+                readOnly
+              />
 
               {!pathname.includes("/account-savelists") ? (
                 <div className="text-grey-c400 font-normal text-xs">
-                  Đã bán 556
+                  Đã bán {item.soldNumber}
                 </div>
               ) : (
                 <MySingleCheckBox
@@ -110,7 +124,7 @@ const ProductCard: FC<ProductCardProps> = ({
                       handleChecked(event);
                     }
                   }}
-                  isChecked={selectedItems?.includes(item?.id)}
+                  isChecked={selectedItems?.includes(item.id.toString())}
                 />
               )}
             </div>
@@ -122,6 +136,7 @@ const ProductCard: FC<ProductCardProps> = ({
       <ModalQuickView
         show={showModalQuickView}
         onCloseModalQuickView={() => setShowModalQuickView(false)}
+        productId={item?.id}
       />
     </>
   );
