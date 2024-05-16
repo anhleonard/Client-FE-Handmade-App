@@ -11,7 +11,10 @@ import { getShippingByUserId, updateShipping } from "@/apis/services/shipping";
 import { AlertState } from "@/enum/defined-types";
 import { AlertStatus, addressTypes } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
-import { formatShippingAddress } from "@/enum/functions";
+import {
+  contentShippingAddress,
+  formatShippingAddress,
+} from "@/enum/functions";
 
 const AccountAddressPage = () => {
   const router = useRouter();
@@ -58,17 +61,6 @@ const AccountAddressPage = () => {
     getAllShippings();
   }, []);
 
-  const exampleContent = (data: any) => {
-    return (
-      <div className="space-y-2">
-        <div className="text-base font-bold">
-          {data?.name} - {data?.phone}
-        </div>
-        <div className="text-sm">{formatShippingAddress(data)}</div>
-      </div>
-    );
-  };
-
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
     const id = (event.target as HTMLInputElement).value;
@@ -111,7 +103,7 @@ const AccountAddressPage = () => {
           {shippings.map((shipping: any) => (
             <AccountAdressCard
               key={shipping?.id}
-              content={exampleContent(shipping)}
+              content={contentShippingAddress(shipping)}
               title={
                 shipping?.receivePlace === addressTypes[0].value
                   ? "Nhà riêng"

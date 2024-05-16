@@ -17,3 +17,8 @@ export type OrderProductValues = {
   productQuantity: number;
   variantId?: number;
 };
+
+export type UpdateOrderProductValues = {
+  productQuantity?: number;
+  isSelected?: boolean;
+};

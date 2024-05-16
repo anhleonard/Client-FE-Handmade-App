@@ -6,8 +6,13 @@ import { Collapse, Divider, List, ListItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import MyTextArea from "@/libs/text-area";
-import BuyingItem from "./buying-item";
-import { OrderProduct, SellerPackage } from "@/enum/defined-types";
+import { AlertState, OrderProduct, SellerPackage } from "@/enum/defined-types";
+import TestBuyingItem from "./test-buying-item";
+import storage from "@/apis/storage";
+import { updatedOrderProduct } from "@/apis/services/order-products";
+import { AlertStatus } from "@/enum/constants";
+import { useDispatch } from "react-redux";
+import { openAlert } from "@/redux/slices/alertSlice";
 
 function calculateTotalPrice(
   selectedItems: string[],
@@ -28,32 +33,31 @@ function calculateTotalPrice(
   return totalPrice;
 }
 
-type SellerItemsPackageProps = {
+type Props = {
   sellerPackage: SellerPackage;
-  handleUpdateListSellerPackages: (sellerPackage: SellerPackage) => void;
+  handleRefetch: () => void;
 };
 
-const SellerItemsPackage = ({
-  sellerPackage,
-  handleUpdateListSellerPackages,
-}: SellerItemsPackageProps) => {
+const TestSellerItemsPackage = ({ sellerPackage, handleRefetch }: Props) => {
+  const dispatch = useDispatch();
   const [selected, setSelected] = useState<string[]>(
     sellerPackage?.orderProducts
       .filter((item) => item.isSelected)
       .map((item) => item.code)
   );
 
-  const [storePackage, setStorePackage] =
-    useState<SellerPackage>(sellerPackage);
-
-  const [items, setItems] = useState(sellerPackage.orderProducts);
-
-  const allItemCodes = items.map((item: OrderProduct) => item.code);
+  const allItemCodes = sellerPackage.orderProducts.map(
+    (item: OrderProduct) => item.code
+  );
 
   const handleChange = (event: any) => {
     const value = event.target.value;
     if (value === "all") {
-      setSelected(selected.length === items.length ? [] : allItemCodes);
+      setSelected(
+        selected.length === sellerPackage.orderProducts.length
+          ? []
+          : allItemCodes
+      );
       return;
     }
     // added below code to update selected options
@@ -63,29 +67,46 @@ const SellerItemsPackage = ({
     setSelected(list);
   };
 
-  const handleUpdateSelectedNumberItem = (buyingItem: OrderProduct) => {
-    const index = items.findIndex((item) => item.id === buyingItem.id);
-    if (index !== -1) {
-      const updatedItems = [...items];
-      updatedItems[index] = buyingItem;
-      setItems(updatedItems);
+  useEffect(() => {
+    handleChangeSelectedItems(selected);
+  }, [selected]);
+
+  const handleChangeSelectedItems = async (selected: string[]) => {
+    try {
+      const token = storage.getLocalAccessToken();
+
+      const notSelectedItems = sellerPackage.orderProducts.filter(
+        (item) => !selected.includes(item.code)
+      );
+      const selectedItems = sellerPackage.orderProducts.filter((item) =>
+        selected.includes(item.code)
+      );
+
+      for (let item of selectedItems) {
+        const variables = {
+          isSelected: true,
+        };
+        await updatedOrderProduct(item?.id, variables, token);
+      }
+
+      for (let item of notSelectedItems) {
+        const variables = {
+          isSelected: false,
+        };
+        await updatedOrderProduct(item?.id, variables, token);
+      }
+
+      handleRefetch(); // refetch page cart
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
     }
   };
-
-  useEffect(() => {
-    let updatedTotalPayment = calculateTotalPrice(selected, items);
-
-    const updatedSellerPackage = {
-      ...sellerPackage,
-      selectedItems: selected,
-      items: items,
-      totalPayment: updatedTotalPayment,
-    };
-
-    setStorePackage(updatedSellerPackage);
-
-    handleUpdateListSellerPackages(updatedSellerPackage);
-  }, [selected, items]);
 
   return (
     <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
@@ -118,22 +139,19 @@ const SellerItemsPackage = ({
       <Collapse in={true}>
         <List disablePadding className="flex flex-col">
           {/* các items có trong giỏ hàng của seller đó */}
-          {storePackage?.orderProducts.map(
-            (item: OrderProduct, index: number) => (
-              <BuyingItem
+          {sellerPackage?.orderProducts
+            ?.sort((a, b) => a.id - b.id)
+            .map((item: OrderProduct, index: number) => (
+              <TestBuyingItem
                 key={index}
                 item={item}
                 handleChecked={(event) => {
                   handleChange(event);
                 }}
-                getBuyingItem={(value, amount) =>
-                  console.log({ value, amount })
-                }
                 selected={selected}
-                handleUpdateSelectedNumberItem={handleUpdateSelectedNumberItem}
+                handleRefetch={handleRefetch}
               />
-            )
-          )}
+            ))}
 
           {/* list applied voucher */}
           {/* <ListItem
@@ -177,7 +195,12 @@ const SellerItemsPackage = ({
                 <div className="flex flex-row justify-between items-center">
                   <div className="text-grey-c700 font-semibold">Tạm tính</div>
                   <div className="font-bold">
-                    {formatCurrency(storePackage.totalPayment)}
+                    {formatCurrency(
+                      calculateTotalPrice(
+                        selected,
+                        sellerPackage?.orderProducts
+                      )
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-row justify-between items-center">
@@ -197,8 +220,16 @@ const SellerItemsPackage = ({
                   <div className="text-grey-c700 font-semibold">Thành tiền</div>
                   <div className="font-bold text-primary-c900">
                     {formatCurrency(
-                      storePackage.totalPayment - 0 >= 0
-                        ? storePackage.totalPayment - 0
+                      calculateTotalPrice(
+                        selected,
+                        sellerPackage?.orderProducts
+                      ) -
+                        0 >=
+                        0
+                        ? calculateTotalPrice(
+                            selected,
+                            sellerPackage?.orderProducts
+                          ) - 0
                         : 0
                     )}
                   </div>
@@ -212,4 +243,4 @@ const SellerItemsPackage = ({
   );
 };
 
-export default SellerItemsPackage;
+export default TestSellerItemsPackage;

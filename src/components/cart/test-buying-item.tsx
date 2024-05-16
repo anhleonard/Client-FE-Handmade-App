@@ -6,34 +6,77 @@ import React, { useEffect, useState } from "react";
 import InputQuantityItem from "../product-detail/input-quantity-item";
 import { COLORS } from "@/enum/colors";
 import { formatCurrency, formatPickedVariant } from "@/enum/functions";
-import { OrderProduct } from "@/enum/defined-types";
+import { AlertState, OrderProduct } from "@/enum/defined-types";
+import { headerUrl } from "@/apis/services/authentication";
+import { useDispatch } from "react-redux";
+import { AlertStatus } from "@/enum/constants";
+import { openAlert } from "@/redux/slices/alertSlice";
+import {
+  deleteOrderProduct,
+  updatedOrderProduct,
+} from "@/apis/services/order-products";
+import storage from "@/apis/storage";
 
-type BuyingItemProps = {
+type Props = {
   item: OrderProduct;
   selected: string[];
   handleChecked: (event: any) => void;
-  getBuyingItem: (numberItem: number, amount: number) => void;
-  handleUpdateSelectedNumberItem: (buyingItem: OrderProduct) => void;
+  handleRefetch: () => void;
 };
 
-const BuyingItem = ({
+const TestBuyingItem = ({
   item,
   selected,
   handleChecked,
-  getBuyingItem,
-  handleUpdateSelectedNumberItem,
-}: BuyingItemProps) => {
-  const [numberItem, setNumberItem] = useState(item?.productQuantity);
+  handleRefetch,
+}: Props) => {
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const updatedBuyingItem = {
-      ...item,
-      numberSelectedItem: numberItem,
-      amountMoney: parseInt(item?.productUnitPrice) * numberItem,
-    };
+  const handleChange = async (value: number) => {
+    try {
+      const variables = {
+        productQuantity: value,
+      };
+      const token = storage.getLocalAccessToken();
+      const res = await updatedOrderProduct(item?.id, variables, token);
+      if (res) {
+        handleRefetch();
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    }
+  };
 
-    handleUpdateSelectedNumberItem(updatedBuyingItem);
-  }, [numberItem]);
+  const handleDelete = async (id: number) => {
+    try {
+      const token = storage.getLocalAccessToken();
+      const res = await deleteOrderProduct(item?.id, token);
+      if (res) {
+        handleRefetch();
+        let alert: AlertState = {
+          isOpen: true,
+          title: "XÓA THÀNH CÔNG",
+          message: "Đã xóa sản phẩm khỏi giỏ hàng!",
+          type: AlertStatus.SUCCESS,
+        };
+        dispatch(openAlert(alert));
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    }
+  };
 
   return (
     <ListItem
@@ -41,7 +84,12 @@ const BuyingItem = ({
       disablePadding
     >
       <div className="flex flex-row items-start gap-4">
-        <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
+        <MyDisplayImage
+          src={`${headerUrl}/products/${
+            item?.variant ? item?.variant?.image : item?.product?.images[0]
+          }`}
+          alt="order-image-product"
+        />
         <div className="flex h-[70px] flex-1 flex-col justify-between">
           <div className="flex flex-row items-center justify-between">
             <div className="text-base font-semibold text-grey-c900">
@@ -53,10 +101,6 @@ const BuyingItem = ({
               checkedColor={COLORS.primary.c900}
               onChanged={(event) => {
                 handleChecked(event);
-                getBuyingItem(
-                  numberItem,
-                  numberItem * parseInt(item?.productUnitPrice)
-                );
               }}
             />
           </div>
@@ -77,18 +121,27 @@ const BuyingItem = ({
                   </span>
                 </div>
               </div>
-              <MyTextAction label="Xóa" color="text-grey-c900" />
+              <MyTextAction
+                label="Xóa"
+                color="text-grey-c900"
+                onClick={() => handleDelete(item?.id)}
+              />
             </div>
             <div className="flex flex-row gap-10 items-center">
               <InputQuantityItem
-                defaultValue={numberItem}
-                onChange={(value) => setNumberItem(value)}
+                defaultValue={item?.productQuantity}
+                onChange={(value) => handleChange(value)}
+                max={
+                  item?.variant
+                    ? item?.variant?.inventoryNumber
+                    : item?.product?.inventoryNumber
+                }
               />
               <div className="flex flex-col items-end text-sm w-[150px]">
                 <div>Tạm tính</div>
                 <div className="text-primary-c900 font-bold">
                   {formatCurrency(
-                    parseInt(item?.productUnitPrice) * numberItem
+                    parseInt(item?.productUnitPrice) * item?.productQuantity
                   )}
                 </div>
               </div>
@@ -100,4 +153,4 @@ const BuyingItem = ({
   );
 };
 
-export default BuyingItem;
+export default TestBuyingItem;

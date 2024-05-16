@@ -1,5 +1,5 @@
 import storage from "@/apis/storage";
-import { VariantItem } from "./defined-types";
+import { OrderProduct, VariantItem } from "./defined-types";
 import moment from "moment";
 
 export function formatCurrency(price: number) {
@@ -54,4 +54,22 @@ export function formatPickedVariant(data: Array<VariantItem>) {
 export function formatDate(timestamp: Date) {
   const date = moment(timestamp).format("DD-MM-YYYY HH:mm:ss");
   return date;
+}
+
+export function contentShippingAddress(data: any) {
+  return (
+    <div className="space-y-2">
+      <div className="text-base font-bold">
+        {data?.name} - {data?.phone}
+      </div>
+      <div className="text-sm">{formatShippingAddress(data)}</div>
+    </div>
+  );
+}
+
+export function calculateTotalPrice(items: OrderProduct[]) {
+  return items.reduce((total: number, item) => {
+    const price = parseInt(item.productUnitPrice) * item.productQuantity;
+    return total + price;
+  }, 0);
 }

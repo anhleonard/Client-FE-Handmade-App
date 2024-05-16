@@ -14,45 +14,53 @@ import { COLORS } from "@/enum/colors";
 import { useEffect, useState } from "react";
 import { formatCurrency } from "@/enum/functions";
 import Button from "@/libs/button";
-import MyVoucherLabel from "@/libs/voucher-label";
 import SellerItemsPackage from "@/components/cart/seller-items-package";
-import axios from "axios";
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import { useRouter } from "next/navigation";
-import { AlertState, SellerPackage } from "@/enum/defined-types";
+import { AlertState, OrderProduct, SellerPackage } from "@/enum/defined-types";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import storage from "@/apis/storage";
 import { orderProductsByUser } from "@/apis/services/order-products";
+import TestSellerItemsPackage from "@/components/cart/test-seller-items-package";
+import { RootState } from "@/redux/store";
+import { refetchComponent } from "@/redux/slices/refetchSlice";
+
+function calculateTotalPrice(items: OrderProduct[]) {
+  return items.reduce((total: number, item) => {
+    const price = parseInt(item.productUnitPrice) * item.productQuantity;
+    return total + price;
+  }, 0);
+}
 
 const CartPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
   const [listSellerPackages, setListSellerPackages] = useState<SellerPackage[]>(
     []
   );
 
-  const handleUpdateListSellerPackages = (sellerPackage: any) => {
-    const index = listSellerPackages.findIndex(
-      (item: any) => item.id === sellerPackage.id
-    );
-    if (index !== -1) {
-      const updatedItems = [...listSellerPackages];
-      updatedItems[index] = sellerPackage;
-
-      setListSellerPackages(updatedItems);
-    }
-  };
+  const [selectedOrderProducts, setSelectedOrderProducts] = useState<
+    OrderProduct[]
+  >([]);
 
   const getListSellerPackages = async () => {
     try {
-      dispatch(openLoading());
       const token = storage.getLocalAccessToken();
       const res = await orderProductsByUser(token);
       if (res) {
+        let items: OrderProduct[] = [];
+        for (let store of res) {
+          const foundItem = store?.orderProducts
+            .filter((item: any) => item.isSelected)
+            .map((item: any) => item);
+          items = [...items, ...foundItem];
+        }
+        setSelectedOrderProducts(items);
         setListSellerPackages(res);
       }
     } catch (error: any) {
@@ -63,14 +71,16 @@ const CartPage = () => {
         type: AlertStatus.ERROR,
       };
       dispatch(openAlert(alert));
-    } finally {
-      dispatch(closeLoading());
     }
   };
 
   useEffect(() => {
     getListSellerPackages();
-  }, []);
+  }, [refetchQueries]);
+
+  const handleRefetch = () => {
+    dispatch(refetchComponent());
+  };
 
   const renderStatusSoldout = () => {
     return (
@@ -120,12 +130,10 @@ const CartPage = () => {
             {listSellerPackages?.map(
               (sellerPackage: SellerPackage, index: number) => {
                 return (
-                  <SellerItemsPackage
+                  <TestSellerItemsPackage
                     key={index}
                     sellerPackage={sellerPackage}
-                    handleUpdateListSellerPackages={
-                      handleUpdateListSellerPackages
-                    }
+                    handleRefetch={handleRefetch}
                   />
                 );
               }
@@ -154,27 +162,30 @@ const CartPage = () => {
                     <div className="col-span-1 text-sm text-grey-c900 space-y-4">
                       <div className="flex flex-row justify-between items-center">
                         <div className="text-grey-c700 font-semibold">
-                          Sản phẩm đã chọn mua tại shop
+                          Sản phẩm đã chọn mua
                         </div>
-                        <div className="font-bold">{6}</div>
+                        <div className="font-bold">
+                          {selectedOrderProducts?.length}
+                        </div>
                       </div>
                       <div className="flex flex-row justify-between items-center">
                         <div className="text-grey-c700 font-semibold">
                           Tạm tính
                         </div>
                         <div className="font-bold">
-                          {formatCurrency(428000)}
+                          {selectedOrderProducts?.length &&
+                            formatCurrency(
+                              calculateTotalPrice(selectedOrderProducts)
+                            )}
                         </div>
                       </div>
                       <div className="flex flex-row justify-between items-center">
                         <div className="text-grey-c700 font-semibold">
                           Mã giảm giá
                         </div>
-                        <div className="font-bold">
-                          - {formatCurrency(50000)}
-                        </div>
+                        <div className="font-bold">- {formatCurrency(0)}</div>
                       </div>
-                      <div className="space-y-2">
+                      {/* <div className="space-y-2">
                         <div className="flex flex-row justify-between items-center">
                           <MyVoucherLabel type="warning" py="py-0.5">
                             G-LAMQUEN -30K
@@ -191,7 +202,7 @@ const CartPage = () => {
                             - {formatCurrency(20000)}
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </ListItem>
                   <ListItem className="block w-full p-4" disablePadding>
@@ -200,7 +211,10 @@ const CartPage = () => {
                         Tổng thanh toán
                       </div>
                       <div className="font-bold text-primary-c900">
-                        {formatCurrency(1500000)}
+                        {selectedOrderProducts?.length &&
+                          formatCurrency(
+                            calculateTotalPrice(selectedOrderProducts) - 0
+                          )}
                       </div>
                     </div>
                   </ListItem>

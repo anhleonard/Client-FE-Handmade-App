@@ -114,14 +114,23 @@ export type Store = {
 export type OrderProduct = {
   id: number;
   code: string;
-  productUnitPrice: number;
+  productUnitPrice: string;
   productQuantity: number;
   isSelected: boolean;
+  numberSelectedItem: number; // số lượng product thay đổi
+  amountMoney: number; // số tiền thay đổi sau khi change numberSelectedItem
   variant: Variant;
   product: Product;
 };
 
 export type SellerPackage = {
+  store: Store;
+  orderProducts: OrderProduct[];
+  selectedItems: string[];
+  totalPayment: number;
+};
+
+export type SelectedPackage = {
   store: Store;
   orderProducts: OrderProduct[];
 };

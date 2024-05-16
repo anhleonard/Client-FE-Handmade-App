@@ -1,3 +1,4 @@
+import { OrderProduct } from "@/enum/defined-types";
 import { formatCurrency } from "@/enum/functions";
 import MyTextAction from "@/libs/text-action";
 import MyVoucherLabel from "@/libs/voucher-label";
@@ -7,11 +8,15 @@ import React from "react";
 type PaymentInformationProps = {
   title?: string;
   isEdit?: boolean;
+  selectedItems?: OrderProduct[];
+  totalPayment?: number;
 };
 
 const PaymentInformation = ({
   title = "Đơn hàng của bạn",
   isEdit = true,
+  selectedItems,
+  totalPayment,
 }: PaymentInformationProps) => {
   return (
     <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
@@ -32,19 +37,21 @@ const PaymentInformation = ({
                 <div className="text-grey-c700 font-semibold">
                   Tổng số sản phẩm đã chọn mua
                 </div>
-                <div className="font-bold">{6}</div>
+                <div className="font-bold">{selectedItems?.length}</div>
               </div>
               <div className="flex flex-row justify-between items-center">
                 <div className="text-grey-c700 font-semibold">Tạm tính</div>
-                <div className="font-bold">{formatCurrency(428000)}</div>
+                <div className="font-bold">
+                  {totalPayment && formatCurrency(totalPayment)}
+                </div>
               </div>
               <div className="flex flex-row justify-between items-center">
                 <div className="text-grey-c700 font-semibold">
                   Phí giao hàng
                 </div>
-                <div className="font-bold">- {formatCurrency(20000)}</div>
+                <div className="font-bold">{formatCurrency(20000)}</div>
               </div>
-              <div className="flex flex-row justify-between items-center">
+              {/* <div className="flex flex-row justify-between items-center">
                 <div className="text-grey-c700 font-semibold">Mã giảm giá</div>
                 <div className="font-bold">- {formatCurrency(50000)}</div>
               </div>
@@ -61,7 +68,7 @@ const PaymentInformation = ({
                   </MyVoucherLabel>
                   <div className="text-xs">- {formatCurrency(20000)}</div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </ListItem>
           <ListItem className="block w-full p-4" disablePadding>
@@ -70,7 +77,7 @@ const PaymentInformation = ({
                 Tổng thanh toán
               </div>
               <div className="font-bold text-primary-c900">
-                {formatCurrency(358000)}
+                {totalPayment && formatCurrency(totalPayment + 20000)}
               </div>
             </div>
           </ListItem>
