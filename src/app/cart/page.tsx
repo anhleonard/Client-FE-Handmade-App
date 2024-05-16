@@ -12,7 +12,7 @@ import DefaultLayout from "@/layout/default-layout";
 import ChildHeading from "@/layout/child-heading";
 import { COLORS } from "@/enum/colors";
 import { useEffect, useState } from "react";
-import { formatCurrency } from "@/enum/functions";
+import { calculateTotalPrice, formatCurrency } from "@/enum/functions";
 import Button from "@/libs/button";
 import SellerItemsPackage from "@/components/cart/seller-items-package";
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
@@ -27,13 +27,6 @@ import { orderProductsByUser } from "@/apis/services/order-products";
 import TestSellerItemsPackage from "@/components/cart/test-seller-items-package";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
-
-function calculateTotalPrice(items: OrderProduct[]) {
-  return items.reduce((total: number, item) => {
-    const price = parseInt(item.productUnitPrice) * item.productQuantity;
-    return total + price;
-  }, 0);
-}
 
 const CartPage = () => {
   const router = useRouter();
