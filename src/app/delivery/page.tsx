@@ -164,12 +164,6 @@ const DeliveryPage = () => {
                 <CheckCircleOutlineRoundedIcon
                   sx={{ color: COLORS.success.c900, fontSize: 22 }}
                 />
-                <div>MIỄN PHÍ GIAO HÀNG đơn từ 399K.</div>
-              </div>
-              <div className="flex flex-row gap-1 items-start">
-                <CheckCircleOutlineRoundedIcon
-                  sx={{ color: COLORS.success.c900, fontSize: 22 }}
-                />
                 <div>Dự kiến giao hàng từ 2-5 ngày, trừ Lễ Tết.</div>
               </div>
             </div>
@@ -183,10 +177,15 @@ const DeliveryPage = () => {
             <PickedItems
               selectedPackage={selectedPackage}
               totalPayment={calculateTotalPrice(selectedItems)}
+              shipping={{
+                value: parseInt(value),
+                shippings: shippings,
+              }}
             />
 
             {/* thông tin thanh toán */}
             <PaymentInformation
+              selectedPackage={selectedPackage}
               selectedItems={selectedItems}
               totalPayment={calculateTotalPrice(selectedItems)}
               shipping={{

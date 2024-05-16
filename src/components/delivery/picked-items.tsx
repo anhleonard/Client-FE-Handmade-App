@@ -7,12 +7,14 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import { COLORS } from "@/enum/colors";
 import { SelectedPackage } from "@/enum/defined-types";
 import { headerUrl } from "@/apis/services/authentication";
+import { SelectedShipping } from "../processing-order/payment-information";
 
 type PickedItemsProps = {
   isCompleted?: boolean;
   title?: string;
   selectedPackage?: SelectedPackage[];
   totalPayment?: number;
+  shipping?: SelectedShipping;
 };
 
 const PickedItems = ({
@@ -20,7 +22,18 @@ const PickedItems = ({
   title = "Giỏ hàng",
   selectedPackage,
   totalPayment,
+  shipping,
 }: PickedItemsProps) => {
+  const currentAddress = shipping?.shippings?.filter(
+    (item) => item?.id == shipping?.value
+  )[0];
+
+  const deliveryFee =
+    currentAddress?.province === "Hà Nội" ||
+    currentAddress?.province === "Hồ Chí Minh"
+      ? 20000
+      : 30000;
+
   return (
     <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
       <ListItem className="bg-white border-b-2 border-grey-c50" disablePadding>
@@ -92,6 +105,14 @@ const PickedItems = ({
                     );
                   })}
                 </div>
+                <div className="flex flex-row justify-between items-center px-4 border-t-[2px] border-dashed border-grey-c100 py-2 text-sm">
+                  <div className="text-grey-c700 font-semibold">
+                    Phí giao hàng
+                  </div>
+                  <div className="font-bold text-grey-c900">
+                    {deliveryFee && formatCurrency(deliveryFee)}
+                  </div>
+                </div>
               </ListItem>
             );
           })}
@@ -99,7 +120,9 @@ const PickedItems = ({
           {!isCompleted ? (
             <ListItem className="block w-full p-4" disablePadding>
               <div className="flex flex-row justify-between items-center text-sm">
-                <div className="text-grey-c700 font-semibold">Tổng tiền</div>
+                <div className="text-grey-c700 font-semibold">
+                  Tổng tiền hàng
+                </div>
                 <div className="font-bold text-primary-c900">
                   {totalPayment && formatCurrency(totalPayment)}
                 </div>

@@ -32,25 +32,17 @@ const CompleteOrderPage = () => {
           </div>
         </div>
 
-        <div className="bg-primary-c100 rounded-3xl space-y-3 w-full md:w-[500px] h-[180px] flex flex-col items-center justify-center">
-          <div>Mã số đơn hàng của bạn là:</div>
-          <div className="font-bold text-3xl text-primary-c900">
-            210719AX70220E
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 md:gap-3 gap-5 items-center w-full md:w-[500px]">
+        <div className="grid md:grid-cols-2 md:gap-3 gap-5 items-center w-full md:w-[500px] mt-10">
           <div className="col-span-1 w-full">
             <Button
               startIcon={
                 <FormatListBulletedRoundedIcon sx={{ fontSize: 20 }} />
               }
               className="!w-full"
-              onClick={() =>
-                router.push("/detail-completed-order", { scroll: true })
-              }
+              onClick={() => router.push("/account-order", { scroll: true })}
+              color="black"
             >
-              Xem chi tiết đơn hàng
+              Quản lý đơn hàng
             </Button>
           </div>
           <div className="col-span-1 w-full">

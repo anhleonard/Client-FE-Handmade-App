@@ -12,7 +12,12 @@ import PaymentWay from "@/components/payment/payment-ways";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import InforClientOrder from "@/components/processing-order/infor-client-order";
-import { AlertState, OrderProduct, Shipping } from "@/enum/defined-types";
+import {
+  AlertState,
+  OrderProduct,
+  SelectedPackage,
+  Shipping,
+} from "@/enum/defined-types";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
@@ -21,6 +26,7 @@ import storage from "@/apis/storage";
 import { getSingleShipping } from "@/apis/services/shipping";
 import { selectedOrderProducts } from "@/apis/services/order-products";
 import { calculateTotalPrice } from "@/enum/functions";
+import { createOrder } from "@/apis/services/orders";
 
 const paymentWays = [
   {
@@ -50,6 +56,7 @@ const PaymentPage = () => {
   const [shipping, setShipping] = useState<Shipping>();
 
   const [selectedItems, setSelectedItems] = useState<OrderProduct[]>([]);
+  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage[]>([]);
 
   const getSelectedOrderProducts = async () => {
     try {
@@ -65,6 +72,7 @@ const PaymentPage = () => {
           items = [...items, ...foundItem];
         }
         setSelectedItems(items);
+        setSelectedPackage(res);
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -86,7 +94,6 @@ const PaymentPage = () => {
       if (shippingId && typeof shippingId === "string") {
         const res = await getSingleShipping(parseInt(shippingId), token);
         if (res) {
-          console.log({ res });
           setShipping(res);
         }
       }
@@ -110,6 +117,55 @@ const PaymentPage = () => {
   useEffect(() => {
     getSelectedOrderProducts();
   }, []);
+
+  const handleClickOrder = async () => {
+    if (shippingId && typeof shippingId === "string") {
+      try {
+        dispatch(openLoading());
+        const token = storage.getLocalAccessToken();
+
+        const deliveryFee =
+          shipping?.province === "Hà Nội" ||
+          shipping?.province === "Hồ Chí Minh"
+            ? 20000
+            : 30000;
+
+        for (let parcel of selectedPackage) {
+          const orderProductIds: number[] = [];
+          for (let item of parcel?.orderProducts) {
+            orderProductIds.push(item?.id);
+          }
+          const variables = {
+            shippingAddressId: parseInt(shippingId),
+            orderedProductIds: orderProductIds,
+            deliveryFee: deliveryFee,
+          };
+
+          await createOrder(variables, token);
+        }
+
+        router.push("/complete-order", { scroll: true });
+      } catch (error: any) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: error?.response?.data?.message,
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+      } finally {
+        dispatch(closeLoading());
+      }
+    } else {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: "Đặt hàng lỗi. Vui lòng thử lại sau.",
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -146,13 +202,17 @@ const PaymentPage = () => {
           <div className="sticky top-28 space-y-6">
             {/* thông tin thanh toán */}
             <PaymentInformation
+              selectedPackage={selectedPackage}
               selectedItems={selectedItems}
               totalPayment={calculateTotalPrice(selectedItems)}
+              selectedShipping={shipping}
             />
 
             <Button
               className="!w-full !py-3"
-              onClick={() => router.push("/complete-order", { scroll: true })}
+              onClick={() => {
+                handleClickOrder();
+              }}
             >
               ĐẶT HÀNG
             </Button>

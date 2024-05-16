@@ -1,4 +1,4 @@
-import { OrderProduct, Shipping } from "@/enum/defined-types";
+import { OrderProduct, SelectedPackage, Shipping } from "@/enum/defined-types";
 import { formatCurrency } from "@/enum/functions";
 import MyTextAction from "@/libs/text-action";
 import MyVoucherLabel from "@/libs/voucher-label";
@@ -6,7 +6,7 @@ import { Collapse, List, ListItem, ListItemButton } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
-type SelectedShipping = {
+export type SelectedShipping = {
   value: number;
   shippings: Shipping[];
 };
@@ -17,6 +17,8 @@ type PaymentInformationProps = {
   selectedItems?: OrderProduct[];
   totalPayment?: number;
   shipping?: SelectedShipping;
+  selectedPackage?: SelectedPackage[];
+  selectedShipping?: Shipping;
 };
 
 const PaymentInformation = ({
@@ -25,18 +27,19 @@ const PaymentInformation = ({
   selectedItems,
   totalPayment,
   shipping,
+  selectedPackage,
+  selectedShipping,
 }: PaymentInformationProps) => {
   const currentAddress = shipping?.shippings?.filter(
     (item) => item?.id == shipping?.value
   )[0];
 
-  console.log(currentAddress);
+  const province = selectedShipping
+    ? selectedShipping?.province
+    : currentAddress?.province;
 
-  const transportFee =
-    currentAddress?.province === "Hà Nội" ||
-    currentAddress?.province === "Hồ Chí Minh"
-      ? 20000
-      : 30000;
+  const deliveryFee =
+    province === "Hà Nội" || province === "Hồ Chí Minh" ? 20000 : 30000;
 
   return (
     <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
@@ -73,7 +76,10 @@ const PaymentInformation = ({
                 <div className="text-grey-c700 font-semibold">
                   Phí giao hàng
                 </div>
-                <div className="font-bold">{formatCurrency(transportFee)}</div>
+                <div className="font-bold">
+                  {selectedPackage?.length &&
+                    formatCurrency(deliveryFee * selectedPackage?.length)}
+                </div>
               </div>
               {/* <div className="flex flex-row justify-between items-center">
                 <div className="text-grey-c700 font-semibold">Mã giảm giá</div>
@@ -101,7 +107,11 @@ const PaymentInformation = ({
                 Tổng thanh toán
               </div>
               <div className="font-bold text-primary-c900">
-                {totalPayment && formatCurrency(totalPayment + transportFee)}
+                {totalPayment &&
+                  selectedPackage?.length &&
+                  formatCurrency(
+                    totalPayment + deliveryFee * selectedPackage?.length
+                  )}
               </div>
             </div>
           </ListItem>
