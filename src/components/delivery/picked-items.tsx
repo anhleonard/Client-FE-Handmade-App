@@ -39,7 +39,7 @@ const PickedItems = ({
                 disablePadding
               >
                 <div className="flex flex-row justify-between px-4 py-1 font-semibold bg-primary-c100">
-                  <div className="text-primary-c900">Gói 1</div>
+                  <div className="text-primary-c900">Gói {index + 1}</div>
                   <div className="flex flex-row gap-1 items-center">
                     <StorefrontIcon
                       sx={{ fontSize: 20, color: COLORS.primary.c900 }}
@@ -57,7 +57,7 @@ const PickedItems = ({
                         className="flex flex-row items-start gap-4 px-4 py-4"
                         key={index}
                       >
-                        <div className="block h-15 w-15 object-cover">
+                        <div className="inline-block h-15 w-15 object-cover">
                           <img
                             src={`${headerUrl}/products/${
                               orderProduct?.variant

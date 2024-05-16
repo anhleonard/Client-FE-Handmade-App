@@ -21,6 +21,7 @@ import {
   AlertState,
   OrderProduct,
   SelectedPackage,
+  Shipping,
 } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { calculateTotalPrice, contentShippingAddress } from "@/enum/functions";
@@ -150,7 +151,7 @@ const DeliveryPage = () => {
           <div className="space-y-4">
             <div className="font-bold text-xl">CHÍNH SÁCH VẬN CHUYỂN</div>
             <div className="space-y-3 font-medium text-grey-c900">
-              <div className="flex flex-row gap-1 items-center">
+              <div className="flex flex-row gap-1 items-start">
                 <CheckCircleOutlineRoundedIcon
                   sx={{ color: COLORS.success.c900, fontSize: 22 }}
                 />
@@ -159,13 +160,13 @@ const DeliveryPage = () => {
                   tỉnh).
                 </div>
               </div>
-              <div className="flex flex-row gap-1 items-center">
+              <div className="flex flex-row gap-1 items-start">
                 <CheckCircleOutlineRoundedIcon
                   sx={{ color: COLORS.success.c900, fontSize: 22 }}
                 />
                 <div>MIỄN PHÍ GIAO HÀNG đơn từ 399K.</div>
               </div>
-              <div className="flex flex-row gap-1 items-center">
+              <div className="flex flex-row gap-1 items-start">
                 <CheckCircleOutlineRoundedIcon
                   sx={{ color: COLORS.success.c900, fontSize: 22 }}
                 />
@@ -188,11 +189,15 @@ const DeliveryPage = () => {
             <PaymentInformation
               selectedItems={selectedItems}
               totalPayment={calculateTotalPrice(selectedItems)}
+              shipping={{
+                value: parseInt(value),
+                shippings: shippings,
+              }}
             />
 
             <Button
               className="!w-full !py-3"
-              onClick={() => router.push("/payment", { scroll: true })}
+              onClick={() => router.push(`/payment/${value}`, { scroll: true })}
             >
               TIẾN HÀNH THANH TOÁN
             </Button>

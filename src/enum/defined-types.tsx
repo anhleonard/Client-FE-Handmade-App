@@ -134,3 +134,15 @@ export type SelectedPackage = {
   store: Store;
   orderProducts: OrderProduct[];
 };
+
+export type Shipping = {
+  id: number;
+  phone: string;
+  name: string;
+  province: string;
+  ward: string;
+  detailAddress: string;
+  isDefaultAddress: boolean;
+  receivePlace: string;
+  companyName?: string;
+};

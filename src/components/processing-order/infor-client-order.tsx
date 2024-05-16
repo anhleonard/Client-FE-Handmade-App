@@ -3,13 +3,21 @@ import MyTextAction from "@/libs/text-action";
 import { Collapse, List, ListItem } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import React from "react";
+import Link from "next/link";
+import { Shipping } from "@/enum/defined-types";
+import { formatShippingAddress } from "@/enum/functions";
 
 type InforClientOrderProps = {
   isEdit?: boolean;
   title?: string;
+  shipping?: Shipping;
 };
 
-const InforClientOrder = ({ isEdit = true, title }: InforClientOrderProps) => {
+const InforClientOrder = ({
+  isEdit = true,
+  title,
+  shipping,
+}: InforClientOrderProps) => {
   return (
     <div className="space-y-4">
       {title && <div className="font-bold text-xl">{title}</div>}
@@ -25,7 +33,11 @@ const InforClientOrder = ({ isEdit = true, title }: InforClientOrderProps) => {
                 Thông tin người nhận
               </div>
             </div>
-            {isEdit && <MyTextAction label="Chỉnh sửa" />}
+            {isEdit && (
+              <Link href={"/delivery"}>
+                <MyTextAction label="Thay đổi" />
+              </Link>
+            )}
           </div>
         </ListItem>
         <Collapse in={true}>
@@ -35,13 +47,9 @@ const InforClientOrder = ({ isEdit = true, title }: InforClientOrderProps) => {
               disablePadding
             >
               <div className="text-base font-bold">
-                TRAN THI ANH - 0394356433
+                {shipping?.name} - {shipping?.phone}
               </div>
-              <div className="text-sm">anhleonard@gmail.com</div>
-              <div className="text-sm">
-                No. 9, Lane 105, Doan Ke Thien Street, Phường Dịch Vọng
-                Hậu, Quận Cầu Giấy, Thành phố Hà Nội, , Việt Nam
-              </div>
+              <div className="text-sm">{formatShippingAddress(shipping)}</div>
             </ListItem>
           </List>
         </Collapse>
