@@ -60,7 +60,7 @@ const ProductCard: FC<ProductCardProps> = ({
     <>
       <div className={`relative flex flex-col bg-transparent ${className}`}>
         <div className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
-          <Link href={`/product-detail/${item.id}`} className="block">
+          <Link href={`/product-detail/${item?.id}`} className="block">
             <NcImage
               containerClassName="flex aspect-w-1 aspect-h-1 w-full h-0"
               src={productImage} // change default image
@@ -77,7 +77,7 @@ const ProductCard: FC<ProductCardProps> = ({
 
         <div className="space-y-4 px-2.5 py-3">
           <div className="flex flex-col gap-1">
-            <Link href={`/product-detail/${item.id}`}>
+            <Link href={`/product-detail/${item?.id}`}>
               <h2 className="text-base font-semibold transition-colors truncate overflow-hidden hover:underline hover:text-primary-c900 hover:cursor-pointer">
                 {item?.productName}
               </h2>
@@ -108,13 +108,13 @@ const ProductCard: FC<ProductCardProps> = ({
               {/* rating item */}
               <Rating
                 size="small"
-                value={Math.round(parseFloat(item.averageRating))}
+                value={Math.round(parseFloat(item?.averageRating))}
                 readOnly
               />
 
               {!pathname.includes("/account-savelists") ? (
                 <div className="text-grey-c400 font-normal text-xs">
-                  Đã bán {item.soldNumber}
+                  Đã bán {item?.soldNumber}
                 </div>
               ) : (
                 <MySingleCheckBox
@@ -124,7 +124,7 @@ const ProductCard: FC<ProductCardProps> = ({
                       handleChecked(event);
                     }
                   }}
-                  isChecked={selectedItems?.includes(item.id.toString())}
+                  isChecked={selectedItems?.includes(item?.id.toString())}
                 />
               )}
             </div>

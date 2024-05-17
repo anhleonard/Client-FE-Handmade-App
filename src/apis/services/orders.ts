@@ -1,6 +1,6 @@
 import axios from "axios";
 import { headerUrl } from "./authentication";
-import { OrderStatusValues, OrderValues } from "../types";
+import { CancelOrderValues, OrderStatusValues, OrderValues } from "../types";
 
 export const createOrder = async (variables: OrderValues, token: string) => {
   const config = {
@@ -14,8 +14,8 @@ export const createOrder = async (variables: OrderValues, token: string) => {
 };
 
 export const ordersByStatus = async (
-  variables: OrderStatusValues,
-  token: string
+  token: string,
+  variables?: OrderStatusValues
 ) => {
   const config = {
     headers: {
@@ -27,5 +27,33 @@ export const ordersByStatus = async (
 
   return await axios
     .post(`${headerUrl}/orders/client-orders`, values, config)
+    .then((res) => res.data);
+};
+
+export const singleOrder = async (orderId: number, token: string) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .get(`${headerUrl}/orders/${orderId}`, config)
+    .then((res) => res.data);
+};
+
+export const cancelOrder = async (
+  orderId: number,
+  variables: CancelOrderValues,
+  token: string
+) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .put(`${headerUrl}/orders/cancel/${orderId}`, variables, config)
     .then((res) => res.data);
 };

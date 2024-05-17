@@ -56,6 +56,21 @@ export function formatDate(timestamp: Date) {
   return date;
 }
 
+export function formatCommonTime(time: Date) {
+  const date = new Date(time);
+  // Lấy giờ và phút
+  let hours = date.getHours().toString().padStart(2, "0");
+  let minutes = date.getMinutes().toString().padStart(2, "0");
+
+  // Lấy ngày, tháng, và năm
+  let day = date.getDate().toString().padStart(2, "0");
+  let month = (date.getMonth() + 1).toString().padStart(2, "0"); // Tháng bắt đầu từ 0
+  let year = date.getFullYear();
+
+  // Định dạng thành chuỗi
+  return `${hours}:${minutes} ${day}-${month}-${year}`;
+}
+
 export function contentShippingAddress(data: any) {
   return (
     <div className="space-y-2">

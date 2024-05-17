@@ -33,5 +33,10 @@ export type OrderValues = {
 };
 
 export type OrderStatusValues = {
-  status: EnumOrderStatus;
+  status: EnumOrderStatus | undefined;
+};
+
+export type CancelOrderValues = {
+  isCanceled: boolean;
+  canceledReason: string;
 };

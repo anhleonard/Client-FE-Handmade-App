@@ -1,14 +1,6 @@
 import { ReactNode } from "react";
 import { AlertStatus, ProductStatus } from "./constants";
 
-export enum OrderStatusTypes {
-  WAITING_PAYMENT = "WAITING_PAYMENT",
-  IN_PROCESSING = "IN_PROCESSING",
-  IN_TRANSPORT = "IN_TRANSPORT",
-  COMPLETED_ORDER = "COMPLETED_ORDER",
-  CANCELED_ORDER = "CANCELED_ORDER",
-}
-
 export type VariantType = {
   name: String;
   inStock: number;
@@ -145,4 +137,27 @@ export type Shipping = {
   isDefaultAddress: boolean;
   receivePlace: string;
   companyName?: string;
+};
+
+export type Order = {
+  id: number;
+  code: string;
+  totalAmountItem: number;
+  provisionalAmount: number;
+  discountAmount: number;
+  totalPayment: number;
+  orderAt: Date;
+  updatedAt: Date;
+  processingAt: Date;
+  isCanceled: boolean;
+  canceledReason: string;
+  isPaid: boolean;
+  deliveryFee: number;
+  status: string;
+  shippedAt: Date;
+  deliveredAt: Date;
+  shipping: Shipping;
+  shippingAddress: Shipping;
+  orderProducts: OrderProduct[];
+  store: Store;
 };

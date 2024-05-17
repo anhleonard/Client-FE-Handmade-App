@@ -15,6 +15,12 @@ import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import StatusStepOrder from "./status-step-order";
+import { Order } from "@/enum/defined-types";
+import { formatCommonTime, formatDate } from "@/enum/functions";
+
+type Props = {
+  order: Order;
+};
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -63,15 +69,27 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = [
-  <StatusStepOrder label="Đơn hàng đã đặt" time="00:12 04-04-2024" />,
-  <StatusStepOrder label="Đơn hàng đã thanh toán" time="00:12 04-04-2024" />,
-  <StatusStepOrder label="Đơn hàng đang được giao" time="09:57 04-04-2024" />,
-  <StatusStepOrder label="Đã nhận được hàng" time="09:57 09-04-2024" />,
-  <StatusStepOrder label="Đánh giá" />,
-];
+const CustomizedSteppers = ({ order }: Props) => {
+  const steps = [
+    <StatusStepOrder
+      label="Đơn hàng đã đặt"
+      time={formatCommonTime(order?.orderAt)}
+    />,
+    <StatusStepOrder
+      label="Đơn hàng được người bán duyệt"
+      time={formatCommonTime(order?.processingAt)}
+    />,
+    <StatusStepOrder
+      label="Đơn hàng đang được giao"
+      time={formatCommonTime(order?.deliveredAt)}
+    />,
+    <StatusStepOrder
+      label="Đã nhận được hàng"
+      time={formatCommonTime(order?.shippedAt)}
+    />,
+    <StatusStepOrder label="Đánh giá" />,
+  ];
 
-const CustomizedSteppers = () => {
   return (
     <Stack sx={{ width: "100%" }} spacing={4}>
       <Stepper

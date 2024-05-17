@@ -27,6 +27,7 @@ import { openAlert } from "@/redux/slices/alertSlice";
 import { calculateTotalPrice, contentShippingAddress } from "@/enum/functions";
 import { FormControl, RadioGroup } from "@mui/material";
 import { selectedOrderProducts } from "@/apis/services/order-products";
+import Link from "next/link";
 
 const DeliveryPage = () => {
   const router = useRouter();
@@ -86,7 +87,9 @@ const DeliveryPage = () => {
         return dateA.getTime() - dateB.getTime();
       });
 
-      setValue(defaultShipping[0]?.id);
+      if (!defaultShipping?.length) {
+        setValue(defaultShipping[0]?.id);
+      }
       setShippings(sortShipping);
     } catch (error: any) {
       let alert: AlertState = {
@@ -113,6 +116,8 @@ const DeliveryPage = () => {
     setValue((event.target as HTMLInputElement).value);
   };
 
+  console.log({ value });
+
   return (
     <DefaultLayout>
       <div className="hidden md:block">
@@ -124,28 +129,41 @@ const DeliveryPage = () => {
         <div className="w-full xl:w-[68%] space-y-10 pb-10 border-b-2 border-grey-c50 xl:border-none">
           <div className="space-y-4">
             <div className="font-bold text-xl">THÔNG TIN GIAO HÀNG</div>
-            <FormControl className="w-full pt-2">
-              <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={value}
-                onChange={handleChange}
-                className="space-y-5"
-              >
-                {shippings.map((shipping: any) => (
-                  <ShippingCard
-                    key={shipping?.id}
-                    content={contentShippingAddress(shipping)}
-                    title={
-                      shipping?.receivePlace === addressTypes[0].value
-                        ? "Nhà riêng"
-                        : "Công ty"
-                    }
-                    radioValue={shipping?.id.toString()}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
+            {shippings?.length ? (
+              <FormControl className="w-full pt-2">
+                <RadioGroup
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="controlled-radio-buttons-group"
+                  value={value}
+                  onChange={handleChange}
+                  className="space-y-5"
+                >
+                  {shippings.map((shipping: any) => (
+                    <ShippingCard
+                      key={shipping?.id}
+                      content={contentShippingAddress(shipping)}
+                      title={
+                        shipping?.receivePlace === addressTypes[0].value
+                          ? "Nhà riêng"
+                          : "Công ty"
+                      }
+                      radioValue={shipping?.id.toString()}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            ) : (
+              <div className="font-medium">
+                Bạn chưa có địa chỉ giao hàng nào. Vui lòng nhấp{" "}
+                <Link
+                  className="text-blue-c900 underline"
+                  href={"/account-address"}
+                >
+                  vào đây
+                </Link>{" "}
+                để thêm mới và tiếp tục!
+              </div>
+            )}
           </div>
 
           <div className="space-y-4">
@@ -197,6 +215,7 @@ const DeliveryPage = () => {
             <Button
               className="!w-full !py-3"
               onClick={() => router.push(`/payment/${value}`, { scroll: true })}
+              disabled={!value}
             >
               TIẾN HÀNH THANH TOÁN
             </Button>

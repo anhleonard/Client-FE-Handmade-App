@@ -24,10 +24,10 @@ function PageHome() {
       <DefaultLayout>
         <DiscoverMoreSlider />
 
-        <SectionSliderProductCard
+        {/* <SectionSliderProductCard
           data={exampleItems.items}
           heading="Hàng len bán chạy"
-        />
+        /> */}
 
         <div className="border-t border-b border-slate-200 dark:border-slate-700 py-10">
           <SectionHowItWork />
@@ -42,11 +42,11 @@ function PageHome() {
           <SectionGridCategories />
         </div>
 
-        <SectionSliderProductCard
+        {/* <SectionSliderProductCard
           data={exampleItems.items}
           heading="Best Sellers"
           subHeading="Best selling of the month"
-        />
+        /> */}
 
         {/* <SectionPromo2 /> */}
 
