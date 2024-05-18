@@ -26,15 +26,29 @@ import { formatCurrency } from "@/enum/functions";
 import Label from "../Label/Label";
 import MySwitchButton from "@/libs/switch-button";
 
-const TabFilters = () => {
+type Props = {
+  isOnSale: boolean;
+  setIsIsOnSale: any;
+  rangePrices: number[];
+  setRangePrices: any;
+  sortOrderStates: string;
+  setSortOrderStates: any;
+};
+
+const TabFilters = ({
+  isOnSale,
+  setIsIsOnSale,
+  rangePrices,
+  setRangePrices,
+  sortOrderStates,
+  setSortOrderStates,
+}: Props) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   //
-  const [isOnSale, setIsIsOnSale] = useState(false);
-  const [rangePrices, setRangePrices] = useState<number[]>(PRICE_RANGE);
+
   const [categoriesState, setCategoriesState] = useState<string[]>([]);
   const [colorsState, setColorsState] = useState<string[]>([]);
   const [sizesState, setSizesState] = useState<string[]>([]);
-  const [sortOrderStates, setSortOrderStates] = useState<string>("");
 
   //
   const closeModalMoreFilter = () => setisOpenMoreFilter(false);
@@ -399,23 +413,23 @@ const TabFilters = () => {
           setRangePrices={setRangePrices}
         />
 
-        <RenderTabsCategories
+        {/* <RenderTabsCategories
           categoriesState={categoriesState}
           setCategoriesState={setCategoriesState}
           handleChangeCategories={handleChangeCategories}
-        />
+        /> */}
 
-        <RenderTabsColor
+        {/* <RenderTabsColor
           colorsState={colorsState}
           setColorsState={setColorsState}
           handleChangeColors={handleChangeColors}
-        />
+        /> */}
 
-        <RenderTabsSize
+        {/* <RenderTabsSize
           sizesState={sizesState}
           setSizesState={setSizesState}
           handleChangeSizes={handleChangeSizes}
-        />
+        /> */}
 
         <RenderTabIsOnsale isOnSale={isOnSale} setIsIsOnSale={setIsIsOnSale} />
 

@@ -7,16 +7,28 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import TabFilters from "@/components/filters/tab-filters";
 import { Transition } from "@/app/headlessui";
+import { Category } from "@/enum/defined-types";
 
 export interface HeaderFilterSearchPageProps {
   className?: string;
+  categories: Category[];
 }
 
 const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
   className = "mb-12",
+  categories,
 }) => {
+  const all: Category = {
+    id: 999999999,
+    title: "Tất cả",
+    description: "Tất cả sản phẩm",
+    image: "",
+  };
+
+  const allCategories = [all, ...categories];
+
   const [isOpen, setIsOpen] = useState(true);
-  const [tabActive, setTabActive] = useState("All items");
+  const [tabActive, setTabActive] = useState(allCategories[0]);
 
   return (
     <div className={`flex flex-col relative ${className}`}>
@@ -25,23 +37,13 @@ const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
           className="sm:space-x-2"
           containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar"
         >
-          {[
-            "All items",
-            "Women",
-            "Man",
-            "Jewels",
-            "Kids",
-            "Sách",
-            "Hộp quà",
-            "Khăn choàng",
-            "Túi đeo",
-          ].map((item, index) => (
+          {allCategories?.map((item, index) => (
             <NavItem
               key={index}
-              isActive={tabActive === item}
+              isActive={tabActive?.id === item?.id}
               onClick={() => setTabActive(item)}
             >
-              {item}
+              {item?.title}
             </NavItem>
           ))}
         </Nav>

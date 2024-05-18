@@ -89,6 +89,8 @@ export type Category = {
   id: number;
   title: string;
   description: string;
+  products?: Product[];
+  image: string;
 };
 
 export type Store = {

@@ -1,64 +1,63 @@
 "use client";
 
-import React, { FC, useState } from "react";
-import CardCategory1 from "@/components/card-categories/CardCategory1";
-import CardCategory4 from "@/components/card-categories/CardCategory4";
+import React, { FC, useEffect, useState } from "react";
 import Heading from "@/components/Heading/Heading";
-import CardCategory6 from "@/components/card-categories/CardCategory6";
 import { DEMO_MORE_CATEGORIES, ExploreType } from "./data";
+import { AlertState, Category } from "@/enum/defined-types";
+import { useDispatch } from "react-redux";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { allCategories } from "@/apis/services/categories";
+import { AlertStatus } from "@/enum/constants";
+import { openAlert } from "@/redux/slices/alertSlice";
+import MainCategoryCard from "../card-categories/main-card-category";
 
 export interface SectionGridCategoriesProps {
   className?: string;
   gridClassName?: string;
-  boxCard?: "box1" | "box4" | "box6";
-  data?: ExploreType[];
 }
 
 const SectionGridCategories: FC<SectionGridCategoriesProps> = ({
   className = "",
-  boxCard = "box4",
   gridClassName = "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
-  data = DEMO_MORE_CATEGORIES.filter((_, i) => i < 6),
 }) => {
-  const renderCard = (item: ExploreType) => {
-    switch (boxCard) {
-      case "box1":
-        return (
-          <CardCategory1 key={item.id} featuredImage={item.image} {...item} />
-        );
+  const dispatch = useDispatch();
+  const [categories, setCategories] = useState<Category[]>([]);
 
-      case "box4":
-        return (
-          <CardCategory4
-            bgSVG={item.svgBg}
-            featuredImage={item.image}
-            key={item.id}
-            color={item.color}
-            {...item}
-          />
-        );
-      case "box6":
-        return (
-          <CardCategory6
-            bgSVG={item.svgBg}
-            featuredImage={item.image}
-            key={item.id}
-            color={item.color}
-            {...item}
-          />
-        );
-
-      default:
-        return (
-          <CardCategory4
-            bgSVG={item.svgBg}
-            featuredImage={item.image}
-            key={item.id}
-            color={item.color}
-            {...item}
-          />
-        );
+  const getAllCategories = async () => {
+    try {
+      dispatch(openLoading());
+      const res = await allCategories();
+      if (res) {
+        setCategories(res);
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
     }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  const renderCard = (item: Category) => {
+    item.image = "/images/bags/bag-1.jpg";
+
+    return (
+      <MainCategoryCard
+        featuredImage={item.image}
+        key={item.id}
+        {...item}
+        category={item}
+      />
+    );
   };
 
   const renderHeading = () => {
@@ -80,7 +79,7 @@ const SectionGridCategories: FC<SectionGridCategoriesProps> = ({
     <div className={`nc-SectionGridMoreExplore relative ${className}`}>
       {renderHeading()}
       <div className={`grid gap-4 md:gap-7 pb-10 ${gridClassName}`}>
-        {data.map((item) => renderCard(item))}
+        {categories.map((item) => renderCard(item))}
       </div>
     </div>
   );

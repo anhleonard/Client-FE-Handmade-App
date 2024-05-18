@@ -4,25 +4,22 @@ import explore1Svg from "@/images/collections/explore1.svg";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import { Category } from "@/enum/defined-types";
 
-export interface CardCategory4Props {
+export interface Props {
   className?: string;
   featuredImage?: StaticImageData | string;
   bgSVG?: string;
-  name: string;
-  desc: string;
   color?: string;
-  count?: number;
+  category: Category;
 }
 
-const CardCategory4: FC<CardCategory4Props> = ({
+const MainCategoryCard: FC<Props> = ({
   className = "",
   featuredImage = ".",
   bgSVG = explore1Svg,
-  name,
-  desc,
   color = "bg-rose-50",
-  count,
+  category,
 }) => {
   return (
     <div
@@ -43,7 +40,7 @@ const CardCategory4: FC<CardCategory4Props> = ({
               height={80}
             />
             <span className="text-xs text-slate-700 dark:text-neutral-300 font-medium">
-              {count} sản phẩm
+              {category?.products?.length} sản phẩm
             </span>
           </div>
 
@@ -51,13 +48,15 @@ const CardCategory4: FC<CardCategory4Props> = ({
             <span
               className={`block mb-2 text-sm text-slate-500 dark:text-slate-400`}
             >
-              {desc}
+              Danh mục
             </span>
-            <h2 className={`text-2xl sm:text-3xl font-semibold`}>{name}</h2>
+            <h2 className={`text-2xl font-semibold text-grey-c900`}>
+              {category?.title}
+            </h2>
           </div>
 
           <Link
-            href={"/collection"}
+            href={`/collection/${category?.id}`}
             className="flex items-center text-sm font-medium group-hover:text-primary-500 transition-colors hover:bg-grey-c100 w-fit px-4 py-2 rounded-3xl"
           >
             <span>Xem chi tiết</span>
@@ -65,10 +64,8 @@ const CardCategory4: FC<CardCategory4Props> = ({
           </Link>
         </div>
       </div>
-
-      {/* <Link href={"/collection"}></Link> */}
     </div>
   );
 };
 
-export default CardCategory4;
+export default MainCategoryCard;

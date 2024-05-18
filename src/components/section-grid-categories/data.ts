@@ -90,7 +90,7 @@ export const DEMO_MORE_CATEGORIES: ExploreType[] = [
     id: 1,
     name: "Backpack",
     desc: "Manufacturar",
-    image: explore1Png,
+    image: "/images/bags/bag-1.jpg",
     svgBg: explore1Svg,
     color: "bg-indigo-50",
     count: 155,

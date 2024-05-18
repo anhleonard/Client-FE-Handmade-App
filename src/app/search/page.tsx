@@ -8,15 +8,17 @@ import ProductCard from "@/components/products/product-card";
 import DefaultLayout from "@/layout/default-layout";
 import { AlertStatus, exampleItems } from "@/enum/constants";
 import PaginationExample from "@/shared/pagination/pagination-example";
-import { AlertState, Product } from "@/enum/defined-types";
+import { AlertState, Category, Product } from "@/enum/defined-types";
 import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { getProducts } from "@/apis/services/products";
 import { openAlert } from "@/redux/slices/alertSlice";
+import { allCategories } from "@/apis/services/categories";
 
 const PageSearch = ({}) => {
   const dispatch = useDispatch();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const getAllProducts = async () => {
     try {
@@ -38,8 +40,32 @@ const PageSearch = ({}) => {
     }
   };
 
+  const getAllCategories = async () => {
+    try {
+      dispatch(openLoading());
+      const res = await allCategories();
+      if (res) {
+        setCategories(res);
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
   useEffect(() => {
     getAllProducts();
+  }, []);
+
+  useEffect(() => {
+    getAllCategories();
   }, []);
 
   return (
@@ -87,7 +113,7 @@ const PageSearch = ({}) => {
       <div className="flex flex-col gap-8">
         <main>
           {/* FILTER */}
-          <HeaderFilterSearchPage />
+          <HeaderFilterSearchPage categories={categories} />
 
           {/* LOOP ITEMS */}
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 mt-8 lg:mt-10">
