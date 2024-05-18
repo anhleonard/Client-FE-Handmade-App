@@ -163,3 +163,38 @@ export type Order = {
   orderProducts: OrderProduct[];
   store: Store;
 };
+
+export type Auction = {
+  id: number;
+  isAccepted: boolean;
+  additionalComment: string;
+  name: string;
+  description: string;
+  images: string[];
+  requiredNumber: number;
+  maxAmount: number;
+  createdAt: Date;
+  closedDate: Date;
+  deposit: number;
+  readyToLaunch: boolean;
+  status: string;
+  shipping: Shipping;
+  candidates: Bidder[];
+  progresses: Progress[];
+};
+
+export type Bidder = {
+  id: number;
+  bidderMoney: number;
+  estimatedDay: number;
+  selfIntroduce: string;
+  isSelected: boolean;
+};
+
+export type Progress = {
+  id: number;
+  percentage: number;
+  comment: string;
+  createdAt: Date;
+  updatedAt: Date;
+};

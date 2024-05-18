@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { Popover, Transition } from "@/app/headlessui";
 import Slider from "rc-slider";
 import RenderXClear from "./render-xclear";
@@ -6,16 +6,16 @@ import ButtonThird from "@/shared/Button/ButtonThird";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import { PRICE_RANGE } from "../filter-data";
 import { formatCurrency } from "@/enum/functions";
+import { CommonContext } from "@/app/page";
 
-type RenderTabsPriceRageProps = {
+type Props = {
   rangePrices: number[];
   setRangePrices: any;
 };
 
-const RenderTabsPriceRage = ({
-  rangePrices,
-  setRangePrices,
-}: RenderTabsPriceRageProps) => {
+const RenderTabsPriceRage = ({ rangePrices, setRangePrices }: Props) => {
+  const theme = useContext(CommonContext);
+
   return (
     <Popover className="relative">
       {({ open, close }) => (
@@ -69,7 +69,12 @@ const RenderTabsPriceRage = ({
 
             {rangePrices[0] !== PRICE_RANGE[0] ||
             rangePrices[1] !== PRICE_RANGE[1] ? (
-              <span onClick={() => setRangePrices(PRICE_RANGE)}>
+              <span
+                onClick={() => {
+                  theme.handleFilterPrice(false);
+                  setRangePrices(PRICE_RANGE);
+                }}
+              >
                 <RenderXClear />
               </span>
             ) : null}
@@ -96,9 +101,6 @@ const RenderTabsPriceRage = ({
                       defaultValue={[rangePrices[0], rangePrices[1]]}
                       allowCross={false}
                       onChange={(_input: number | number[]) => {
-                        // if(Array.isArray(_input) && _input.includes(null)){
-
-                        // }
                         setRangePrices(_input as number[]);
                       }}
                     />
@@ -150,6 +152,7 @@ const RenderTabsPriceRage = ({
                 <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                   <ButtonThird
                     onClick={() => {
+                      theme.handleFilterPrice(false);
                       setRangePrices(PRICE_RANGE);
                       close();
                     }}
@@ -157,7 +160,16 @@ const RenderTabsPriceRage = ({
                   >
                     Clear
                   </ButtonThird>
-                  <ButtonPrimary onClick={close} sizeClass="px-4 py-2 sm:px-5">
+                  <ButtonPrimary
+                    onClick={() => {
+                      if (!theme.isFilterPrice) {
+                        theme.handleFilterPrice(true);
+                      } else {
+                        theme.handleRefetch();
+                      }
+                    }}
+                    sizeClass="px-4 py-2 sm:px-5"
+                  >
                     Apply
                   </ButtonPrimary>
                 </div>

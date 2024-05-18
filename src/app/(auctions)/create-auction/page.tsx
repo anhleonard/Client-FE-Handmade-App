@@ -6,15 +6,17 @@ import MyPrimaryTextField from "@/libs/primary-text-field";
 import MySelect from "@/libs/select";
 import MyTextArea from "@/libs/text-area";
 import MyTextField from "@/libs/text-field";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import { COLORS } from "@/enum/colors";
 import ListSellerPrice from "@/components/auctions/list-seller-price";
 import Button from "@/libs/button";
-import { Collapse, Grow, Zoom } from "@mui/material";
-import { Transition } from "@headlessui/react";
+import { Collapse } from "@mui/material";
+import { UploadFile } from "antd";
+import UploadImage from "@/libs/upload-image";
 
 const CreateAuctionPage = () => {
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [amount, setAmount] = useState("");
 
   const [hiddenSelectHandmader, setHiddenSelectHandmader] = useState(true);
@@ -45,6 +47,14 @@ const CreateAuctionPage = () => {
             placeholder="Nhập số lượng sản phẩm mà bạn cần"
             isRequired
           />
+
+          <div className="flex flex-col gap-1">
+            <label className="block text-sm font-medium text-grey-c600 dark:text-white">
+              Thêm hình ảnh mô tả
+            </label>
+            <UploadImage fileList={fileList} setFileList={setFileList} />
+          </div>
+
           <MyTextField
             id={Math.random().toString()}
             type="text"
@@ -57,7 +67,7 @@ const CreateAuctionPage = () => {
                 value={parseInt(amount !== "" ? amount : "0")}
               />
             }
-            onChange={(value) => setAmount(value as string)}
+            // onChange={(value) => setAmount(value as string)}
           />
           <div className="grid grid-cols-2 gap-8">
             <MySelect
@@ -78,9 +88,6 @@ const CreateAuctionPage = () => {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-grey-c900 dark:text-white">
-              Địa chỉ giao hàng
-            </label>
             <div className="grid grid-cols-3 gap-8">
               <MySelect
                 id={Math.random().toString()}
