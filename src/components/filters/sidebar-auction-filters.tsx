@@ -8,67 +8,48 @@ import { DATA_COMPLETED_TIME, PRICE_RANGE } from "./filter-data";
 import MySwitchButton from "@/libs/switch-button";
 import MyLabel from "@/libs/label";
 import Button from "@/libs/button";
+import MyPrimaryTextField from "@/libs/primary-text-field";
+import { FilterTime } from "@/enum/defined-types";
 
-const SidebarAuctionFilters = () => {
-  //
-  const [isOpen, setIsOpen] = useState(true);
-  const [rangePrices, setRangePrices] = useState([0, 1000000]);
-  const [completedTime, setCompletedTime] = useState<string>("");
+type Props = {
+  isOpen: boolean;
+  setIsOpen: any;
+  completedTime?: FilterTime;
+  setCompletedTime: any;
+  setMinPrice: any;
+  setMaxPrice: any;
+  handleRefetch: () => void;
+};
 
+const SidebarAuctionFilters = ({
+  isOpen,
+  setIsOpen,
+  completedTime,
+  setCompletedTime,
+  setMinPrice,
+  setMaxPrice,
+  handleRefetch,
+}: Props) => {
   const renderTabsPriceRage = () => {
     return (
       <div className="relative flex flex-col pb-8 space-y-5">
         <div className="space-y-5">
           <span className="font-semibold">Khoảng giá</span>
-          <Slider
-            range
-            min={PRICE_RANGE[0]}
-            max={PRICE_RANGE[1]}
-            step={1}
-            defaultValue={[rangePrices[0], rangePrices[1]]}
-            allowCross={false}
-            onChange={(_input: number | number[]) =>
-              setRangePrices(_input as number[])
-            }
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="minPrice"
-              className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-            >
-              Thấp nhất
-            </label>
-            <div className="mt-1 relative rounded-md">
-              <input
-                type="text"
-                name="minPrice"
-                disabled
-                id="minPrice"
-                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
-                value={formatCurrency(rangePrices[0])}
-              />
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="maxPrice"
-              className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-            >
-              Cao nhất
-            </label>
-            <div className="mt-1 relative rounded-md">
-              <input
-                type="text"
-                disabled
-                name="maxPrice"
-                id="maxPrice"
-                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
-                value={formatCurrency(rangePrices[1])}
-              />
-            </div>
+          <div className="flex flex-row items-center gap-2">
+            <MyPrimaryTextField
+              id="MIN"
+              type="number"
+              placeholder="MIN"
+              inputClassName="rounded-full !border-[1px]"
+              onChange={(event) => setMinPrice(event.target.value)}
+            ></MyPrimaryTextField>
+            <MyPrimaryTextField
+              id="MAX"
+              type="number"
+              placeholder="MAX"
+              inputClassName="rounded-full !border-[1px]"
+              onChange={(event) => setMaxPrice(event.target.value)}
+            ></MyPrimaryTextField>
           </div>
         </div>
       </div>
@@ -85,10 +66,15 @@ const SidebarAuctionFilters = () => {
             key={item.id}
             name="radioCompletedTime"
             label={item.name}
-            defaultChecked={completedTime === item.id}
+            defaultChecked={completedTime?.id === item.id}
             sizeClassName="w-5 h-5"
             className="!text-sm"
-            onChange={setCompletedTime}
+            onChange={(value) => {
+              const date = DATA_COMPLETED_TIME.filter(
+                (item) => item.id === value
+              );
+              setCompletedTime(date[0]);
+            }}
           />
         ))}
       </div>
@@ -117,7 +103,11 @@ const SidebarAuctionFilters = () => {
           />
         </div>
       </div>
-      <Button className="!py-2 !px-3 !w-full" color="info">
+      <Button
+        className="!py-2 !px-3 !w-full"
+        color="info"
+        onClick={() => handleRefetch()}
+      >
         Lọc
       </Button>
     </div>

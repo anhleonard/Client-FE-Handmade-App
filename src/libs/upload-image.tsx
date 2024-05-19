@@ -50,9 +50,16 @@ const UploadImage: React.FC<Props> = ({ fileList, setFileList }: Props) => {
     </button>
   );
 
+  const dummyRequest = ({ file, onSuccess }: any) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
+
   return (
     <>
       <Upload
+        customRequest={dummyRequest}
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}

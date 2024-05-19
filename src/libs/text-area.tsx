@@ -5,6 +5,7 @@ import MyIcon from "./my-icon";
 
 interface MyTextAreaProps {
   id: string;
+  name?: string;
   title?: string;
   placeholder?: string;
   isRequired?: boolean;
@@ -16,12 +17,13 @@ interface MyTextAreaProps {
   width?: string;
   value?: string | number;
   defaultValue?: string | number;
-  onChange?: (value: string | number) => void;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement & HTMLInputElement>;
   className?: string;
 }
 
 const MyTextArea: React.FC<MyTextAreaProps> = ({
   id,
+  name,
   title,
   placeholder,
   isRequired = false,
@@ -46,15 +48,11 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
           ) : null}
         </label>
         <textarea
-          name={id}
           id={id}
+          name={name}
           rows={3}
           placeholder={placeholder}
-          onChange={(e) => {
-            if (onChange) {
-              onChange(e.target.value);
-            }
-          }}
+          onChange={onChange}
           value={value}
           defaultValue={defaultValue}
           disabled={disabled}

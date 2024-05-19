@@ -1,16 +1,22 @@
-import { formatCurrency } from "@/enum/functions";
+import { calculateRemainingDays, formatCurrency } from "@/enum/functions";
 import MyLabel from "@/libs/label";
 import { Collapse, List, ListItem } from "@mui/material";
 import React from "react";
 import MyDisplayImage from "@/libs/display-image";
 import Button from "@/libs/button";
+import { Auction } from "@/enum/defined-types";
 
 type DetailAuctionProps = {
   type?: "client" | "seller";
   status: string;
+  auction: Auction;
 };
 
-const DetailAuction = ({ type = "client", status }: DetailAuctionProps) => {
+const DetailAuction = ({
+  type = "client",
+  status,
+  auction,
+}: DetailAuctionProps) => {
   return (
     <div>
       <div className="rounded-2xl border-[2px] border-grey-c50">
@@ -21,10 +27,12 @@ const DetailAuction = ({ type = "client", status }: DetailAuctionProps) => {
           <div className="flex w-full flex-row items-center justify-between px-4 py-4">
             <div className="flex flex-row items-center gap-2">
               <div className="text-base font-semibold text-primary-c900">
-                Finish Json Web Token
+                {auction?.name}
               </div>
               {status === "progress" && (
-                <MyLabel type="warning">Còn 6 ngày</MyLabel>
+                <MyLabel type="warning">
+                  Còn {calculateRemainingDays(auction?.closedDate)} ngày
+                </MyLabel>
               )}
               {type === "seller" && status !== "canceled" && (
                 <MyLabel type="success">Đạt tiến độ: 100%</MyLabel>
@@ -43,7 +51,9 @@ const DetailAuction = ({ type = "client", status }: DetailAuctionProps) => {
                 )}
               </>
             ) : (
-              <MyLabel type="success">Max: {formatCurrency(100000)}</MyLabel>
+              <MyLabel type="success">
+                Max: {formatCurrency(auction?.maxAmount)}
+              </MyLabel>
             )}
           </div>
         </ListItem>
@@ -56,47 +66,35 @@ const DetailAuction = ({ type = "client", status }: DetailAuctionProps) => {
               <div className="flex flex-col gap-1">
                 <div className="font-bold text-grey-c900">Mô tả chi tiết</div>
                 <div className="text-justify font-normal text-grey-c900">
-                  Marshfield was a rapid transit station on the Chicago "L" in
-                  the U.S. between 1895 and 1954. Originally part of the
-                  Metropolitan West Side Elevated Railroad, it was the
-                  westernmost station of the Metropolitan's main line. West of
-                  the station, the main line diverged into three branches; this
-                  junction, served by the station, has been described as the
-                  most complex on the entire Chicago "L" system. After 1905, the
-                  Chicago Aurora and Elgin Railroad, an interurban line, also
-                  served the station, but limited its service based on direction
-                  to avoid competing with the "L". The lines that had been
-                  constructed by the Metropolitan, including those serving
-                  Marshfield, were subject to modifications planned since the
-                  1930s that incrementally withdrew service from the station.
+                  {auction?.description}
                 </div>
               </div>
             </ListItem>
-            <ListItem
-              className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
-              disablePadding
-            >
-              <div className="flex flex-col gap-2">
-                <div className="font-bold text-grey-c900">Hình ảnh ví dụ</div>
-                <div className="flex flex-row gap-5">
-                  <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
-                  <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
-                  <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
+            {auction?.images?.length && (
+              <ListItem
+                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+                disablePadding
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="font-bold text-grey-c900">Hình ảnh ví dụ</div>
+                  <div className="flex flex-row gap-5">
+                    <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
+                    <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
+                    <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
+                  </div>
                 </div>
-              </div>
-            </ListItem>
+              </ListItem>
+            )}
             <ListItem
               className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
               disablePadding
             >
               <div className="flex flex-col gap-1">
                 <div className="font-bold text-grey-c900">
-                  Lĩnh vực liên quan
+                  Số ngày dự kiến hoàn thành dự án
                 </div>
-                <div className="flex flex-row items-center gap-3 font-medium text-primary-c900">
-                  <div className="hover:cursor-pointer">Đan len</div>
-                  <div className="hover:cursor-pointer">Thú nhồi bông</div>
-                  <div className="hover:cursor-pointer">Quà tặng</div>
+                <div className="font-medium text-primary-c900">
+                  {auction?.maxDays}
                 </div>
               </div>
             </ListItem>
@@ -109,7 +107,7 @@ const DetailAuction = ({ type = "client", status }: DetailAuctionProps) => {
                   <div className="font-bold text-grey-c900">
                     Số người đã đặt giá
                   </div>
-                  <div className="text-grey-c900">12</div>
+                  <div className="font-medium text-primary-c900">12</div>
                 </div>
               )}
               {type === "seller" && (

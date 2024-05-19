@@ -116,8 +116,6 @@ const DeliveryPage = () => {
     setValue((event.target as HTMLInputElement).value);
   };
 
-  console.log({ value });
-
   return (
     <DefaultLayout>
       <div className="hidden md:block">

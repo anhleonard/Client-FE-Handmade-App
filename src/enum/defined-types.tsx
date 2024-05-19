@@ -175,6 +175,7 @@ export type Auction = {
   maxAmount: number;
   createdAt: Date;
   closedDate: Date;
+  maxDays: number;
   deposit: number;
   readyToLaunch: boolean;
   status: string;
@@ -197,4 +198,11 @@ export type Progress = {
   comment: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type FilterTime = {
+  id: string;
+  name: string;
+  min?: number;
+  max?: number;
 };

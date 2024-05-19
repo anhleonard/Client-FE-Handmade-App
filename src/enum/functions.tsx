@@ -88,3 +88,20 @@ export function calculateTotalPrice(items: OrderProduct[]) {
     return total + price;
   }, 0);
 }
+
+export function calculateRemainingDays(date: Date) {
+  const targetDate = new Date(date);
+
+  // Ngày hiện tại
+  const currentDate = new Date();
+
+  // Tính số mili giây giữa hai ngày
+  const differenceInMilliseconds = targetDate.getTime() - currentDate.getTime();
+
+  // Chuyển đổi mili giây thành ngày
+  const differenceInDays = Math.ceil(
+    differenceInMilliseconds / (1000 * 60 * 60 * 24)
+  );
+
+  return differenceInDays;
+}

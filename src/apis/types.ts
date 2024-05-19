@@ -40,3 +40,14 @@ export type CancelOrderValues = {
   isCanceled: boolean;
   canceledReason: string;
 };
+
+export type CreateAuctionValues = {
+  name: string;
+  description: string;
+  images?: string[] | undefined;
+  requiredNumber: string;
+  maxAmount: string;
+  closedDate: string;
+  shippingId: string;
+  maxDays: string;
+};

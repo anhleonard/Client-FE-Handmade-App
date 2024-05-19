@@ -1,3 +1,5 @@
+import { FilterTime } from "@/enum/defined-types";
+
 export const DATA_categories = [
   {
     name: "New Arrivals",
@@ -60,11 +62,10 @@ export const DATA_sortOrderRadios = [
 
 export const PRICE_RANGE = [5000, 10000000];
 
-export const DATA_COMPLETED_TIME = [
-  { name: "< 1 tuần", id: "LESS_1_WEEK" },
-  { name: "1 tuần - 4 tuần", id: "FROM_1_TO_4_WEEKS" },
-  { name: "1 tháng - 2 tháng", id: "FROM_1_TO_2_MONTHS" },
-  { name: "2 tháng - 3 tháng", id: "FROM_2_TO_3_MONTHS" },
-  { name: "3 tháng - 4 tháng", id: "FROM_3_TO_4_MONTHS" },
-  { name: "> 4 tháng", id: "MORE_4_MONTHS" },
+export const DATA_COMPLETED_TIME: FilterTime[] = [
+  { name: "< 1 tuần", min: 0, max: 6, id: "LESS_1_WEEK" },
+  { name: "1 tuần - 2 tuần", min: 7, max: 14, id: "FROM_1_TO_2_WEEKS" },
+  { name: "2 tuần - 4 tuần", min: 14, max: 30, id: "FROM_2_TO_4_WEEKS" },
+  { name: "1 tháng - 2 tháng", min: 30, max: 60, id: "FROM_1_TO_2_MONTHS" },
+  { name: "> 2 tháng", min: 61, id: "MORE_2_MONTHS" },
 ];
