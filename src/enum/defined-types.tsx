@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { AlertStatus, ProductStatus } from "./constants";
+import { AlertStatus, ProductStatus, Role } from "./constants";
 
 export type VariantType = {
   name: String;
@@ -103,6 +103,7 @@ export type Store = {
   productAmount: number;
   avgStoreRating: number;
   followerAmount: number;
+  owner: User;
 };
 
 export type OrderProduct = {
@@ -190,6 +191,7 @@ export type Bidder = {
   estimatedDay: number;
   selfIntroduce: string;
   isSelected: boolean;
+  store: Store;
 };
 
 export type Progress = {
@@ -205,4 +207,15 @@ export type FilterTime = {
   name: string;
   min?: number;
   max?: number;
+};
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  avatar: string;
+  phoneNumber: string;
+  dateOfBirth: Date;
+  role: Role;
 };

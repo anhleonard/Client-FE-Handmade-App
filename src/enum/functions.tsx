@@ -1,5 +1,5 @@
 import storage from "@/apis/storage";
-import { OrderProduct, VariantItem } from "./defined-types";
+import { Bidder, OrderProduct, VariantItem } from "./defined-types";
 import moment from "moment";
 
 export function formatCurrency(price: number) {
@@ -104,4 +104,36 @@ export function calculateRemainingDays(date: Date) {
   );
 
   return differenceInDays;
+}
+
+export function hiddenEmail(email: string) {
+  const atIndex = email.indexOf("@");
+  const hiddenEmail = email.replace(email.substring(1, atIndex), "***");
+
+  return hiddenEmail;
+}
+
+export function calculateAverageBidderMoney(candidates: Bidder[]) {
+  const totalBidderMoney = candidates.reduce(
+    (total, candidate) => total + candidate.bidderMoney,
+    0
+  );
+
+  const averageBidderMoney = totalBidderMoney / candidates.length;
+
+  const roundedAverageBidderMoney = Math.round(averageBidderMoney);
+
+  return roundedAverageBidderMoney;
+}
+
+export function findMinMaxBidderMoney(candidates: Bidder[]) {
+  if (candidates.length === 0) {
+    return []; // Trả về mảng rỗng nếu mảng candidates không có phần tử
+  }
+
+  const bidderMoneyArray = candidates.map((candidate) => candidate.bidderMoney);
+  const min = Math.min(...bidderMoneyArray);
+  const max = Math.max(...bidderMoneyArray);
+
+  return [min, max];
 }

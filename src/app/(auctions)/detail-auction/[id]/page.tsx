@@ -54,14 +54,7 @@ const DetailAuctionPage = () => {
       }
     >
       {auction && <DetailAuction status="progress" auction={auction} />}
-      <div className="py-8 flex flex-col gap-8">
-        <div className="font-bold text-grey-c900">
-          Danh sách sellers đã ra giá
-        </div>
-        <ListSellerPrice />
-        <ListSellerPrice />
-        <ListSellerPrice />
-      </div>
+      {auction && <ListSellerPrice auction={auction} />}
     </SecondaryAuctionLayout>
   );
 };

@@ -1,4 +1,9 @@
-import { calculateRemainingDays, formatCurrency } from "@/enum/functions";
+import {
+  calculateAverageBidderMoney,
+  calculateRemainingDays,
+  findMinMaxBidderMoney,
+  formatCurrency,
+} from "@/enum/functions";
 import MyLabel from "@/libs/label";
 import { Collapse, List, ListItem } from "@mui/material";
 import React from "react";
@@ -17,6 +22,9 @@ const DetailAuction = ({
   status,
   auction,
 }: DetailAuctionProps) => {
+  const minMax = auction?.candidates?.length
+    ? findMinMaxBidderMoney(auction?.candidates)
+    : [0, 0];
   return (
     <div>
       <div className="rounded-2xl border-[2px] border-grey-c50">
@@ -107,7 +115,9 @@ const DetailAuction = ({
                   <div className="font-bold text-grey-c900">
                     Số người đã đặt giá
                   </div>
-                  <div className="font-medium text-primary-c900">12</div>
+                  <div className="font-medium text-primary-c900">
+                    {auction?.candidates?.length}
+                  </div>
                 </div>
               )}
               {type === "seller" && (
@@ -129,10 +139,15 @@ const DetailAuction = ({
                     Giá đặt trung bình
                   </div>
                   <div className="font-medium text-primary-c900">
-                    {formatCurrency(60000)}
+                    {formatCurrency(
+                      auction?.candidates?.length
+                        ? calculateAverageBidderMoney(auction?.candidates)
+                        : 0
+                    )}
                   </div>
                 </div>
               )}
+              {/* giá mà seller và client đã chốt */}
               {type === "seller" && (
                 <div className="flex flex-col gap-1">
                   <div className="font-bold text-grey-c900">Làm trong vòng</div>
@@ -148,7 +163,9 @@ const DetailAuction = ({
                       Giá đặt thấp nhất/ cao nhất
                     </div>
                     <div className="font-medium text-primary-c900">
-                      {`${formatCurrency(60000)} / ${formatCurrency(200000)}`}
+                      {`${formatCurrency(minMax[0])} / ${formatCurrency(
+                        minMax[1]
+                      )}`}
                     </div>
                   </div>
                 )}

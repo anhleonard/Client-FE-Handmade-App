@@ -312,3 +312,17 @@ export enum EnumOrderStatus {
   DELIVERED = "DELIVERED",
   CENCELLED = "CENCELLED",
 }
+
+export enum AuctionStatus {
+  AUCTIONING = "AUCTIONING",
+  PROGRESS = "PROGRESS",
+  DELIVERY = "DELIVERY",
+  COMPLETED = "COMPLETED",
+  CANCELED = "CANCELED",
+}
+
+export enum Role {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  SELLER = "SELLER",
+}

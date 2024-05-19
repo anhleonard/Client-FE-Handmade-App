@@ -1,7 +1,11 @@
 import { Collapse, List, ListItem } from "@mui/material";
 import React from "react";
 import MyLabel from "@/libs/label";
-import { calculateRemainingDays, formatCurrency } from "@/enum/functions";
+import {
+  calculateAverageBidderMoney,
+  calculateRemainingDays,
+  formatCurrency,
+} from "@/enum/functions";
 import Button from "@/libs/button";
 import { useParams, useRouter } from "next/navigation";
 import { Auction } from "@/enum/defined-types";
@@ -63,20 +67,28 @@ const AunctionCard = ({ auction }: Props) => {
                     Giá đặt trung bình:
                   </div>
                   <div className="text-xs font-bold text-primary-c900">
-                    {formatCurrency(60000)}
+                    {formatCurrency(
+                      auction?.candidates?.length
+                        ? calculateAverageBidderMoney(auction?.candidates)
+                        : 0
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="text-xs font-bold text-grey-c900">
-                    Số người đã đặt giá: 12
+                    Số người đã đặt giá:
                   </div>
                   <div className="text-xs font-bold text-primary-c900">
-                    {auction?.candidates?.length}
+                    {auction?.candidates?.length ?? 0}
                   </div>
                 </div>
                 <Button
                   className="!w-fit !px-3 !py-1.5"
-                  onClick={() => router.push(`/detail-auction/${auction?.id}`)}
+                  onClick={() =>
+                    router.push(`/detail-auction/${auction?.id}`, {
+                      scroll: true,
+                    })
+                  }
                 >
                   <span className="text-xs font-medium">Đặt giá ngay</span>
                 </Button>

@@ -44,9 +44,10 @@ const AuctionHomePage = () => {
           maxPrice: parseInt(maxPrice),
         }),
         ...(title !== "" && {
-          title: parseInt(title),
+          title: title,
         }),
       };
+
       const res = await filterAuctions(query);
       if (res) {
         setAuctions(res);
