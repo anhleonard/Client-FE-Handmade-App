@@ -51,3 +51,12 @@ export type CreateAuctionValues = {
   shippingId: string;
   maxDays: string;
 };
+
+export type CreateProgressValues = {
+  auctionId: number;
+  comment: string;
+};
+
+export type UpdateProgressValues = {
+  comment: string;
+};

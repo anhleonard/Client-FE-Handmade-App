@@ -201,6 +201,7 @@ export type Progress = {
   comment: string;
   createdAt: Date;
   updatedAt: Date;
+  user: User;
 };
 
 export type FilterTime = {

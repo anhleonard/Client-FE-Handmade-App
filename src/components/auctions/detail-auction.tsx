@@ -1,5 +1,6 @@
 import {
   calculateAverageBidderMoney,
+  calculateDaysAfterAccepted,
   calculateRemainingDays,
   findMinMaxBidderMoney,
   formatCurrency,
@@ -9,23 +10,26 @@ import { Collapse, List, ListItem } from "@mui/material";
 import React from "react";
 import MyDisplayImage from "@/libs/display-image";
 import Button from "@/libs/button";
-import { Auction } from "@/enum/defined-types";
+import { Auction, Bidder } from "@/enum/defined-types";
 import { AuctionStatus } from "@/enum/constants";
 
 type DetailAuctionProps = {
   type?: "client" | "seller";
   status: AuctionStatus;
   auction: Auction;
+  bidder?: Bidder;
 };
 
 const DetailAuction = ({
   type = "client",
   status,
   auction,
+  bidder,
 }: DetailAuctionProps) => {
   const minMax = auction?.candidates?.length
     ? findMinMaxBidderMoney(auction?.candidates)
     : [0, 0];
+
   return (
     <div>
       <div className="rounded-2xl border-[2px] border-grey-c50">
@@ -50,7 +54,10 @@ const DetailAuction = ({
             {type === "seller" ? (
               <>
                 {status === AuctionStatus.PROGRESS && (
-                  <MyLabel type="progress">Đang làm</MyLabel>
+                  <MyLabel type="progress">Đang tiến hành</MyLabel>
+                )}
+                {status === AuctionStatus.DELIVERY && (
+                  <MyLabel type="success">Đang vận chuyển</MyLabel>
                 )}
                 {status === AuctionStatus.COMPLETED && (
                   <MyLabel type="success">Đã hoàn thành</MyLabel>
@@ -94,35 +101,62 @@ const DetailAuction = ({
                 </div>
               </ListItem>
             )}
-            <ListItem
-              className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
-              disablePadding
-            >
-              <div className="flex flex-col gap-1">
-                <div className="font-bold text-grey-c900">Ngân sách</div>
-                <div className="font-medium text-primary-c900">
-                  {formatCurrency(auction?.maxAmount)}
+            {status === AuctionStatus.AUCTIONING || !auction?.status ? (
+              <ListItem
+                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+                disablePadding
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="font-bold text-grey-c900">Ngân sách</div>
+                  <div className="font-medium text-primary-c900">
+                    {formatCurrency(auction?.maxAmount)}
+                  </div>
                 </div>
-              </div>
-            </ListItem>
-            <ListItem
-              className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
-              disablePadding
-            >
-              <div className="flex flex-col gap-1">
-                <div className="font-bold text-grey-c900">
-                  Số ngày dự kiến hoàn thành dự án
+              </ListItem>
+            ) : null}
+            {status === AuctionStatus.PROGRESS ||
+            !auction?.status ||
+            status === AuctionStatus.AUCTIONING ? (
+              <ListItem
+                className={`block w-full ${
+                  auction.status ? "border-b-[2px] border-grey-c50" : ""
+                } px-4 py-4`}
+                disablePadding
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="font-bold text-grey-c900">
+                    Số ngày dự kiến hoàn thành dự án
+                  </div>
+                  <div className="font-medium text-primary-c900">
+                    {bidder ? bidder?.estimatedDay : auction?.maxDays} ngày
+                  </div>
                 </div>
-                <div className="font-medium text-primary-c900">
-                  {auction?.maxDays}
+              </ListItem>
+            ) : null}
+            {status === AuctionStatus.PROGRESS && bidder ? (
+              <ListItem
+                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+                disablePadding
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="font-bold text-grey-c900">
+                    Số ngày còn lại
+                  </div>
+                  <div className="font-medium text-primary-c900">
+                    {calculateDaysAfterAccepted(
+                      bidder?.estimatedDay,
+                      bidder?.acceptedAt
+                    )}{" "}
+                    ngày
+                  </div>
                 </div>
-              </div>
-            </ListItem>
-            <ListItem
-              className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
-              disablePadding
-            >
-              {type === "client" && (
+              </ListItem>
+            ) : null}
+            {status === AuctionStatus.AUCTIONING ? (
+              <ListItem
+                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+                disablePadding
+              >
                 <div className="flex flex-col gap-1">
                   <div className="font-bold text-grey-c900">
                     Số người đã đặt giá
@@ -131,43 +165,41 @@ const DetailAuction = ({
                     {auction?.candidates?.length}
                   </div>
                 </div>
-              )}
-              {type === "seller" && (
+              </ListItem>
+            ) : null}
+            {status === AuctionStatus.PROGRESS ||
+            status === AuctionStatus.DELIVERY ? (
+              <ListItem>
                 <div className="flex flex-col gap-1">
                   <div className="font-bold text-grey-c900">Giá chốt</div>
                   <div className="font-medium text-primary-c900">
-                    {formatCurrency(150000)}
+                    {bidder?.bidderMoney && formatCurrency(bidder?.bidderMoney)}
                   </div>
                 </div>
-              )}
-            </ListItem>
-            <ListItem
-              className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
-              disablePadding
-            >
-              {type === "client" && (
-                <div className="flex flex-col gap-1">
-                  <div className="font-bold text-grey-c900">
-                    Giá đặt trung bình
+              </ListItem>
+            ) : null}
+            {status === AuctionStatus.AUCTIONING ? (
+              <ListItem
+                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+                disablePadding
+              >
+                {type === "client" && (
+                  <div className="flex flex-col gap-1">
+                    <div className="font-bold text-grey-c900">
+                      Giá đặt trung bình
+                    </div>
+                    <div className="font-medium text-primary-c900">
+                      {formatCurrency(
+                        auction?.candidates?.length
+                          ? calculateAverageBidderMoney(auction?.candidates)
+                          : 0
+                      )}
+                    </div>
                   </div>
-                  <div className="font-medium text-primary-c900">
-                    {formatCurrency(
-                      auction?.candidates?.length
-                        ? calculateAverageBidderMoney(auction?.candidates)
-                        : 0
-                    )}
-                  </div>
-                </div>
-              )}
-              {/* giá mà seller và client đã chốt */}
-              {type === "seller" && (
-                <div className="flex flex-col gap-1">
-                  <div className="font-bold text-grey-c900">Làm trong vòng</div>
-                  <div className="text-grey-c900">12 ngày</div>
-                </div>
-              )}
-            </ListItem>
-            {status !== AuctionStatus.CANCELED && (
+                )}
+              </ListItem>
+            ) : null}
+            {status === AuctionStatus.AUCTIONING ? (
               <ListItem className="block w-full px-4 py-4" disablePadding>
                 {type === "client" && (
                   <div className="flex flex-col gap-1">
@@ -190,18 +222,20 @@ const DetailAuction = ({
                   </div>
                 )}
               </ListItem>
-            )}
+            ) : null}
           </List>
         </Collapse>
       </div>
-      {type === "seller" && status === AuctionStatus.PROGRESS && (
+      {status === AuctionStatus.PROGRESS && (
         <div className="mt-4 flex flex-row justify-end gap-3">
           <Button className="!w-fit !px-3 !py-1.5" color="grey">
             <span className="text-xs font-medium">Hủy dự án</span>
           </Button>
-          <Button className="!w-fit !px-3 !py-1.5" color="primary">
-            <span className="text-xs font-medium">Dự án đã xong?</span>
-          </Button>
+          {type === "seller" ? (
+            <Button className="!w-fit !px-3 !py-1.5" color="primary">
+              <span className="text-xs font-medium">Dự án đã xong?</span>
+            </Button>
+          ) : null}
         </div>
       )}
     </div>

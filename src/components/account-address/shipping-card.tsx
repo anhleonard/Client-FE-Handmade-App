@@ -16,9 +16,15 @@ type Props = {
   title?: ReactNode;
   content?: ReactNode;
   radioValue?: string;
+  canSelect?: boolean;
 };
 
-const ShippingCard = ({ title, content, radioValue }: Props) => {
+const ShippingCard = ({
+  title,
+  content,
+  radioValue,
+  canSelect = true,
+}: Props) => {
   const router = useRouter();
 
   return (
@@ -31,16 +37,18 @@ const ShippingCard = ({ title, content, radioValue }: Props) => {
               {title}
             </div>
           </div>
-          <div className="flex flex-col gap-1 items-end">
-            <div className="flex flex-row gap-3 items-center">
-              <FormControlLabel
-                value={radioValue}
-                control={<Radio size="small" />}
-                label={"Giao ở địa chỉ này"}
-                labelPlacement="start"
-              />
+          {canSelect && (
+            <div className="flex flex-col gap-1 items-end">
+              <div className="flex flex-row gap-3 items-center">
+                <FormControlLabel
+                  value={radioValue}
+                  control={<Radio size="small" />}
+                  label={"Giao ở địa chỉ này"}
+                  labelPlacement="start"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </ListItem>
       <Collapse in={true}>

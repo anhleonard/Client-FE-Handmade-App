@@ -1,5 +1,5 @@
 import storage from "@/apis/storage";
-import { Bidder, OrderProduct, VariantItem } from "./defined-types";
+import { Bidder, OrderProduct, VariantItem, Progress } from "./defined-types";
 import moment from "moment";
 
 export function formatCurrency(price: number) {
@@ -159,4 +159,15 @@ export function calculateDaysAfterAccepted(
   const remainingDays = Math.ceil(remainingTime / (1000 * 60 * 60 * 24));
 
   return remainingDays > 0 ? remainingDays : 0;
+}
+
+export function findMaxPercentage(progresses: Progress[]) {
+  if (!progresses?.length) return 0;
+
+  const maxPercentage = progresses
+    .map((progress) => progress.percentage)
+    .filter((percentage) => percentage !== null)
+    .reduce((max, current) => Math.max(max, current), 0);
+
+  return maxPercentage;
 }

@@ -5,6 +5,7 @@ import {
   calculateAverageBidderMoney,
   calculateDaysAfterAccepted,
   calculateRemainingDays,
+  findMaxPercentage,
   formatCurrency,
 } from "@/enum/functions";
 import Button from "@/libs/button";
@@ -53,7 +54,7 @@ const MyAunctionCard = ({ auction }: Props) => {
           </div>
         );
       case AuctionStatus.PROGRESS:
-        const bidder = auction?.candidates?.filter(
+        let bidder = auction?.candidates?.filter(
           (bidder) => bidder?.isSelected === true
         )[0];
 
@@ -77,13 +78,37 @@ const MyAunctionCard = ({ auction }: Props) => {
             </div>
             <div className="flex flex-row gap-1 items-center">
               <div className="text-xs font-bold text-grey-c900">Tiến độ:</div>
-              <div className="text-xs font-bold text-primary-c900">50%</div>
+              <div className="text-xs font-bold text-primary-c900">
+                {findMaxPercentage(auction?.progresses)}%
+              </div>
             </div>
             <div className="flex flex-col gap-2">
               <div className="text-xs font-bold text-grey-c900">
                 Trạng thái:
               </div>
               <MyLabel type="progress">Đang tiến hành</MyLabel>
+            </div>
+          </div>
+        );
+      case AuctionStatus.DELIVERY:
+        let candidate = auction?.candidates?.filter(
+          (bidder) => bidder?.isSelected === true
+        )[0];
+
+        return (
+          <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-row gap-1 items-center">
+              <div className="text-xs font-bold text-grey-c900">Giá chốt</div>
+              <div className="text-xs font-bold text-primary-c900">
+                {formatCurrency(candidate?.bidderMoney)}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Trạng thái:
+              </div>
+              <MyLabel type="delivery">Đang vận chuyển</MyLabel>
             </div>
           </div>
         );

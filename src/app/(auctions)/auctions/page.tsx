@@ -14,9 +14,12 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { filterAuctions } from "@/apis/services/auctions";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const AuctionHomePage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [auctions, setAuctions] = useState<Auction[]>([]);
   const [isOpen, setIsOpen] = useState(true);
   const [minPrice, setMinPrice] = useState<string>("");
@@ -89,7 +92,9 @@ const AuctionHomePage = () => {
             }
           />
         </div>
-        <Button color="info">Dự án của tôi</Button>
+        <Button color="info" onClick={() => router.push("/account-auction")}>
+          Dự án của tôi
+        </Button>
       </div>
 
       {/* main content */}
