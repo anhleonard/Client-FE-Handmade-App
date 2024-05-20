@@ -8,7 +8,7 @@ import { AlertState, Auction } from "@/enum/defined-types";
 import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { singleAuction } from "@/apis/services/auctions";
-import { AlertStatus } from "@/enum/constants";
+import { AlertStatus, AuctionStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 
 const DetailAuctionPage = () => {
@@ -53,7 +53,12 @@ const DetailAuctionPage = () => {
         </div>
       }
     >
-      {auction && <DetailAuction status="progress" auction={auction} />}
+      {auction && (
+        <DetailAuction
+          status={auction.status as AuctionStatus}
+          auction={auction}
+        />
+      )}
       {auction && <ListSellerPrice auction={auction} />}
     </SecondaryAuctionLayout>
   );

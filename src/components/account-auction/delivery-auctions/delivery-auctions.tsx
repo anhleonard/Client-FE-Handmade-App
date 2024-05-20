@@ -10,7 +10,7 @@ import { allClientAuctions } from "@/apis/services/auctions";
 import NoOrderCard from "@/components/account-orders/no-order-card";
 import MyAunctionCard from "@/components/auctions/my-aunction-card";
 
-const AllAuctions = () => {
+const DeliveryAuctions = () => {
   const dispatch = useDispatch();
   const [auctions, setAuctions] = useState<Auction[]>([]);
 
@@ -19,7 +19,7 @@ const AllAuctions = () => {
       dispatch(openLoading());
       const token = storage.getLocalAccessToken();
       const variables = {
-        status: undefined,
+        status: AuctionStatus?.DELIVERY,
       };
       const res = await allClientAuctions(token, variables);
       if (res) {
@@ -54,4 +54,4 @@ const AllAuctions = () => {
   );
 };
 
-export default AllAuctions;
+export default DeliveryAuctions;

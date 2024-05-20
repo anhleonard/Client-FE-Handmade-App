@@ -191,6 +191,7 @@ export type Bidder = {
   estimatedDay: number;
   selfIntroduce: string;
   isSelected: boolean;
+  acceptedAt: Date;
   store: Store;
 };
 

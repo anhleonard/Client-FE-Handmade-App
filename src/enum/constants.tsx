@@ -16,6 +16,11 @@ import StoreCollection from "@/app/(stores)/store-collection/page";
 import StoreHistory from "@/app/(stores)/store-history/page";
 import AuctioningAuctions from "@/components/account-auction/auctioning-auctions/auctioning-auctions";
 import ProcessingAuctions from "@/components/account-auction/processing-auctions/processing-auctions";
+import DeliveryAuctions from "@/components/account-auction/delivery-auctions/delivery-auctions";
+import CompletedAuctions from "@/components/account-auction/completed-auctions/completed-auctions";
+import CanceledAuctions from "@/components/account-auction/canceled-auctions/canceled-auctions";
+import AllAuctions from "@/components/account-auction/all-auctions/all-auctions";
+import WaitingAuctions from "@/components/account-auction/waiting-auctions/waiting-auctions";
 
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
@@ -24,7 +29,7 @@ export enum ColorState {
   warning = "bg-primary-c100 text-primary-c900 text-xs font-medium",
   progress = "bg-blue-c50 text-blue-c900 text-xs font-medium",
   delivery = "bg-purple-c10 text-purple-c900 text-xs font-medium",
-  grey = "bg-grey-c10 text-grey-c900 text-xs font-medium",
+  grey = "bg-grey-c50 text-grey-c900 text-xs font-medium",
 }
 
 export enum VoucherColorState {
@@ -106,32 +111,37 @@ export const accountAuctionTabs = [
   {
     label: "Tất cả dự án",
     value: 1,
-    content: <AllOrders />,
+    content: <AllAuctions />,
+  },
+  {
+    label: "Chờ duyệt",
+    value: 2,
+    content: <WaitingAuctions />,
   },
   {
     label: "Đang đặt giá",
-    value: 2,
+    value: 3,
     content: <AuctioningAuctions />,
   },
   {
     label: "Đang tiến hành",
-    value: 3,
+    value: 4,
     content: <ProcessingAuctions />,
   },
   {
     label: "Đang vận chuyển",
-    value: 4,
-    content: <TransportOrders />,
+    value: 5,
+    content: <DeliveryAuctions />,
   },
   {
     label: "Đã giao",
-    value: 5,
-    content: <CompletedOrders />,
+    value: 6,
+    content: <CompletedAuctions />,
   },
   {
     label: "Đã hủy",
-    value: 6,
-    content: <CanceledOrders />,
+    value: 7,
+    content: <CanceledAuctions />,
   },
 ];
 

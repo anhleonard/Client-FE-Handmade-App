@@ -10,10 +10,11 @@ import React from "react";
 import MyDisplayImage from "@/libs/display-image";
 import Button from "@/libs/button";
 import { Auction } from "@/enum/defined-types";
+import { AuctionStatus } from "@/enum/constants";
 
 type DetailAuctionProps = {
   type?: "client" | "seller";
-  status: string;
+  status: AuctionStatus;
   auction: Auction;
 };
 
@@ -37,24 +38,24 @@ const DetailAuction = ({
               <div className="text-base font-semibold text-primary-c900">
                 {auction?.name}
               </div>
-              {status === "progress" && (
+              {status === AuctionStatus.AUCTIONING && (
                 <MyLabel type="warning">
                   Còn {calculateRemainingDays(auction?.closedDate)} ngày
                 </MyLabel>
               )}
-              {type === "seller" && status !== "canceled" && (
+              {type === "seller" && status !== AuctionStatus.CANCELED && (
                 <MyLabel type="success">Đạt tiến độ: 100%</MyLabel>
               )}
             </div>
             {type === "seller" ? (
               <>
-                {status === "progress" && (
+                {status === AuctionStatus.PROGRESS && (
                   <MyLabel type="progress">Đang làm</MyLabel>
                 )}
-                {status === "finished" && (
+                {status === AuctionStatus.COMPLETED && (
                   <MyLabel type="success">Đã hoàn thành</MyLabel>
                 )}
-                {status === "canceled" && (
+                {status === AuctionStatus.CANCELED && (
                   <MyLabel type="error">Đã hủy</MyLabel>
                 )}
               </>
@@ -93,6 +94,17 @@ const DetailAuction = ({
                 </div>
               </ListItem>
             )}
+            <ListItem
+              className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+              disablePadding
+            >
+              <div className="flex flex-col gap-1">
+                <div className="font-bold text-grey-c900">Ngân sách</div>
+                <div className="font-medium text-primary-c900">
+                  {formatCurrency(auction?.maxAmount)}
+                </div>
+              </div>
+            </ListItem>
             <ListItem
               className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
               disablePadding
@@ -155,7 +167,7 @@ const DetailAuction = ({
                 </div>
               )}
             </ListItem>
-            {status !== "canceled" && (
+            {status !== AuctionStatus.CANCELED && (
               <ListItem className="block w-full px-4 py-4" disablePadding>
                 {type === "client" && (
                   <div className="flex flex-col gap-1">
@@ -182,7 +194,7 @@ const DetailAuction = ({
           </List>
         </Collapse>
       </div>
-      {type === "seller" && status === "progress" && (
+      {type === "seller" && status === AuctionStatus.PROGRESS && (
         <div className="mt-4 flex flex-row justify-end gap-3">
           <Button className="!w-fit !px-3 !py-1.5" color="grey">
             <span className="text-xs font-medium">Hủy dự án</span>

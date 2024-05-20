@@ -3,6 +3,7 @@ import React from "react";
 import MyLabel from "@/libs/label";
 import {
   calculateAverageBidderMoney,
+  calculateDaysAfterAccepted,
   calculateRemainingDays,
   formatCurrency,
 } from "@/enum/functions";
@@ -18,17 +19,83 @@ type Props = {
 const MyAunctionCard = ({ auction }: Props) => {
   const router = useRouter();
 
-  const renderAuctionStatus = () => {
+  const renderRightContent = () => {
     switch (auction?.status) {
       case AuctionStatus.AUCTIONING:
         return (
-          <div className="flex flex-row items-center gap-3">
-            <MyLabel type="success">
-              Max: {formatCurrency(auction?.maxAmount)}
-            </MyLabel>
-            <MyLabel type="success">
-              Dự kiến làm: {auction?.maxDays} ngày
-            </MyLabel>
+          <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <div className="text-xs font-bold text-grey-c900">
+                Giá đặt trung bình:
+              </div>
+              <div className="text-xs font-bold text-primary-c900">
+                {formatCurrency(
+                  auction?.candidates?.length
+                    ? calculateAverageBidderMoney(auction?.candidates)
+                    : 0
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="text-xs font-bold text-grey-c900">
+                Số người đã đặt giá:
+              </div>
+              <div className="text-xs font-bold text-primary-c900">
+                {auction?.candidates?.length ?? 0}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Trạng thái:
+              </div>
+              <MyLabel type="warning">Đang đặt giá</MyLabel>
+            </div>
+          </div>
+        );
+      case AuctionStatus.PROGRESS:
+        const bidder = auction?.candidates?.filter(
+          (bidder) => bidder?.isSelected === true
+        )[0];
+
+        return (
+          <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-row gap-1 items-center">
+              <div className="text-xs font-bold text-grey-c900">Giá chốt</div>
+              <div className="text-xs font-bold text-primary-c900">
+                {formatCurrency(bidder?.bidderMoney)}
+              </div>
+            </div>
+            <div className="flex flex-row gap-1 items-center">
+              <div className="text-xs font-bold text-grey-c900">Còn lại:</div>
+              <div className="text-xs font-bold text-primary-c900">
+                {calculateDaysAfterAccepted(
+                  bidder?.estimatedDay,
+                  bidder?.acceptedAt
+                )}{" "}
+                ngày
+              </div>
+            </div>
+            <div className="flex flex-row gap-1 items-center">
+              <div className="text-xs font-bold text-grey-c900">Tiến độ:</div>
+              <div className="text-xs font-bold text-primary-c900">50%</div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Trạng thái:
+              </div>
+              <MyLabel type="progress">Đang tiến hành</MyLabel>
+            </div>
+          </div>
+        );
+      default:
+        return (
+          <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Trạng thái:
+              </div>
+              <MyLabel type="grey">Chờ duyệt</MyLabel>
+            </div>
           </div>
         );
     }
@@ -45,16 +112,27 @@ const MyAunctionCard = ({ auction }: Props) => {
             <div className="text-base font-semibold text-primary-c900">
               {auction?.name}
             </div>
-            <MyLabel type="warning">
-              Còn {calculateRemainingDays(auction?.closedDate)} ngày
-            </MyLabel>
+            {auction?.status === AuctionStatus.AUCTIONING && (
+              <MyLabel type="warning">
+                Còn {calculateRemainingDays(auction?.closedDate)} ngày
+              </MyLabel>
+            )}
           </div>
 
-          {renderAuctionStatus()}
+          <Button
+            className="!w-fit !px-3 !py-1.5"
+            onClick={() =>
+              router.push(`/detail-auction/${auction?.id}`, {
+                scroll: true,
+              })
+            }
+          >
+            <span className="text-xs font-medium">Xem chi tiết</span>
+          </Button>
         </div>
       </ListItem>
-      <Collapse in>
-        <List disablePadding className="flex flex-col gap-4 px-4 py-4">
+      <Collapse in className="p-4">
+        <List disablePadding className="flex flex-col gap-4">
           {/* item 1 */}
           <ListItem className="block w-full" disablePadding>
             <div className="grid grid-cols-3 gap-9 md:grid-cols-4 lg:grid-cols-5">
@@ -73,38 +151,7 @@ const MyAunctionCard = ({ auction }: Props) => {
                 </div> */}
               </div>
               {/* right content */}
-              <div className="col-span-1 flex flex-col gap-3">
-                <div className="flex flex-col gap-1">
-                  <div className="text-xs font-bold text-grey-c900">
-                    Giá đặt trung bình:
-                  </div>
-                  <div className="text-xs font-bold text-primary-c900">
-                    {formatCurrency(
-                      auction?.candidates?.length
-                        ? calculateAverageBidderMoney(auction?.candidates)
-                        : 0
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="text-xs font-bold text-grey-c900">
-                    Số người đã đặt giá:
-                  </div>
-                  <div className="text-xs font-bold text-primary-c900">
-                    {auction?.candidates?.length ?? 0}
-                  </div>
-                </div>
-                <Button
-                  className="!w-fit !px-3 !py-1.5"
-                  onClick={() =>
-                    router.push(`/detail-auction/${auction?.id}`, {
-                      scroll: true,
-                    })
-                  }
-                >
-                  <span className="text-xs font-medium">Đặt giá ngay</span>
-                </Button>
-              </div>
+              {renderRightContent()}
             </div>
           </ListItem>
         </List>

@@ -46,7 +46,7 @@ const CompletedOrders = () => {
     <div className="space-y-8">
       {orders?.map((order, index) => {
         return (
-          <div>
+          <div key={index}>
             {order?.orderProducts.length ? (
               <AccountOrdersCard
                 key={index}
