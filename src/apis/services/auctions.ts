@@ -28,3 +28,15 @@ export const singleAuction = async (id: number) => {
 
   return await axios.get(url).then((res) => res.data);
 };
+
+export const allClientAuctions = async (token: string, variables: any) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .post(`${headerUrl}/auctions/client-auctions`, variables, config)
+    .then((res) => res.data);
+};

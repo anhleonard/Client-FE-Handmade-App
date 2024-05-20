@@ -15,7 +15,7 @@ type Props = {
   auction: Auction;
 };
 
-const AunctionCard = ({ auction }: Props) => {
+const MyAunctionCard = ({ auction }: Props) => {
   const router = useRouter();
 
   const renderAuctionStatus = () => {
@@ -113,4 +113,4 @@ const AunctionCard = ({ auction }: Props) => {
   );
 };
 
-export default AunctionCard;
+export default MyAunctionCard;

@@ -16,6 +16,9 @@ import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import AccountOrder from "./account-order/page";
 import AccountAddressPage from "./account-address/page";
+import AccountAuction from "./account-auction/page";
+import ReorderRoundedIcon from "@mui/icons-material/ReorderRounded";
+import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 
 export interface CommonLayoutProps {
   children?: React.ReactNode;
@@ -49,7 +52,13 @@ const accountPages: {
     name: "Quản lý đơn hàng",
     link: "/account-order",
     component: <AccountOrder />,
-    icon: <FavoriteBorderRoundedIcon sx={{ fontSize: 24 }} />,
+    icon: <ReorderRoundedIcon sx={{ fontSize: 24 }} />,
+  },
+  {
+    name: "Dự án handmade",
+    link: "/account-auction",
+    component: <AccountAuction />,
+    icon: <AssignmentOutlinedIcon sx={{ fontSize: 24 }} />,
   },
   {
     name: "Đổi trả hàng",

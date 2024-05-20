@@ -14,6 +14,8 @@ import StoreItemsScreen from "@/app/(stores)/store-items/page";
 import SingleStoreCollection from "@/components/store/single-store-collection";
 import StoreCollection from "@/app/(stores)/store-collection/page";
 import StoreHistory from "@/app/(stores)/store-history/page";
+import AuctioningAuctions from "@/components/account-auction/auctioning-auctions/auctioning-auctions";
+import ProcessingAuctions from "@/components/account-auction/processing-auctions/processing-auctions";
 
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
@@ -81,6 +83,40 @@ export const accountOrderTabs = [
     label: "Đang xử lý",
     value: 3,
     content: <ProcessingOrders />,
+  },
+  {
+    label: "Đang vận chuyển",
+    value: 4,
+    content: <TransportOrders />,
+  },
+  {
+    label: "Đã giao",
+    value: 5,
+    content: <CompletedOrders />,
+  },
+  {
+    label: "Đã hủy",
+    value: 6,
+    content: <CanceledOrders />,
+  },
+];
+
+// account auction tabs
+export const accountAuctionTabs = [
+  {
+    label: "Tất cả dự án",
+    value: 1,
+    content: <AllOrders />,
+  },
+  {
+    label: "Đang đặt giá",
+    value: 2,
+    content: <AuctioningAuctions />,
+  },
+  {
+    label: "Đang tiến hành",
+    value: 3,
+    content: <ProcessingAuctions />,
   },
   {
     label: "Đang vận chuyển",
