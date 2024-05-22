@@ -112,6 +112,39 @@ const MyAunctionCard = ({ auction }: Props) => {
             </div>
           </div>
         );
+      case AuctionStatus.COMPLETED:
+        let selectedBidder = auction?.candidates?.filter(
+          (bidder) => bidder?.isSelected === true
+        )[0];
+
+        return (
+          <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-row gap-1 items-center">
+              <div className="text-xs font-bold text-grey-c900">Giá chốt</div>
+              <div className="text-xs font-bold text-primary-c900">
+                {formatCurrency(selectedBidder?.bidderMoney)}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Trạng thái:
+              </div>
+              <MyLabel type="success">Đã giao</MyLabel>
+            </div>
+          </div>
+        );
+      case AuctionStatus.CANCELED:
+        return (
+          <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Trạng thái:
+              </div>
+              <MyLabel type="error">Đã hủy</MyLabel>
+            </div>
+          </div>
+        );
       default:
         return (
           <div className="col-span-1 flex flex-col gap-3">

@@ -19,7 +19,7 @@ const CompletedAuctions = () => {
       dispatch(openLoading());
       const token = storage.getLocalAccessToken();
       const variables = {
-        status: AuctionStatus?.COMPLETED,
+        status: AuctionStatus.COMPLETED,
       };
       const res = await allClientAuctions(token, variables);
       if (res) {
