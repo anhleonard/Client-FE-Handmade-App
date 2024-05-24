@@ -2,17 +2,55 @@
 import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
-import { storeSellerTabs } from "@/enum/constants";
+import { AlertStatus, storeSellerTabs } from "@/enum/constants";
 import { renderSearchIcon } from "@/enum/icons";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
+import { AlertState, Store } from "@/enum/defined-types";
+import { useDispatch } from "react-redux";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { singleStore } from "@/apis/services/stores";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { addStore } from "@/redux/slices/storeSlice";
 
 const SingleStoreScreen = () => {
   const router = useRouter();
+  const params = useParams();
+  const dispatch = useDispatch();
+  const [store, setStore] = useState<Store>();
+
+  const storeId = parseInt(params?.id?.toString());
+
+  const getSingleStore = async () => {
+    try {
+      dispatch(openLoading());
+      const res: Store = await singleStore(storeId);
+      if (res) {
+        setStore(res);
+        dispatch(addStore({ store: res }));
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  useEffect(() => {
+    getSingleStore();
+  }, []);
+
+  console.log(store);
 
   const renderSearchForm = () => {
     return (
@@ -59,7 +97,7 @@ const SingleStoreScreen = () => {
                 sx={{ width: 64, height: 64 }}
                 src="/images/bags/bag-1.jpg"
               />
-              <div className="font-semibold text-center">Góc nhỏ của Anh</div>
+              <div className="font-semibold text-center">{store?.name}</div>
               <div className="flex items-center gap-5 text-sm">
                 <div className="flex items-center gap-1">
                   <StarRoundedIcon

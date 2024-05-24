@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { AlertStatus, ProductStatus, Role } from "./constants";
+import { AlertStatus, ProductStatus, Role, StoreStatus } from "./constants";
 
 export type VariantType = {
   name: String;
@@ -31,6 +31,10 @@ export type AlertState = {
   title: string;
   message: string;
   type: AlertStatus | string;
+};
+
+export type StoreState = {
+  store: Store | null;
 };
 
 export type Product = {
@@ -104,6 +108,12 @@ export type Store = {
   avgStoreRating: number;
   followerAmount: number;
   owner: User;
+  createdAt: Date;
+  products: Product[];
+  orders: Order[];
+  bannedReason: string;
+  notApproveReason: string;
+  status: StoreStatus;
 };
 
 export type OrderProduct = {
