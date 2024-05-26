@@ -19,6 +19,14 @@ class Storage {
     return this.localStorage.getItem("order");
   }
 
+  updateLocalAppTransId(id: string) {
+    this.localStorage.setItem("apptransid", id);
+  }
+
+  getLocalAppTransId() {
+    return this.localStorage.getItem("apptransid");
+  }
+
   updateLocalUser(user: string) {
     this.localStorage.setItem("user", user);
   }

@@ -27,10 +27,11 @@ const CompleteOrderPage = () => {
     const localOrder = storage.getLocalOrder();
     const currentOrders = JSON.parse(localOrder);
 
-    console.log(currentOrders);
-
-    return;
     if (apptransid) {
+      if (apptransid !== storage.getLocalAppTransId()) {
+        storage.updateLocalAppTransId(apptransid);
+      } else return;
+
       try {
         dispatch(openLoading());
         const res = await checkingPayment(apptransid);
@@ -39,6 +40,14 @@ const CompleteOrderPage = () => {
           for (let order of currentOrders) {
             await createOrder(order, token);
           }
+        } else {
+          let alert: AlertState = {
+            isOpen: true,
+            title: "LỖI",
+            message: "Thanh toán không thành công.",
+            type: AlertStatus.ERROR,
+          };
+          dispatch(openAlert(alert));
         }
       } catch (error: any) {
         let alert: AlertState = {

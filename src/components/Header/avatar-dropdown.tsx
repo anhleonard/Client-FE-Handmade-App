@@ -58,7 +58,7 @@ export default function AvatarDropdown() {
 
                       <div className="flex-grow">
                         <h4 className="font-semibold">{user?.name}</h4>
-                        <p className="text-xs mt-0.5">Los Angeles, CA</p>
+                        <p className="text-xs mt-0.5">Việt Nam</p>
                       </div>
                     </div>
 

@@ -30,6 +30,7 @@ export type OrderValues = {
   shippingAddressId: number;
   orderedProductIds: number[];
   deliveryFee: number;
+  isPaid: boolean;
 };
 
 export type OrderStatusValues = {
