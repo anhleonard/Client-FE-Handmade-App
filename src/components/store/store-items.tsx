@@ -9,6 +9,9 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { AlertState, Product } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { filterStoreProducts } from "@/apis/services/stores";
+import { PRICE_RANGE } from "../filters/filter-data";
+import { refetchComponent } from "@/redux/slices/refetchSlice";
+import { CommonContext } from "@/app/page";
 
 const StoreItems = () => {
   const dispatch = useDispatch();
@@ -16,11 +19,26 @@ const StoreItems = () => {
   const store = useSelector((state: RootState) => state.store.store);
   const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
-  const getFilterProducts = async () => {
+  const [isOnSale, setIsIsOnSale] = useState<boolean>(false);
+  const [rangePrices, setRangePrices] = useState<number[]>(PRICE_RANGE);
+  const [sortOrderStates, setSortOrderStates] = useState<string>("");
+  const [isFilterPrice, setIsFilterPrice] = useState(false);
+
+  const getFilterProducts = async (hasPrice: boolean) => {
     try {
       dispatch(openLoading());
       if (store) {
-        const res = await filterStoreProducts(store.id);
+        const query = {
+          discount: isOnSale ? 1 : 0,
+          sort: sortOrderStates !== "" ? sortOrderStates : null,
+          ...(hasPrice && {
+            minPrice: rangePrices[0],
+            maxPrice: rangePrices[1],
+          }),
+        };
+
+        const res = await filterStoreProducts(store.id, query);
+
         if (res) {
           setProducts(res?.data);
         }
@@ -39,17 +57,43 @@ const StoreItems = () => {
   };
 
   useEffect(() => {
-    getFilterProducts();
-  }, [refetchQueries]);
+    getFilterProducts(isFilterPrice);
+  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries]);
+
+  const handleFilterPrice = (value: boolean) => {
+    setIsFilterPrice(value);
+  };
+
+  const handleRefetch = () => {
+    dispatch(refetchComponent());
+  };
 
   return (
     <div className="nc-SectionGridFeatureItems relative">
-      <StoreFilterSection />
+      {/* FILTER */}
+      <CommonContext.Provider
+        value={{
+          isFilterPrice: isFilterPrice,
+          handleFilterPrice: handleFilterPrice,
+          handleRefetch: handleRefetch,
+        }}
+      >
+        <StoreFilterSection
+          isOnSale={isOnSale}
+          setIsIsOnSale={setIsIsOnSale}
+          rangePrices={rangePrices}
+          setRangePrices={setRangePrices}
+          sortOrderStates={sortOrderStates}
+          setSortOrderStates={setSortOrderStates}
+          products={products}
+        />
+      </CommonContext.Provider>
+
       <div
         className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 `}
       >
-        {exampleItems.items.map((item) => (
-          <ProductCard item={item} key={item.id} />
+        {products?.map((product, index) => (
+          <ProductCard item={product} key={index} />
         ))}
       </div>
       <div className="flex mt-10 justify-center items-center">

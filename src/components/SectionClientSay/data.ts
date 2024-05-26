@@ -1,20 +1,20 @@
 export const DEMO_DATA = [
   {
     id: 1,
-    clientName: "Tiana Abie",
+    clientName: "Nhung Trần",
     content:
-      "Great quality products, affordable prices, fast and friendly delivery. I very recommend.",
+      "Sàn thương mại này có rất nhiều sản phẩm đa dạng và sáng tạo. Tôi luôn tìm được những món quà độc đáo cho bạn bè và gia đình.",
   },
   {
     id: 2,
-    clientName: "Lennie Swiffan",
+    clientName: "Đào Quỳnh Mai",
     content:
-      "Great quality products, affordable prices, fast and friendly delivery. I very recommend.",
+      "Tôi đã mua rất nhiều sản phẩm handmade trên sàn này và chưa bao giờ thất vọng. Mỗi lần nhận hàng là mỗi lần tôi cảm thấy vui vẻ và hài lòng.",
   },
   {
     id: 3,
-    clientName: "Berta Emili",
+    clientName: "Bùi Thu Phương",
     content:
-      "Great quality products, affordable prices, fast and friendly delivery. I very recommend.",
+      "Website dễ sử dụng và giao diện thân thiện với người dùng. Tôi có thể dễ dàng tìm kiếm và đặt hàng chỉ trong vài phút.",
   },
 ];

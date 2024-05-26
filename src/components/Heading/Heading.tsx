@@ -10,6 +10,7 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   hasNextPrev?: boolean;
   isCenter?: boolean;
   isSeeAll?: boolean;
+  componentSeeAll?: ReactNode;
 }
 
 const solutions = [
@@ -37,6 +38,7 @@ const Heading: React.FC<HeadingProps> = ({
   rightDescText,
   rightPopoverOptions = solutions,
   isSeeAll = false,
+  componentSeeAll,
   ...args
 }) => {
   return (
@@ -76,9 +78,13 @@ const Heading: React.FC<HeadingProps> = ({
             <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
           </div>
         )}
-        {isSeeAll && (
-          <Button className="!text-sm !px-3 !py-2">Xem tất cả</Button>
-        )}
+        {isSeeAll ? (
+          componentSeeAll ? (
+            componentSeeAll
+          ) : (
+            <Button className="!text-sm !px-3 !py-2">Xem tất cả</Button>
+          )
+        ) : null}
       </div>
     </div>
   );

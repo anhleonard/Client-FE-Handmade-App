@@ -135,14 +135,14 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "" }) => {
           />
         </div>
 
-        <div className="mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 bottom-0 top-0 w-full max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
+        <div className="hidden mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 bottom-0 top-0 w-full max-w-2xl xl:max-w-3xl 2xl:max-w-4xl sm:flex sm:items-center sm:justify-center">
           <Image
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain object-center sm:object-right-bottom nc-SectionHero2Item__image"
             src={item.image}
             alt={item.heading}
             priority
+            width={400}
+            height={400}
           />
         </div>
 

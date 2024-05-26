@@ -3,13 +3,60 @@ import StatusHeaderTab from "@/components/processing-order/status-header-tab";
 import DefaultLayout from "@/layout/default-layout";
 import Button from "@/libs/button";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import KeyboardBackspaceRoundedIcon from "@mui/icons-material/KeyboardBackspaceRounded";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import storage from "@/apis/storage";
+import { useDispatch } from "react-redux";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { checkingPayment } from "@/apis/services/payments";
+import { AlertState } from "@/enum/defined-types";
+import { AlertStatus } from "@/enum/constants";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { createOrder } from "@/apis/services/orders";
 
 const CompleteOrderPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+
+  const apptransid = searchParams.get("apptransid");
+
+  const handleCheckOrder = async () => {
+    const localOrder = storage.getLocalOrder();
+    const currentOrders = JSON.parse(localOrder);
+
+    console.log(currentOrders);
+
+    return;
+    if (apptransid) {
+      try {
+        dispatch(openLoading());
+        const res = await checkingPayment(apptransid);
+        if (res?.return_code === 1) {
+          const token = storage.getLocalAccessToken();
+          for (let order of currentOrders) {
+            await createOrder(order, token);
+          }
+        }
+      } catch (error: any) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: error?.response?.data?.message,
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+      } finally {
+        dispatch(closeLoading());
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleCheckOrder();
+  }, []);
 
   return (
     <DefaultLayout>

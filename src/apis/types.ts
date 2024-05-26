@@ -60,3 +60,8 @@ export type CreateProgressValues = {
 export type UpdateProgressValues = {
   comment: string;
 };
+
+export type CreatePaymentValues = {
+  orderedProductIds: number[];
+  deliveryFee: number;
+};

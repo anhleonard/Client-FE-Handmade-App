@@ -11,6 +11,14 @@ class Storage {
     this.localStorage.setItem("accessToken", accessToken);
   }
 
+  updateLocalOrder(order: string) {
+    this.localStorage.setItem("order", order);
+  }
+
+  getLocalOrder() {
+    return this.localStorage.getItem("order");
+  }
+
   updateLocalUser(user: string) {
     this.localStorage.setItem("user", user);
   }

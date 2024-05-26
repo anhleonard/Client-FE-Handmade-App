@@ -21,29 +21,27 @@ import {
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import storage from "@/apis/storage";
 import { getSingleShipping } from "@/apis/services/shipping";
 import { selectedOrderProducts } from "@/apis/services/order-products";
 import { calculateTotalPrice } from "@/enum/functions";
 import { createOrder } from "@/apis/services/orders";
+import { createPayment } from "@/apis/services/payments";
+import { CreatePaymentValues } from "@/apis/types";
+import { addOrder } from "@/redux/slices/orderSlice";
+import { RootState } from "@/redux/store";
 
 const paymentWays = [
   {
     index: 0,
     title: "Thanh toán khi nhận hàng",
+    logo: "/images/cash-logo.png",
   },
   {
     index: 1,
     title: "Ví điện tử ZaloPay",
-  },
-  {
-    index: 2,
-    title: "Ví điện tử MOMO",
-  },
-  {
-    index: 3,
-    title: "Chuyển khoản ngân hàng",
+    logo: "/images/zalopay-logo.png",
   },
 ];
 
@@ -57,6 +55,8 @@ const PaymentPage = () => {
 
   const [selectedItems, setSelectedItems] = useState<OrderProduct[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage[]>([]);
+
+  const order = useSelector((state: RootState) => state.order);
 
   const getSelectedOrderProducts = async () => {
     try {
@@ -130,21 +130,51 @@ const PaymentPage = () => {
             ? 20000
             : 30000;
 
+        let rawOrders: any = [];
+        let orderProductIds: number[] = [];
+
         for (let parcel of selectedPackage) {
-          const orderProductIds: number[] = [];
+          let packageIds: number[] = [];
+
           for (let item of parcel?.orderProducts) {
+            packageIds.push(item?.id);
             orderProductIds.push(item?.id);
           }
+
           const variables = {
             shippingAddressId: parseInt(shippingId),
-            orderedProductIds: orderProductIds,
+            orderedProductIds: packageIds,
             deliveryFee: deliveryFee,
+            isPaid: selectedWay === 0 ? false : true,
           };
 
-          await createOrder(variables, token);
+          rawOrders.push(variables);
         }
 
-        router.push("/complete-order", { scroll: true });
+        if (selectedWay === 1) {
+          const values: CreatePaymentValues = {
+            orderedProductIds: orderProductIds,
+            deliveryFee: deliveryFee * selectedPackage?.length,
+          };
+
+          const paymentGate = await createPayment(values, token);
+
+          if (paymentGate?.return_code === 2) {
+            let alert: AlertState = {
+              isOpen: true,
+              title: "LỖI",
+              message: "Giao dịch gặp lỗi. Vui lòng thử lại sau.",
+              type: AlertStatus.ERROR,
+            };
+            dispatch(openAlert(alert));
+
+            return;
+          } else if (paymentGate?.return_code === 1) {
+            const localOrder = JSON.stringify(rawOrders);
+            storage.updateLocalOrder(localOrder);
+            window.open(paymentGate?.order_url, "_blank");
+          }
+        }
       } catch (error: any) {
         let alert: AlertState = {
           isOpen: true,
@@ -167,6 +197,8 @@ const PaymentPage = () => {
     }
   };
 
+  console.log(order);
+
   return (
     <DefaultLayout>
       <div className="hidden md:block">
@@ -188,6 +220,7 @@ const PaymentPage = () => {
                   key={item.index}
                   selected={selectedWay === item.index}
                   title={item.title}
+                  logo={item.logo}
                   onClicked={() => {
                     setSelectedWay(item.index);
                   }}

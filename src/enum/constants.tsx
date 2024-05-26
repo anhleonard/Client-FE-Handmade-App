@@ -1,5 +1,5 @@
 import AllOrders from "@/components/account-orders/all-orders/all-orders";
-import { OrderStatus } from "./defined-types";
+import { OrderStatus, TestCustomTab } from "./defined-types";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import WaitingPaymentOrders from "@/components/account-orders/waiting-payment-orders/waiting-payment-orders";
 import ProcessingOrders from "@/components/account-orders/processing-orders/processing-orders";
@@ -304,34 +304,31 @@ export const storeSellerTabs = [
   },
 ];
 
-// collection store seller tabs
-export const collectionStoreTabs = [
+// test store seller tabs
+export const testStoreTabs: TestCustomTab[] = [
   {
-    label: "Collection 1",
+    label: "Cửa hàng",
     value: 1,
-    content: (
-      <SingleStoreCollection title="Hoa len" subTitle="Tổng cộng 54 sản phẩm" />
-    ),
+    link: "/store-homepage",
+    content: <StoreHomePage />,
   },
   {
-    label: "Collection 2",
+    label: "Tất cả sản phẩm",
     value: 2,
-    content: (
-      <SingleStoreCollection
-        title="Búp bê len"
-        subTitle="Tổng cộng 50 sản phẩm"
-      />
-    ),
+    link: "/store-items",
+    content: <StoreItemsScreen />,
   },
   {
-    label: "Collection 3",
+    label: "Bộ sưu tập",
     value: 3,
-    content: <div>Collection 3</div>,
+    link: "/store-collection",
+    content: <StoreCollection />,
   },
   {
-    label: "Collection 4",
+    label: "Hồ sơ cửa hàng",
     value: 4,
-    content: <div>Collection 4</div>,
+    link: "/store-history",
+    content: <StoreHistory />,
   },
 ];
 

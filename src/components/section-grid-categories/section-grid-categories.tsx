@@ -1,55 +1,22 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import Heading from "@/components/Heading/Heading";
-import { DEMO_MORE_CATEGORIES, ExploreType } from "./data";
-import { AlertState, Category } from "@/enum/defined-types";
-import { useDispatch } from "react-redux";
-import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { allCategories } from "@/apis/services/categories";
-import { AlertStatus } from "@/enum/constants";
-import { openAlert } from "@/redux/slices/alertSlice";
 import MainCategoryCard from "../card-categories/main-card-category";
+import { Category } from "@/enum/defined-types";
 
 export interface SectionGridCategoriesProps {
   className?: string;
   gridClassName?: string;
+  categories: Category[];
 }
 
 const SectionGridCategories: FC<SectionGridCategoriesProps> = ({
   className = "",
   gridClassName = "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
+  categories,
 }) => {
-  const dispatch = useDispatch();
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  const getAllCategories = async () => {
-    try {
-      dispatch(openLoading());
-      const res = await allCategories();
-      if (res) {
-        setCategories(res);
-      }
-    } catch (error: any) {
-      let alert: AlertState = {
-        isOpen: true,
-        title: "LỖI",
-        message: error?.response?.data?.message,
-        type: AlertStatus.ERROR,
-      };
-      dispatch(openAlert(alert));
-    } finally {
-      dispatch(closeLoading());
-    }
-  };
-
-  useEffect(() => {
-    getAllCategories();
-  }, []);
-
   const renderCard = (item: Category) => {
-    item.image = "/images/bags/bag-1.jpg";
-
     return (
       <MainCategoryCard
         featuredImage={item.image}

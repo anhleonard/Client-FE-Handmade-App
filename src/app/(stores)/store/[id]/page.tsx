@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
-import { AlertStatus, storeSellerTabs } from "@/enum/constants";
+import { AlertStatus, storeSellerTabs, testStoreTabs } from "@/enum/constants";
 import { renderSearchIcon } from "@/enum/icons";
 import { useParams, useRouter } from "next/navigation";
 import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
@@ -49,8 +49,6 @@ const SingleStoreScreen = () => {
   useEffect(() => {
     getSingleStore();
   }, []);
-
-  console.log(store);
 
   const renderSearchForm = () => {
     return (

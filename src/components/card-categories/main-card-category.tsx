@@ -5,6 +5,8 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { Category } from "@/enum/defined-types";
+import { headerUrl } from "@/apis/services/authentication";
+import { Avatar } from "@mui/material";
 
 export interface Props {
   className?: string;
@@ -16,9 +18,7 @@ export interface Props {
 
 const MainCategoryCard: FC<Props> = ({
   className = "",
-  featuredImage = ".",
   bgSVG = explore1Svg,
-  color = "bg-rose-50",
   category,
 }) => {
   return (
@@ -32,13 +32,13 @@ const MainCategoryCard: FC<Props> = ({
 
         <div className="absolute inset-5 sm:inset-8 flex flex-col justify-between">
           <div className="flex justify-between items-center">
-            <NcImage
-              alt=""
-              src={featuredImage}
-              containerClassName={`w-20 h-20 rounded-full overflow-hidden z-0 ${color}`}
-              width={80}
-              height={80}
-            />
+            {category?.image ? (
+              <Avatar
+                src={`${headerUrl}/products/${category.image}`}
+                style={{ width: 120, height: 120 }}
+                className="border-[2px] border-grey-c200"
+              />
+            ) : null}
             <span className="text-xs text-slate-700 dark:text-neutral-300 font-medium">
               {category?.products?.length} sản phẩm
             </span>

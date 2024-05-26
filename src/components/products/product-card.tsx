@@ -78,24 +78,24 @@ const ProductCard: FC<ProductCardProps> = ({
         <div className="space-y-4 px-2.5 py-3">
           <div className="flex flex-col gap-1">
             <Link href={`/product-detail/${item?.id}`}>
-              <h2 className="text-base font-semibold transition-colors truncate overflow-hidden hover:underline hover:text-primary-c900 hover:cursor-pointer">
+              <h2 className="text-sm font-semibold transition-colors truncate overflow-hidden hover:underline hover:text-primary-c900 hover:cursor-pointer">
                 {item?.productName}
               </h2>
             </Link>
 
             <div className="flex flex-row gap-2 items-center">
-              <div className="text-primary-c900 font-semibold text-base">
-                {item?.price //giá bán
-                  ? item?.discount
-                    ? formatCurrency(
-                        (item?.price * (100 - item?.discount)) / 100
-                      )
-                    : formatCurrency(item?.price)
-                  : "-- --"}
+              <div className="text-primary-c900 font-semibold text-sm">
+                {item?.price && formatCurrency(item?.price)}
               </div>
               {item?.discount && (
                 <div className="text-grey-c400 font-normal text-xs line-through">
-                  {item?.price && formatCurrency(item?.price)}
+                  {item?.price //giá bán
+                    ? item?.discount
+                      ? formatCurrency(
+                          (item?.price * (100 + item?.discount)) / 100
+                        )
+                      : formatCurrency(item?.price)
+                    : "-- --"}
                 </div>
               )}
               {item?.discount && (

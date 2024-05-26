@@ -2,13 +2,15 @@ import { exampleItems } from "@/enum/constants";
 import React from "react";
 import ProductCard from "../products/product-card";
 import Button from "@/libs/button";
+import { Product } from "@/enum/defined-types";
 
 type Props = {
   title: string;
   subTitle: string;
+  products: Product[];
 };
 
-const SingleStoreCollection = ({ title, subTitle }: Props) => {
+const SingleStoreCollection = ({ title, subTitle, products }: Props) => {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
@@ -18,8 +20,8 @@ const SingleStoreCollection = ({ title, subTitle }: Props) => {
       <div
         className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 `}
       >
-        {exampleItems.items.map((item) => (
-          <ProductCard item={item} key={item.id} />
+        {products?.map((item, index) => (
+          <ProductCard item={item} key={index} />
         ))}
       </div>
       <div className="flex mt-10 justify-center items-center">

@@ -1,10 +1,13 @@
 "use client";
 
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import ProductCard from "../products/product-card";
+import { Product } from "@/enum/defined-types";
+import Button from "@/libs/button";
+import Link from "next/link";
 
 export interface SectionSliderProductCardProps {
   className?: string;
@@ -13,7 +16,8 @@ export interface SectionSliderProductCardProps {
   headingFontClassName?: string;
   headingClassName?: string;
   subHeading?: string;
-  data?: any;
+  products?: Product[];
+  componentSeeAll?: ReactNode;
 }
 
 const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
@@ -22,7 +26,8 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
   headingFontClassName,
   headingClassName,
   heading,
-  data,
+  products,
+  componentSeeAll,
 }) => {
   const sliderRef = useRef(null);
 
@@ -75,13 +80,14 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({
           fontClass={headingFontClassName}
           hasNextPrev
           isSeeAll
+          componentSeeAll={componentSeeAll}
         >
           {heading}
         </Heading>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {data?.map((item: any) => (
-              <li key={item.id} className={`glide__slide ${itemClassName}`}>
+            {products?.map((item, index) => (
+              <li key={index} className={`glide__slide ${itemClassName}`}>
                 <ProductCard key={item.id} item={item} />
               </li>
             ))}

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Avatar from "@/shared/Avatar/Avatar";
 import Badge from "@/shared/Badge/Badge";
@@ -11,6 +12,8 @@ import { _getImgRd, _getPersonNameRd, _getTitleRd } from "@/contains/fakeData";
 import Tag from "@/shared/Tag/Tag";
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const BlogSingle = () => {
   const renderHeader = () => {

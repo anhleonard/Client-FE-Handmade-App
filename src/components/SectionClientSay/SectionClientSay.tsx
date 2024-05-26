@@ -17,6 +17,7 @@ import quotationImg2 from "@/images/quotation2.png";
 import { StarIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { DEMO_DATA } from "./data";
+import { Avatar } from "@mui/material";
 
 export interface SectionClientSayProps {
   className?: string;
@@ -90,13 +91,23 @@ const SectionClientSay: FC<SectionClientSayProps> = ({ className = "" }) => {
       className={`nc-SectionClientSay relative flow-root ${className} `}
       data-nc-id="SectionClientSay"
     >
-      <Heading desc="Let's see what people think of Ciseco" isCenter>
-        Good news from far away 🥇
+      <Heading
+        desc="Hãy cùng lắng nghe các chia sẻ của khách hàng về Handmade."
+        isCenter
+      >
+        Mọi người nói gì về Handmade? 🥇
       </Heading>
       <div className="relative md:mb-16 max-w-2xl mx-auto">
         {renderBg()}
 
-        <Image className="mx-auto" src={clientSayMain} alt="" />
+        <Avatar
+          className="mx-auto"
+          src="/images/clients/image-1.jpg"
+          style={{
+            width: 120,
+            height: 120,
+          }}
+        />
         <div
           ref={sliderRef}
           className={`mt-12 lg:mt-16 relative ${isShow ? "" : "invisible"}`}

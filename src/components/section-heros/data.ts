@@ -15,24 +15,24 @@ interface Hero2DataType {
 
 export const HERO2_DEMO_DATA: Hero2DataType[] = [
   {
-    image: imageRightPng2,
+    image: "/images/box-hm.png",
     heading: "Mua hàng không giới hạn. Khám phá ngay!",
     subHeading: "Ý tưởng sáng tạo, thiết kế độc đáo 🔥",
     btnText: "KHÁM PHÁ",
-    btnLink: "/collection",
+    btnLink: "/search",
   },
   {
-    image: imageRightPng3,
+    image: "/images/image-1.png",
     heading: "Mua hàng không giới hạn. Khám phá ngay!",
     subHeading: "Ý tưởng sáng tạo, thiết kế độc đáo 🔥",
     btnText: "KHÁM PHÁ",
-    btnLink: "/collection",
+    btnLink: "/search",
   },
   {
-    image: imageRightPng,
+    image: "/images/image-2.png",
     heading: "Mua hàng không giới hạn. Khám phá ngay!",
     subHeading: "Ý tưởng sáng tạo, thiết kế độc đáo 🔥",
     btnText: "KHÁM PHÁ",
-    btnLink: "/collection",
+    btnLink: "/search",
   },
 ];

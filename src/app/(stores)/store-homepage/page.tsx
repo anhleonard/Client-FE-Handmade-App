@@ -1,22 +1,28 @@
 import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
 import StoreItems from "@/components/store/store-items";
-import { exampleItems } from "@/enum/constants";
-import React, { createContext } from "react";
+import { getTopSoldProducts } from "@/enum/functions";
+import { RootState } from "@/redux/store";
+import React from "react";
+import { useSelector } from "react-redux";
 
 const StoreHomePage = () => {
+  const store = useSelector((state: RootState) => state.store.store);
+
   return (
     <div className="flex flex-col gap-10">
       {/* các bộ sưu tập của cửa hàng */}
-      <SectionSliderProductCard
-        data={exampleItems.items}
-        heading="1. Light Novel"
-        subHeading="Best selling of the month"
-      />
-      <SectionSliderProductCard
-        data={exampleItems.items}
-        heading="2. Tiểu Thuyết Ngôn Tình"
-        subHeading="Best selling of the month"
-      />
+      {store?.collections?.map((collection, index) => {
+        const filteredProducts = collection?.products
+          ? getTopSoldProducts(collection?.products, 10)
+          : [];
+        return (
+          <SectionSliderProductCard
+            key={index}
+            heading={`${index + 1}. ${collection?.name}`}
+            products={filteredProducts}
+          />
+        );
+      })}
 
       {/* tất cả sản phẩm của store */}
       <StoreItems />

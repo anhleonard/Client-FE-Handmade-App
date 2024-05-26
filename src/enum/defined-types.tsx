@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { AlertStatus, ProductStatus, Role, StoreStatus } from "./constants";
+import { Route } from "next";
 
 export type VariantType = {
   name: String;
@@ -14,6 +15,13 @@ export type RadioItem = {
 };
 
 export type CustomTab = {
+  label: string;
+  value: number;
+  content: ReactNode;
+};
+
+export type TestCustomTab = {
+  link: Route;
   label: string;
   value: number;
   content: ReactNode;
@@ -34,7 +42,16 @@ export type AlertState = {
 };
 
 export type StoreState = {
+  //redux
   store: Store | null;
+};
+
+export type OrderState = {
+  //redux
+  shippingAddressId: number;
+  orderedProductIds: number[];
+  deliveryFee: number;
+  isPaid: boolean;
 };
 
 export type Product = {
@@ -114,6 +131,7 @@ export type Store = {
   bannedReason: string;
   notApproveReason: string;
   status: StoreStatus;
+  collections: Collection[];
 };
 
 export type OrderProduct = {
@@ -230,4 +248,11 @@ export type User = {
   phoneNumber: string;
   dateOfBirth: Date;
   role: Role;
+};
+
+export type Collection = {
+  id: number;
+  name: string;
+  store: Store;
+  products: Product[];
 };

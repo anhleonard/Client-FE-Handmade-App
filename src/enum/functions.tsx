@@ -1,5 +1,11 @@
 import storage from "@/apis/storage";
-import { Bidder, OrderProduct, VariantItem, Progress } from "./defined-types";
+import {
+  Bidder,
+  OrderProduct,
+  VariantItem,
+  Progress,
+  Product,
+} from "./defined-types";
 import moment from "moment";
 
 export function formatCurrency(price: number) {
@@ -171,3 +177,9 @@ export function findMaxPercentage(progresses: Progress[]) {
 
   return maxPercentage;
 }
+
+export const getTopSoldProducts = (products: Product[], topN: number) => {
+  return [...products]
+    .sort((a, b) => b.soldNumber - a.soldNumber) // Sort products by soldNumber in descending order
+    .slice(0, topN); // Get the top N products
+};
