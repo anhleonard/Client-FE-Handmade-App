@@ -1,22 +1,75 @@
 "use client";
 
+import { updateFavouriteProducts } from "@/apis/services/products";
+import storage from "@/apis/storage";
+import { UpdateFavouriteProductsValues } from "@/apis/types";
+import { AlertStatus } from "@/enum/constants";
+import { AlertState } from "@/enum/defined-types";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export interface LikeButtonProps {
   className?: string;
   liked?: boolean;
+  productId: number;
+  handleRefetch?: () => void;
+  hasUpdate?: boolean;
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({
   className = "",
   liked = false,
+  productId,
+  handleRefetch,
+  hasUpdate = false,
 }) => {
+  const dispatch = useDispatch();
   const [isLiked, setIsLiked] = useState(liked);
+  const [index, setIndex] = useState(0);
+
+  const handleUpdateFavouriteProducts = async () => {
+    try {
+      dispatch(openLoading());
+      const token = storage.getLocalAccessToken();
+      const variables: UpdateFavouriteProductsValues = {
+        productId: productId,
+        isAdd: isLiked,
+      };
+
+      await updateFavouriteProducts(variables, token);
+      if (handleRefetch) {
+        handleRefetch();
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  useEffect(() => {
+    if (index !== 0 && hasUpdate) {
+      handleUpdateFavouriteProducts();
+    }
+  }, [isLiked]);
 
   return (
     <button
       className={`w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-slate-900 text-neutral-700 dark:text-slate-200 ${className}`}
-      onClick={() => setIsLiked(!isLiked)}
+      onClick={() => {
+        if (hasUpdate) {
+          setIndex((pre) => pre + 1);
+          setIsLiked(!isLiked);
+        }
+      }}
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
         <path

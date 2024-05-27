@@ -11,16 +11,18 @@ import PaginationExample from "@/shared/pagination/pagination-example";
 import { AlertState, Category, Product } from "@/enum/defined-types";
 import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { getProducts } from "@/apis/services/products";
+import { getFavouriteProducts, getProducts } from "@/apis/services/products";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { allCategories } from "@/apis/services/categories";
 import { PRICE_RANGE } from "@/components/filters/filter-data";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import { CommonContext } from "../page";
+import storage from "@/apis/storage";
 
 const PageSearch = ({}) => {
   const dispatch = useDispatch();
+  const localToken = storage.getLocalAccessToken();
   const [products, setProducts] = useState<Product[]>([]);
 
   const [isOnSale, setIsIsOnSale] = useState<boolean>(false);
@@ -33,6 +35,13 @@ const PageSearch = ({}) => {
   const getAllProducts = async (hasPrice: boolean) => {
     try {
       dispatch(openLoading());
+
+      //get all favourite products
+      let lovedProducts: Product[] = [];
+      if (localToken) {
+        lovedProducts = await getFavouriteProducts(localToken);
+      }
+
       const query = {
         discount: isOnSale ? 1 : 0,
         sort: sortOrderStates !== "" ? sortOrderStates : null,
@@ -46,7 +55,19 @@ const PageSearch = ({}) => {
       };
       const res = await getProducts(query);
       if (res) {
-        setProducts(res?.data);
+        if (localToken && res?.data?.length && lovedProducts?.length) {
+          let products: Product[] = [];
+          for (let product of res?.data) {
+            const item: Product = product;
+            const isLoved = lovedProducts.some(
+              (product) => product.id === item.id
+            );
+
+            item.isLiked = isLoved;
+            products.push(item);
+          }
+          setProducts(products);
+        } else setProducts(res?.data);
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -142,7 +163,12 @@ const PageSearch = ({}) => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
               {products.length &&
                 products.map((product: Product) => (
-                  <ProductCard key={product.id} item={product} />
+                  <ProductCard
+                    key={product.id}
+                    item={product}
+                    localToken={localToken}
+                    isLiked={product?.isLiked}
+                  />
                 ))}
             </div>
 

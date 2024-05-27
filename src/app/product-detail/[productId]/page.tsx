@@ -26,27 +26,17 @@ import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AlertState, Product, Variant } from "@/enum/defined-types";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { singleProduct } from "@/apis/services/products";
+import { getFavouriteProducts, singleProduct } from "@/apis/services/products";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { headerUrl } from "@/apis/services/authentication";
 import { createOrderProduct } from "@/apis/services/order-products";
 import storage from "@/apis/storage";
 import { OrderProductValues } from "@/apis/types";
 
-const imageUrls = [
-  "/images/bags/bag-1.jpg",
-  "/images/bags/bag-2.jpg",
-  "/images/bags/bag-3.jpg",
-  "/images/bags/bag-4.jpg",
-  "/images/bags/bag-5.jpg",
-  "/images/bags/bag-6.jpg",
-  "/images/bags/bag-7.jpg",
-  "/images/bags/bag-8.jpg",
-];
-
 const ProductDetailPage = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const localToken = storage.getLocalAccessToken();
   const productId = params.productId;
   const [qualitySelected, setQualitySelected] = useState(1);
   const [product, setProduct] = useState<Product>();
@@ -61,9 +51,15 @@ const ProductDetailPage = () => {
     if (productId && typeof productId === "string") {
       try {
         dispatch(openLoading());
+
+        //get all favourite products
+        let lovedProducts: Product[] = [];
+        if (localToken) {
+          lovedProducts = await getFavouriteProducts(localToken);
+        }
+
         const res = await singleProduct(parseInt(productId));
         if (res) {
-          setProduct(res);
           if (res?.variants?.length) {
             const images = res?.variants?.map((item: Variant) => item?.image);
             setProductImages(images);
@@ -75,6 +71,16 @@ const ProductDetailPage = () => {
             setPrice(res?.price);
             setCurrentImage(res?.images[0]);
           }
+
+          if (localToken && lovedProducts?.length) {
+            const item: Product = res;
+            const isLoved = lovedProducts.some(
+              (product) => product.id === item.id
+            );
+
+            item.isLiked = isLoved;
+            setProduct(item);
+          } else setProduct(res);
         }
       } catch (error: any) {
         let alert: AlertState = {
@@ -221,7 +227,12 @@ const ProductDetailPage = () => {
                   </MyLabel>
                 )}
               </div>
-              <LikeButton />
+              {localToken && product?.id ? (
+                <LikeButton
+                  liked={product?.isLiked ? product?.isLiked : false}
+                  productId={product?.id}
+                />
+              ) : null}
             </div>
           </div>
 
@@ -359,7 +370,11 @@ const ProductDetailPage = () => {
           <hr className="border-slate-200 dark:border-slate-700" />
           <div className="flex items-start gap-3">
             {/* seller avatar */}
-            <Avatar src={imageUrls[0]} sx={{ width: 45, height: 45 }}></Avatar>
+            <Avatar
+              src={`${headerUrl}/products/${product?.store?.avatar}`}
+              sx={{ width: 45, height: 45 }}
+              alt="store-avatar"
+            ></Avatar>
 
             <div>
               {/* store information */}

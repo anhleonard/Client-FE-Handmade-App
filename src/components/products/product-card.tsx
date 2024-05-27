@@ -5,7 +5,6 @@ import LikeButton from "./like-button";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ModalQuickView from "../modals/modal-quick-view";
-import ProductStatus from "./product-status";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
@@ -17,18 +16,22 @@ import { headerUrl } from "@/apis/services/authentication";
 
 export interface ProductCardProps {
   className?: string;
-  isLiked?: boolean;
   item: Product;
   selectedItems?: string[];
   handleChecked?: (event: any) => void;
+  isLiked?: boolean;
+  localToken?: string;
+  handleRefetch?: () => void;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
   className = "",
-  isLiked,
   item,
   selectedItems,
   handleChecked,
+  isLiked,
+  localToken,
+  handleRefetch,
 }) => {
   let productImage = item?.images
     ? `${headerUrl}/products/${item?.images[0]}`
@@ -71,7 +74,15 @@ const ProductCard: FC<ProductCardProps> = ({
             />
           </Link>
           {/* <ProductStatus status={status as string} /> */}
-          <LikeButton liked={isLiked} className="absolute top-3 end-3 z-10" />
+          {localToken ? (
+            <LikeButton
+              hasUpdate //bấm vào có update hay không
+              liked={isLiked ? isLiked : false}
+              productId={item?.id}
+              className="absolute top-3 end-3 z-10"
+              handleRefetch={handleRefetch}
+            />
+          ) : null}
           {renderGroupButtons()}
         </div>
 

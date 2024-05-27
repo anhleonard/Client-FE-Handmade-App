@@ -84,6 +84,7 @@ export type Product = {
   averageRating: string;
   totalReviews: number;
   store: Store;
+  isLiked?: boolean;
 };
 
 export type VariantCategory = {

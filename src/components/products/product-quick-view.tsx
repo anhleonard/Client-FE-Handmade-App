@@ -30,7 +30,7 @@ import { COLORS } from "@/enum/colors";
 import { imageUrls, types } from "@/enum/fake-datas";
 import { AlertState, Product, Variant } from "@/enum/defined-types";
 import { useDispatch } from "react-redux";
-import { singleProduct } from "@/apis/services/products";
+import { getFavouriteProducts, singleProduct } from "@/apis/services/products";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
@@ -49,6 +49,8 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
   productId,
 }) => {
   const dispatch = useDispatch();
+  const localToken = storage.getLocalAccessToken();
+
   const [qualitySelected, setQualitySelected] = useState(1);
   const [product, setProduct] = useState<Product>();
   const [selectedVariant, setSelectedVariant] = useState<Variant>();
@@ -59,6 +61,13 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
   const getSingleProduct = async () => {
     try {
       dispatch(openLoading());
+
+      //get all favourite products
+      let lovedProducts: Product[] = [];
+      if (localToken) {
+        lovedProducts = await getFavouriteProducts(localToken);
+      }
+
       const res = await singleProduct(productId);
       if (res) {
         if (res?.variants?.length) {
@@ -72,7 +81,16 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
           setProductImages(res?.images);
           setPrice(res?.price);
         }
-        setProduct(res);
+
+        if (localToken && lovedProducts?.length) {
+          const item: Product = res;
+          const isLoved = lovedProducts.some(
+            (product) => product.id === item.id
+          );
+
+          item.isLiked = isLoved;
+          setProduct(item);
+        } else setProduct(res);
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -233,7 +251,12 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
                 </MyLabel>
               )}
             </div>
-            <LikeButton />
+            {localToken && product?.id ? (
+              <LikeButton
+                liked={product?.isLiked ? product?.isLiked : false}
+                productId={product?.id}
+              />
+            ) : null}
           </div>
         </div>
 

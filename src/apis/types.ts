@@ -66,3 +66,8 @@ export type CreatePaymentValues = {
   orderedProductIds: number[];
   deliveryFee: number;
 };
+
+export type UpdateFavouriteProductsValues = {
+  productId: number;
+  isAdd: boolean;
+};

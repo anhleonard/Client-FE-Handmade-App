@@ -71,8 +71,6 @@ function PageHome() {
     getAllDatas();
   }, []);
 
-  console.log(products);
-
   return (
     <div className="relative overflow-hidden">
       <SectionHero2 />
