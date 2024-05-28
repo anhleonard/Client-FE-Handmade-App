@@ -212,6 +212,11 @@ export type Auction = {
   shipping: Shipping;
   candidates: Bidder[];
   progresses: Progress[];
+  updatedAt: Date;
+  isPaymentDeposit: boolean;
+  isPaymentFull: boolean;
+  owner: User;
+  canceledBy: User;
 };
 
 export type Bidder = {
@@ -222,6 +227,7 @@ export type Bidder = {
   isSelected: boolean;
   acceptedAt: Date;
   store: Store;
+  auction: Auction;
 };
 
 export type Progress = {
@@ -256,4 +262,21 @@ export type Collection = {
   name: string;
   store: Store;
   products: Product[];
+};
+
+// Confirm
+export type ConfirmState = {
+  isOpen?: boolean;
+  title: string;
+  message: string;
+  feature: string;
+  onConfirm?: () => void;
+};
+
+// Modal
+export type ModalState = {
+  isOpen?: boolean;
+  title: string;
+  content: React.ReactNode;
+  className?: string;
 };

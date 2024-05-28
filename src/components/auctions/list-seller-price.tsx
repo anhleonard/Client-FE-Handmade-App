@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SellerPriceCard from "./seller-price-card";
-import { AlertState, Auction } from "@/enum/defined-types";
+import { AlertState, Auction, Bidder } from "@/enum/defined-types";
 import { FormControl, RadioGroup } from "@mui/material";
 import Button from "@/libs/button";
 import { AlertStatus } from "@/enum/constants";
@@ -10,6 +10,9 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { updateBidder } from "@/apis/services/bidders";
 import storage from "@/apis/storage";
 import { useRouter } from "next/navigation";
+import { closeConfirm, openConfirm } from "@/redux/slices/confirmSlice";
+import { CreateAuctionPaymentValues } from "@/apis/types";
+import { createAuctionPayment } from "@/apis/services/payments";
 
 type Props = {
   auction: Auction;
@@ -24,6 +27,18 @@ const ListSellerPrice = ({ auction }: Props) => {
     setPickedSeller((event.target as HTMLInputElement).value);
   };
 
+  const handleOpenConfirm = () => {
+    const confirm: any = {
+      isOpen: true,
+      title: "XÁC NHẬN CHỌN ĐỐI TÁC",
+      message: "Bạn đã chắc chắn chọn đối tác này chưa?",
+      feature: "CONFIRM_CONTACT_US",
+      onConfirm: () => handleSelectedBidder(),
+    };
+
+    dispatch(openConfirm(confirm));
+  };
+
   const handleSelectedBidder = async () => {
     try {
       dispatch(openLoading());
@@ -31,8 +46,33 @@ const ListSellerPrice = ({ auction }: Props) => {
       const variables = {
         isSelected: true,
       };
-      const res = await updateBidder(+pickedSeller, variables, token);
+      //update selected bidder
+      const res: Bidder = await updateBidder(+pickedSeller, variables, token);
+
+      //payment full money
+      const data: CreateAuctionPaymentValues = {
+        auctionId: res.auction.id,
+        amount: res.bidderMoney - res.auction.deposit, //tính số tiền còn phải trả còn lại
+        isDepositPayment: false,
+      };
+      const paymentGate = await createAuctionPayment(data, token);
+
+      if (paymentGate?.return_code === 2) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: "Giao dịch gặp lỗi. Vui lòng thử lại sau.",
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+
+        return;
+      } else if (paymentGate?.return_code === 1) {
+        window.open(paymentGate?.order_url, "_blank");
+      }
+
       if (res) {
+        dispatch(closeConfirm());
         router.push("/account-auction");
       }
     } catch (error: any) {
@@ -80,9 +120,9 @@ const ListSellerPrice = ({ auction }: Props) => {
             <Button
               className="!w-fit"
               color="info"
-              onClick={() => handleSelectedBidder()}
+              onClick={() => handleOpenConfirm()}
             >
-              Lựa chọn
+              Lựa chọn & Thanh toán
             </Button>
           </div>
         </div>

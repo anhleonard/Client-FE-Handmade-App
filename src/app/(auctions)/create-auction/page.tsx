@@ -20,16 +20,17 @@ import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import storage from "@/apis/storage";
 import { getShippingByUserId } from "@/apis/services/shipping";
-import { AlertState } from "@/enum/defined-types";
+import { AlertState, Auction } from "@/enum/defined-types";
 import { AlertStatus, addressTypes } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import ShippingCard from "@/components/account-address/shipping-card";
 import Link from "next/link";
-import { CreateAuctionValues } from "@/apis/types";
+import { CreateAuctionPaymentValues, CreateAuctionValues } from "@/apis/types";
 import MyDatePicker from "@/libs/date-picker";
 import moment from "moment";
 import { createAuction } from "@/apis/services/auctions";
 import { useRouter } from "next/navigation";
+import { createAuctionPayment } from "@/apis/services/payments";
 
 const CreateAuctionPage = () => {
   const dispatch = useDispatch();
@@ -109,8 +110,33 @@ const CreateAuctionPage = () => {
         maxDays: parseInt(values.maxDays),
       };
       const token = storage.getLocalAccessToken();
-      const res = await createAuction(variables, token);
+
+      //create auction
+      const res: Auction = await createAuction(variables, token);
       if (res) {
+        //create auction payment
+        const data: CreateAuctionPaymentValues = {
+          auctionId: res.id,
+          amount: res.deposit,
+          isDepositPayment: true,
+        };
+        const paymentGate = await createAuctionPayment(data, token);
+
+        if (paymentGate?.return_code === 2) {
+          let alert: AlertState = {
+            isOpen: true,
+            title: "LỖI",
+            message: "Giao dịch gặp lỗi. Vui lòng thử lại sau.",
+            type: AlertStatus.ERROR,
+          };
+          dispatch(openAlert(alert));
+
+          return;
+        } else if (paymentGate?.return_code === 1) {
+          window.open(paymentGate?.order_url, "_blank");
+        }
+
+        //reset form and alert successfully
         resetForm();
         let alert: AlertState = {
           isOpen: true,
@@ -326,7 +352,7 @@ const CreateAuctionPage = () => {
                     ? "Mở tùy chọn handmader"
                     : "Ẩn tùy chọn handmader"}
                 </Button>
-                <Button type="submit">Đặt dự án</Button>
+                <Button type="submit">Trả tiền cọc & Đặt dự án</Button>
               </div>
             </div>
           </Form>

@@ -19,6 +19,7 @@ import AccountAddressPage from "./account-address/page";
 import AccountAuction from "./account-auction/page";
 import ReorderRoundedIcon from "@mui/icons-material/ReorderRounded";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
+import storage from "@/apis/storage";
 
 export interface CommonLayoutProps {
   children?: React.ReactNode;
@@ -85,7 +86,14 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
                   title={item.name}
                   icon={item.icon}
                   selected={pathname === item.link}
-                  onClicked={() => router.push(item.link, { scroll: true })}
+                  onClicked={() => {
+                    if (item.link === "/account-auction") {
+                      storage.updateAuctionTab("");
+                    } else if (item.link === "/account-order") {
+                      storage.updateOrderTab("");
+                    }
+                    router.push(item.link, { scroll: true });
+                  }}
                 />
               ))}
             </div>

@@ -40,3 +40,19 @@ export const allClientAuctions = async (token: string, variables: any) => {
     .post(`${headerUrl}/auctions/client-auctions`, variables, config)
     .then((res) => res.data);
 };
+
+export const updateAuction = async (
+  auctionId: number,
+  variables: any,
+  token: string
+) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .put(`${headerUrl}/auctions/update/${auctionId}`, variables, config)
+    .then((res) => res.data);
+};

@@ -45,9 +45,13 @@ const AunctionCard = ({ auction }: Props) => {
             <div className="text-base font-semibold text-primary-c900">
               {auction?.name}
             </div>
-            <MyLabel type="warning">
-              Còn {calculateRemainingDays(auction?.closedDate)} ngày
-            </MyLabel>
+            {calculateRemainingDays(auction?.closedDate) > 0 ? (
+              <MyLabel type="warning">
+                Còn {calculateRemainingDays(auction?.closedDate)} ngày
+              </MyLabel>
+            ) : (
+              <MyLabel type="error">Quá hạn</MyLabel>
+            )}
           </div>
 
           {renderAuctionStatus()}
@@ -102,7 +106,7 @@ const AunctionCard = ({ auction }: Props) => {
                     })
                   }
                 >
-                  <span className="text-xs font-medium">Đặt giá ngay</span>
+                  <span className="text-xs font-medium">Xem chi tiết</span>
                 </Button>
               </div>
             </div>

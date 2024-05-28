@@ -84,6 +84,16 @@ const MyAunctionCard = ({ auction }: Props) => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="text-xs font-bold text-grey-c900">
+                Thanh toán toàn bộ:
+              </div>
+              {auction?.isPaymentFull ? (
+                <MyLabel type="success">Đã thanh toán</MyLabel>
+              ) : (
+                <MyLabel type="error">Chưa thanh toán</MyLabel>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
                 Trạng thái:
               </div>
               <MyLabel type="progress">Đang tiến hành</MyLabel>
@@ -130,7 +140,7 @@ const MyAunctionCard = ({ auction }: Props) => {
               <div className="text-xs font-bold text-grey-c900">
                 Trạng thái:
               </div>
-              <MyLabel type="success">Đã giao</MyLabel>
+              <MyLabel type="success">Đã hoàn thành</MyLabel>
             </div>
           </div>
         );
@@ -148,6 +158,16 @@ const MyAunctionCard = ({ auction }: Props) => {
       default:
         return (
           <div className="col-span-1 flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
+              <div className="text-xs font-bold text-grey-c900">
+                Thanh toán cọc:
+              </div>
+              {auction?.isPaymentDeposit ? (
+                <MyLabel type="success">Đã thanh toán</MyLabel>
+              ) : (
+                <MyLabel type="error">Chưa thanh toán</MyLabel>
+              )}
+            </div>
             <div className="flex flex-col gap-2">
               <div className="text-xs font-bold text-grey-c900">
                 Trạng thái:

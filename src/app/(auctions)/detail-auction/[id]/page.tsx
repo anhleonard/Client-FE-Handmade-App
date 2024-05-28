@@ -107,7 +107,8 @@ const DetailAuctionPage = () => {
 
       {auction &&
       (auction.status === AuctionStatus.PROGRESS ||
-        auction.status === AuctionStatus.DELIVERY) ? (
+        auction.status === AuctionStatus.DELIVERY ||
+        auction.status === AuctionStatus.COMPLETED) ? (
         <div className="space-y-8">
           {auction?.progresses?.length
             ? auction?.progresses
@@ -116,10 +117,10 @@ const DetailAuctionPage = () => {
                     new Date(b.createdAt).getTime() -
                     new Date(a.createdAt).getTime()
                 )
-                .map((progress, index) => {
+                .map((progress) => {
                   return (
                     <ContentUpdatedWork
-                      key={index}
+                      key={progress.id}
                       status={auction?.status as AuctionStatus}
                       handleRefetch={handleRefetch}
                       progress={progress}

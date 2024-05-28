@@ -71,3 +71,9 @@ export type UpdateFavouriteProductsValues = {
   productId: number;
   isAdd: boolean;
 };
+
+export type CreateAuctionPaymentValues = {
+  auctionId: number;
+  amount: number;
+  isDepositPayment: boolean;
+};

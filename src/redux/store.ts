@@ -4,6 +4,8 @@ import alertSlice from "./slices/alertSlice";
 import refetchSlice from "./slices/refetchSlice";
 import storeSlice from "./slices/storeSlice";
 import orderSlice from "./slices/orderSlice";
+import confirmSlice from "./slices/confirmSlice";
+import modalSlice from "./slices/modalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     refetch: refetchSlice,
     store: storeSlice,
     order: orderSlice,
+    confirm: confirmSlice,
+    modal: modalSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -19,12 +19,7 @@ type Props = {
   handleRefetch: () => void;
 };
 
-const ContentUpdatedWork = ({
-  type,
-  status,
-  progress,
-  handleRefetch,
-}: Props) => {
+const ContentUpdatedWork = ({ status, progress, handleRefetch }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [content, setContent] = useState(progress.comment);
   const dispatch = useDispatch();

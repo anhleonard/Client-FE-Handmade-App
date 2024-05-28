@@ -1,3 +1,4 @@
+import storage from "@/apis/storage";
 import { COLORS } from "@/enum/colors";
 import { CustomTab } from "@/enum/defined-types";
 import { renderSearchIcon } from "@/enum/icons";
@@ -15,15 +16,17 @@ interface TabPanelProps {
 type ScrollTabsProps = {
   tabs: CustomTab[];
   hasSearchTab?: boolean;
+  value: number;
+  handleChange: any;
 };
 
-const ScrollTabs = ({ tabs, hasSearchTab = false }: ScrollTabsProps) => {
+const ScrollTabs = ({
+  tabs,
+  hasSearchTab = false,
+  value = 1,
+  handleChange,
+}: ScrollTabsProps) => {
   const router = useRouter();
-  const [value, setValue] = useState(1);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
