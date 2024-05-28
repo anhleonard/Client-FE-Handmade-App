@@ -31,6 +31,8 @@ export type OrderValues = {
   orderedProductIds: number[];
   deliveryFee: number;
   isPaid: boolean;
+  apptransid?: string;
+  zp_trans_id?: string;
 };
 
 export type OrderStatusValues = {
@@ -76,4 +78,10 @@ export type CreateAuctionPaymentValues = {
   auctionId: number;
   amount: number;
   isDepositPayment: boolean;
+};
+
+//refund money
+export type CreateRefundPaymentValues = {
+  zp_trans_id: string;
+  amount: number;
 };

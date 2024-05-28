@@ -1,5 +1,9 @@
 import axios from "axios";
-import { CreateAuctionPaymentValues, CreatePaymentValues } from "../types";
+import {
+  CreateAuctionPaymentValues,
+  CreatePaymentValues,
+  CreateRefundPaymentValues,
+} from "../types";
 import { headerUrl } from "./authentication";
 
 export const createPayment = async (
@@ -33,5 +37,13 @@ export const createAuctionPayment = async (
   };
   return await axios
     .post(`${headerUrl}/payment/auction`, variables, config)
+    .then((res) => res.data);
+};
+
+export const createRefundPayment = async (
+  variables: CreateRefundPaymentValues
+) => {
+  return await axios
+    .post(`${headerUrl}/payment/refund`, variables)
     .then((res) => res.data);
 };

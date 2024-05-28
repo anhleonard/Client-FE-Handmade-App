@@ -16,6 +16,8 @@ import { Order, OrderStatus } from "@/enum/defined-types";
 import { useRouter } from "next/navigation";
 import { headerUrl } from "@/apis/services/authentication";
 import ModalReasonCancelOrder from "./reason-cancel-order-modal";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/redux/slices/modalSlice";
 
 type AccountOrdersCardProps = {
   status: EnumOrderStatus;
@@ -28,6 +30,7 @@ const AccountOrdersCard = ({
   isDetail = false,
   order,
 }: AccountOrdersCardProps) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   let currentStatus: OrderStatus | undefined;
@@ -53,8 +56,6 @@ const AccountOrdersCard = ({
       currentStatus = orderStatus.find((item) => item.value === status);
       break;
   }
-
-  const handleCancelOrder = () => {};
 
   const renderActionButtons = () => {
     return (
@@ -84,7 +85,7 @@ const AccountOrdersCard = ({
           <Button
             className="!text-sm !font-normal"
             color="grey"
-            onClick={() => setIsOpenModal(true)}
+            onClick={() => handleOpenCancelModal()}
           >
             Hủy đơn
           </Button>
@@ -139,6 +140,16 @@ const AccountOrdersCard = ({
         )}
       </div>
     );
+  };
+
+  const handleOpenCancelModal = () => {
+    const modal = {
+      isOpen: true,
+      title: "Lý do hủy đơn",
+      content: <ModalReasonCancelOrder order={order} />,
+      className: "max-w-3xl",
+    };
+    dispatch(openModal(modal));
   };
 
   return (
@@ -292,14 +303,6 @@ const AccountOrdersCard = ({
           </ListItem>
         </List>
       </Collapse>
-      {/* MODAL */}
-      <ModalReasonCancelOrder
-        orderId={order?.id}
-        show={isOpenModal}
-        onCloseModal={() => {
-          setIsOpenModal(false);
-        }}
-      />
     </div>
   );
 };

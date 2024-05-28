@@ -192,6 +192,8 @@ export type Order = {
   shippingAddress: Shipping;
   orderProducts: OrderProduct[];
   store: Store;
+  apptransid: string;
+  zp_trans_id: string;
 };
 
 export type Auction = {

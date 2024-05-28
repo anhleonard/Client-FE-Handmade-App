@@ -26,11 +26,10 @@ import storage from "@/apis/storage";
 import { getSingleShipping } from "@/apis/services/shipping";
 import { selectedOrderProducts } from "@/apis/services/order-products";
 import { calculateTotalPrice } from "@/enum/functions";
-import { createOrder } from "@/apis/services/orders";
 import { createPayment } from "@/apis/services/payments";
 import { CreatePaymentValues } from "@/apis/types";
-import { addOrder } from "@/redux/slices/orderSlice";
 import { RootState } from "@/redux/store";
+import { createOrder } from "@/apis/services/orders";
 
 const paymentWays = [
   {
@@ -148,9 +147,15 @@ const PaymentPage = () => {
             isPaid: selectedWay === 0 ? false : true,
           };
 
+          //tạo đơn khi chưa thanh toán
+          if (selectedWay === 0) {
+            await createOrder(variables, token);
+          }
+
           rawOrders.push(variables);
         }
 
+        //tạo đơn khi thanh toán qua zalopay
         if (selectedWay === 1) {
           const values: CreatePaymentValues = {
             orderedProductIds: orderProductIds,
@@ -175,6 +180,11 @@ const PaymentPage = () => {
             window.open(paymentGate?.order_url, "_blank");
           }
         }
+
+        if (selectedWay === 0) {
+          storage.updateOrderTab("2");
+          router.push("/account-order");
+        }
       } catch (error: any) {
         let alert: AlertState = {
           isOpen: true,
@@ -196,8 +206,6 @@ const PaymentPage = () => {
       dispatch(openAlert(alert));
     }
   };
-
-  console.log(order);
 
   return (
     <DefaultLayout>

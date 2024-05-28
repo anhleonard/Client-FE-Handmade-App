@@ -1,42 +1,12 @@
 "use client";
 import DefaultLayout from "@/layout/default-layout";
-import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
 import StatusHeaderTab from "@/components/processing-order/status-header-tab";
 import PaymentInformation from "@/components/processing-order/payment-information";
-import { Collapse, List, ListItem } from "@mui/material";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import MyTextAction from "@/libs/text-action";
-import PaymentWay from "@/components/payment/payment-ways";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import InforClientOrder from "@/components/processing-order/infor-client-order";
 import PickedItems from "@/components/delivery/picked-items";
 
-const paymentWays = [
-  {
-    index: 0,
-    title: "Thanh toán khi nhận hàng",
-  },
-  {
-    index: 1,
-    title: "Ví điện tử ZaloPay",
-  },
-  {
-    index: 2,
-    title: "Ví điện tử MOMO",
-  },
-  {
-    index: 3,
-    title: "Chuyển khoản ngân hàng",
-  },
-];
-
 const DetailCompletedOrderPage = () => {
-  const router = useRouter();
-
-  const [selectedWay, setSelectedWay] = useState(0);
-
   return (
     <DefaultLayout>
       <div className="hidden md:block">

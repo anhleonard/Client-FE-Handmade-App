@@ -38,7 +38,12 @@ const CompleteOrderPage = () => {
         if (res?.return_code === 1) {
           const token = storage.getLocalAccessToken();
           for (let order of currentOrders) {
-            await createOrder(order, token);
+            const orderParams = {
+              ...order,
+              apptransid: apptransid,
+              zp_trans_id: res?.zp_trans_id?.toString(),
+            };
+            await createOrder(orderParams, token);
           }
         } else {
           let alert: AlertState = {
