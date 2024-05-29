@@ -1,10 +1,14 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { Tooltip } from "@mui/material";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import { COLORS } from "@/enum/colors";
+import { StoreContext } from "../store/[id]/page";
 
 const StoreHistory = () => {
+  const theme = useContext(StoreContext);
+  const store = JSON.parse(theme.store);
+
   const storeHistoryItem = (title: string, content: ReactNode) => {
     return (
       <div className="grid grid-cols-4 text-sm font-medium text-grey-c900 gap-4 md:gap-8">
@@ -49,14 +53,14 @@ const StoreHistory = () => {
       </div>
 
       <div className="space-y-4">
-        {storeHistoryItem("Thành viên từ năm", "2020")}
-
-        {storeHistoryItem("Sản phẩm", "2121")}
-
         {storeHistoryItem(
-          "Mô tả cửa hàng",
-          "Mua online sản phẩm của cửa hàng Nhà Sách Trẻ Online trên Tiki.vn. ✓ chất lượng cao, uy tín, giá tốt ✓ Chính hãng ✓ Giao hàng toàn quốc"
+          "Thành viên từ năm",
+          new Date(store?.createdAt).getFullYear()
         )}
+
+        {storeHistoryItem("Sản phẩm", store?.products?.length)}
+
+        {storeHistoryItem("Mô tả cửa hàng", store?.description)}
 
         {storeHistoryItem(
           "Đánh giá",

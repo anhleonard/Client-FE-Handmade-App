@@ -280,30 +280,6 @@ export const orderStatus: OrderStatus[] = [
   },
 ];
 
-// store seller tabs
-export const storeSellerTabs = [
-  {
-    label: "Cửa hàng",
-    value: 1,
-    content: <StoreHomePage />,
-  },
-  {
-    label: "Tất cả sản phẩm",
-    value: 2,
-    content: <StoreItemsScreen />,
-  },
-  {
-    label: "Bộ sưu tập",
-    value: 3,
-    content: <StoreCollection />,
-  },
-  {
-    label: "Hồ sơ cửa hàng",
-    value: 4,
-    content: <StoreHistory />,
-  },
-];
-
 export enum AlertStatus {
   ERROR = "error",
   SUCCESS = "success",

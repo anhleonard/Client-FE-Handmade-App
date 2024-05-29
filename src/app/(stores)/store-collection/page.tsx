@@ -7,15 +7,12 @@ import { RootState } from "@/redux/store";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-const StoreCollection = () => {
-  const tabId = storage.getCollectionTab();
-  const [value, setValue] = useState<number>(tabId ? +tabId : 1);
+type Props = {
+  value: number;
+  handleChange: any;
+};
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    storage.updateCollectionTab(newValue.toString());
-    setValue(newValue);
-  };
-
+const StoreCollection = ({ value, handleChange }: Props) => {
   const store = useSelector((state: RootState) => state.store.store);
 
   let collectionStoreTabs: CustomTab[] = [];

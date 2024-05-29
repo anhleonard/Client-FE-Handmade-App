@@ -22,7 +22,7 @@ import { Avatar } from "@mui/material";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { AlertStatus, exampleItems } from "@/enum/constants";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AlertState, Product, Variant } from "@/enum/defined-types";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
@@ -36,6 +36,7 @@ import { OrderProductValues } from "@/apis/types";
 const ProductDetailPage = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const router = useRouter();
   const localToken = storage.getLocalAccessToken();
   const productId = params.productId;
   const [qualitySelected, setQualitySelected] = useState(1);
@@ -378,12 +379,15 @@ const ProductDetailPage = () => {
 
             <div>
               {/* store information */}
-              <Link
-                href={`/store/${product?.store?.id}`}
-                className="hover:underline"
+              <div
+                className="font-bold hover:underline cursor-pointer"
+                onClick={() => {
+                  storage.updateStoreTab("1");
+                  router.push(`/store/${product?.store?.id}`);
+                }}
               >
-                <div className="font-bold">{product?.store?.name}</div>
-              </Link>
+                {product?.store?.name}
+              </div>
               <div className="flex items-center gap-6 font-medium text-sm">
                 <div className="flex items-center gap-1">
                   <div>4.7/5</div>

@@ -3,12 +3,15 @@ import SectionSliderProductCard from "@/components/slide-products/section-slider
 import StoreItems from "@/components/store/store-items";
 import { getTopSoldProducts } from "@/enum/functions";
 import Button from "@/libs/button";
-import { refetchComponent } from "@/redux/slices/refetchSlice";
 import { RootState } from "@/redux/store";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const StoreHomePage = () => {
+type Props = {
+  changeCollectTab: (tabId: number, collectTabId: number) => void;
+};
+
+const StoreHomePage = ({ changeCollectTab }: Props) => {
   const dispatch = useDispatch();
   const store = useSelector((state: RootState) => state.store.store);
 
@@ -30,6 +33,7 @@ const StoreHomePage = () => {
                 onClick={() => {
                   storage.updateStoreTab("3");
                   storage.updateCollectionTab(collection?.id?.toString());
+                  changeCollectTab(3, collection?.id);
                 }}
               >
                 Xem tất cả

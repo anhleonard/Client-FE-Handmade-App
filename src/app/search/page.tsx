@@ -160,7 +160,7 @@ const PageSearch = ({}) => {
             </CommonContext.Provider>
 
             {/* LOOP ITEMS */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
+            <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
               {products.length &&
                 products.map((product: Product) => (
                   <ProductCard

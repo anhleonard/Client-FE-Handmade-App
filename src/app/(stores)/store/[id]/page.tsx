@@ -2,21 +2,31 @@
 import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
-import { AlertStatus, storeSellerTabs } from "@/enum/constants";
-import { renderSearchIcon } from "@/enum/icons";
+import { AlertStatus } from "@/enum/constants";
 import { useParams, useRouter } from "next/navigation";
 import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
 import { AlertState, Store } from "@/enum/defined-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { singleStore } from "@/apis/services/stores";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { addStore } from "@/redux/slices/storeSlice";
 import storage from "@/apis/storage";
+import StoreHomePage from "../../store-homepage/page";
+import StoreItemsScreen from "../../store-items/page";
+import StoreCollection from "../../store-collection/page";
+import StoreHistory from "../../store-history/page";
+
+export const StoreContext = createContext({
+  store: "",
+  value: 0,
+  searchText: "",
+  handleResetValue: (value: number, searchText: string) => {},
+});
 
 const SingleStoreScreen = () => {
   const router = useRouter();
@@ -24,13 +34,39 @@ const SingleStoreScreen = () => {
   const dispatch = useDispatch();
   const [store, setStore] = useState<Store>();
   const storeId = parseInt(params?.id?.toString());
+  const [searchText, setSearchText] = useState("");
 
   const tabId = storage.getStoreTab();
   const [value, setValue] = useState<number>(tabId ? +tabId : 1);
 
+  const handleResetValue = (value: number, searchText: string) => {
+    setValue(value);
+    setSearchText(searchText);
+  };
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     storage.updateStoreTab(newValue.toString());
     setValue(newValue);
+  };
+
+  const tabCollectId = storage.getCollectionTab();
+  const [collectValue, setCollectValue] = useState<number>(
+    tabCollectId ? +tabCollectId : 1
+  );
+
+  //change inside collect tab
+  const handleChangeCollect = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    storage.updateCollectionTab(newValue.toString());
+    setCollectValue(newValue);
+  };
+
+  //change from home page
+  const changeCollectTab = async (tabId: number, collectTabId: number) => {
+    setValue(tabId);
+    setCollectValue(collectTabId);
   };
 
   const getSingleStore = async () => {
@@ -58,27 +94,33 @@ const SingleStoreScreen = () => {
     getSingleStore();
   }, []);
 
-  const renderSearchForm = () => {
-    return (
-      <form
-        className="flex-1 text-slate-900 dark:text-slate-100"
-        onSubmit={(e) => {
-          e.preventDefault();
-          router.push("/search");
-        }}
-      >
-        <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1.5 px-5 h-full rounded-2xl py-3.5">
-          {renderSearchIcon()}
-          <input
-            type="text"
-            placeholder="Tìm kiếm mặt hàng của bạn"
-            className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-sm placeholder:text-grey-c300 py-0"
-            autoFocus
-          />
-        </div>
-      </form>
-    );
-  };
+  const storeSellerTabs = [
+    {
+      label: "Cửa hàng",
+      value: 1,
+      content: <StoreHomePage changeCollectTab={changeCollectTab} />,
+    },
+    {
+      label: "Tất cả sản phẩm",
+      value: 2,
+      content: <StoreItemsScreen />,
+    },
+    {
+      label: "Bộ sưu tập",
+      value: 3,
+      content: (
+        <StoreCollection
+          value={collectValue}
+          handleChange={handleChangeCollect}
+        />
+      ),
+    },
+    {
+      label: "Hồ sơ cửa hàng",
+      value: 4,
+      content: <StoreHistory />,
+    },
+  ];
 
   return (
     <DefaultLayout>
@@ -134,12 +176,21 @@ const SingleStoreScreen = () => {
         </div>
       </div>
 
-      <ScrollTabs
-        tabs={storeSellerTabs}
-        hasSearchTab
-        value={value}
-        handleChange={handleChange}
-      />
+      <StoreContext.Provider
+        value={{
+          store: JSON.stringify(store),
+          value: value,
+          searchText: searchText,
+          handleResetValue: handleResetValue,
+        }}
+      >
+        <ScrollTabs
+          tabs={storeSellerTabs}
+          hasSearchTab
+          value={value}
+          handleChange={handleChange}
+        />
+      </StoreContext.Provider>
     </DefaultLayout>
   );
 };

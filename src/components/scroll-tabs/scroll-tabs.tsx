@@ -1,10 +1,9 @@
-import storage from "@/apis/storage";
+import React from "react";
 import { COLORS } from "@/enum/colors";
 import { CustomTab } from "@/enum/defined-types";
-import { renderSearchIcon } from "@/enum/icons";
 import { Box, Tab, Tabs, tabsClasses } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import RenderSearchForm from "./render-search-form";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,28 +42,6 @@ const ScrollTabs = ({
       </div>
     );
   }
-
-  const renderSearchForm = () => {
-    return (
-      <form
-        className="flex-1 text-slate-900 dark:text-slate-100"
-        onSubmit={(e) => {
-          e.preventDefault();
-          router.push("/search");
-        }}
-      >
-        <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1.5 px-5 h-full rounded-2xl py-3.5">
-          {renderSearchIcon()}
-          <input
-            type="text"
-            placeholder="Tìm kiếm mặt hàng của bạn"
-            className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-sm placeholder:text-grey-c300 py-0"
-            autoFocus
-          />
-        </div>
-      </form>
-    );
-  };
 
   return (
     <div className="w-full">
@@ -134,7 +111,9 @@ const ScrollTabs = ({
             </Tabs>
           </Box>
           {hasSearchTab && (
-            <div className="md:col-span-2">{renderSearchForm()}</div>
+            <div className="md:col-span-2">
+              <RenderSearchForm />
+            </div>
           )}
 
           <hr className="border-grey-c50 dark:border-slate-700 block md:hidden" />
