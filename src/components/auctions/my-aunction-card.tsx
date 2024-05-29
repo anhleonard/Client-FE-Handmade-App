@@ -190,11 +190,15 @@ const MyAunctionCard = ({ auction }: Props) => {
             <div className="text-base font-semibold text-primary-c900">
               {auction?.name}
             </div>
-            {auction?.status === AuctionStatus.AUCTIONING && (
-              <MyLabel type="warning">
-                Còn {calculateRemainingDays(auction?.closedDate)} ngày
-              </MyLabel>
-            )}
+            {auction?.status === AuctionStatus.AUCTIONING ? (
+              calculateRemainingDays(auction?.closedDate) > 0 ? (
+                <MyLabel type="warning">
+                  Còn {calculateRemainingDays(auction?.closedDate)} ngày
+                </MyLabel>
+              ) : (
+                <MyLabel type="error">Quá hạn đấu giá</MyLabel>
+              )
+            ) : null}
           </div>
 
           <Button

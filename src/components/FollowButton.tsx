@@ -32,7 +32,7 @@ const FollowButton: FC<FollowButtonProps> = ({
       fontSize={fontSize}
       onClick={() => setFollowing(false)}
     >
-      <span className="text-sm ">Following</span>
+      Following
     </ButtonSecondary>
   );
 };

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
-import { AlertStatus, storeSellerTabs, testStoreTabs } from "@/enum/constants";
+import { AlertStatus, storeSellerTabs } from "@/enum/constants";
 import { renderSearchIcon } from "@/enum/icons";
 import { useParams, useRouter } from "next/navigation";
 import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
@@ -16,14 +16,22 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { singleStore } from "@/apis/services/stores";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { addStore } from "@/redux/slices/storeSlice";
+import storage from "@/apis/storage";
 
 const SingleStoreScreen = () => {
   const router = useRouter();
   const params = useParams();
   const dispatch = useDispatch();
   const [store, setStore] = useState<Store>();
-
   const storeId = parseInt(params?.id?.toString());
+
+  const tabId = storage.getStoreTab();
+  const [value, setValue] = useState<number>(tabId ? +tabId : 1);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    storage.updateStoreTab(newValue.toString());
+    setValue(newValue);
+  };
 
   const getSingleStore = async () => {
     try {
@@ -126,7 +134,12 @@ const SingleStoreScreen = () => {
         </div>
       </div>
 
-      <ScrollTabs tabs={storeSellerTabs} hasSearchTab />
+      <ScrollTabs
+        tabs={storeSellerTabs}
+        hasSearchTab
+        value={value}
+        handleChange={handleChange}
+      />
     </DefaultLayout>
   );
 };

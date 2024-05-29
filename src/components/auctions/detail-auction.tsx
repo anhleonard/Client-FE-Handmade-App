@@ -16,8 +16,6 @@ import { Auction, Bidder } from "@/enum/defined-types";
 import { AuctionStatus, Role } from "@/enum/constants";
 import storage from "@/apis/storage";
 import { useDispatch } from "react-redux";
-import { openConfirm } from "@/redux/slices/confirmSlice";
-import { SCREEN } from "@/enum/setting";
 import { openModal } from "@/redux/slices/modalSlice";
 import RejectAuctionModal from "./reject-auction-modal";
 

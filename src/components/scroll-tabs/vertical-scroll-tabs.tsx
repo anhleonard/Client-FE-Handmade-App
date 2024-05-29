@@ -14,20 +14,15 @@ interface TabPanelProps {
 
 type VerticalScrollTabsProps = {
   tabs: CustomTab[];
-  hasSearchTab?: boolean;
+  value: number;
+  handleChange: any;
 };
 
 const VerticalScrollTabs = ({
   tabs,
-  hasSearchTab = false,
+  value = 1,
+  handleChange,
 }: VerticalScrollTabsProps) => {
-  const router = useRouter();
-  const [value, setValue] = useState(1);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
   function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 

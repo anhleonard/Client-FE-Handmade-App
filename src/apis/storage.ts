@@ -64,6 +64,24 @@ class Storage {
   getOrderTab() {
     return this.localStorage.getItem("orderTabId");
   }
+
+  //store tab id
+  updateStoreTab(value: string) {
+    this.localStorage.setItem("storeTabId", value);
+  }
+
+  getStoreTab() {
+    return this.localStorage.getItem("storeTabId");
+  }
+
+  //vertical collect tab id
+  updateCollectionTab(value: string) {
+    this.localStorage.setItem("collectTabId", value);
+  }
+
+  getCollectionTab() {
+    return this.localStorage.getItem("collectTabId");
+  }
 }
 
 export default new Storage();

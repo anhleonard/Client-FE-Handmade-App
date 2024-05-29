@@ -1,5 +1,10 @@
-import { updateAuction } from "@/apis/services/auctions";
+import {
+  updateAuction,
+  updateDepositPaidAuction,
+} from "@/apis/services/auctions";
+import { createRefundPayment } from "@/apis/services/payments";
 import storage from "@/apis/storage";
+import { CreateRefundPaymentValues } from "@/apis/types";
 import { AlertStatus, AuctionStatus } from "@/enum/constants";
 import { AlertState } from "@/enum/defined-types";
 import Button from "@/libs/button";
@@ -23,21 +28,49 @@ const RejectAuctionModal = ({ auctionId }: Props) => {
   const handleConfirmCancel = async () => {
     try {
       dispatch(openLoading());
-
       const token = storage.getLocalAccessToken();
 
-      const variables = {
-        status: AuctionStatus.CANCELED,
-        additionalComment: reason,
+      //update deposit auction isFund: false -> true
+      const params1 = {
+        auctionId: auctionId,
+      };
+      const res1 = await updateDepositPaidAuction(params1, token);
+
+      if (!res1) return;
+
+      //refund deposit money
+      const param2: CreateRefundPaymentValues = {
+        zp_trans_id: res1?.zp_trans_id,
+        amount: res1?.auction?.deposit,
       };
 
-      const res = await updateAuction(auctionId, variables, token);
+      const res = await createRefundPayment(param2);
 
       if (res) {
-        dispatch(closeModal());
-        storage.updateAuctionTab("7");
-        router.push("/account-auction");
-      }
+        if (res?.return_code !== 1) {
+          let alert: AlertState = {
+            isOpen: true,
+            title: "LỖI",
+            message: res?.return_message,
+            type: AlertStatus.ERROR,
+          };
+          dispatch(openAlert(alert));
+          return;
+        } else {
+          //update auction status
+          const variables = {
+            status: AuctionStatus.CANCELED,
+            additionalComment: reason,
+          };
+          const res2 = await updateAuction(auctionId, variables, token);
+
+          if (res2) {
+            dispatch(closeModal());
+            storage.updateAuctionTab("7");
+            router.push("/account-auction");
+          }
+        }
+      } else return;
     } catch (error: any) {
       let alert: AlertState = {
         isOpen: true,

@@ -1,12 +1,21 @@
 "use client";
+import storage from "@/apis/storage";
 import VerticalScrollTabs from "@/components/scroll-tabs/vertical-scroll-tabs";
 import SingleStoreCollection from "@/components/store/single-store-collection";
 import { CustomTab } from "@/enum/defined-types";
 import { RootState } from "@/redux/store";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 const StoreCollection = () => {
+  const tabId = storage.getCollectionTab();
+  const [value, setValue] = useState<number>(tabId ? +tabId : 1);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    storage.updateCollectionTab(newValue.toString());
+    setValue(newValue);
+  };
+
   const store = useSelector((state: RootState) => state.store.store);
 
   let collectionStoreTabs: CustomTab[] = [];
@@ -29,9 +38,15 @@ const StoreCollection = () => {
     }
   }
 
+  if (collectionStoreTabs?.length) collectionStoreTabs.reverse();
+
   return (
     <div className="md:pt-3">
-      <VerticalScrollTabs tabs={collectionStoreTabs} />
+      <VerticalScrollTabs
+        tabs={collectionStoreTabs}
+        value={value}
+        handleChange={handleChange}
+      />
     </div>
   );
 };

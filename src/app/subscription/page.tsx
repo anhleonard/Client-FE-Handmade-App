@@ -92,9 +92,7 @@ const PageSubcription = ({}) => {
           {pricing.isPopular ? (
             <ButtonPrimary>Submit</ButtonPrimary>
           ) : (
-            <ButtonSecondary>
-              <span className="font-medium">Submit</span>
-            </ButtonSecondary>
+            <ButtonSecondary> Submit</ButtonSecondary>
           )}
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-3">
             {pricing.desc}

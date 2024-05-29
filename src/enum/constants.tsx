@@ -304,34 +304,6 @@ export const storeSellerTabs = [
   },
 ];
 
-// test store seller tabs
-export const testStoreTabs: TestCustomTab[] = [
-  {
-    label: "Cửa hàng",
-    value: 1,
-    link: "/store-homepage",
-    content: <StoreHomePage />,
-  },
-  {
-    label: "Tất cả sản phẩm",
-    value: 2,
-    link: "/store-items",
-    content: <StoreItemsScreen />,
-  },
-  {
-    label: "Bộ sưu tập",
-    value: 3,
-    link: "/store-collection",
-    content: <StoreCollection />,
-  },
-  {
-    label: "Hồ sơ cửa hàng",
-    value: 4,
-    link: "/store-history",
-    content: <StoreHistory />,
-  },
-];
-
 export enum AlertStatus {
   ERROR = "error",
   SUCCESS = "success",
