@@ -85,3 +85,11 @@ export type CreateRefundPaymentValues = {
   zp_trans_id: string;
   amount: number;
 };
+
+//create paid auction
+export type CreatePaidAuction = {
+  auctionId: number;
+  type: string;
+  apptransid: string;
+  zp_trans_id: string;
+};

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateAuctionValues } from "../types";
+import { CreateAuctionValues, CreatePaidAuction } from "../types";
 import { headerUrl } from "./authentication";
 
 export const createAuction = async (variables: any, token: string) => {
@@ -17,8 +17,6 @@ export const createAuction = async (variables: any, token: string) => {
 export const filterAuctions = async (query?: any) => {
   const params = new URLSearchParams(query).toString();
   const url = `${headerUrl}/auctions/filter?${params}`;
-
-  console.log({ url });
 
   return await axios.get(url).then((res) => res.data);
 };
@@ -54,5 +52,20 @@ export const updateAuction = async (
 
   return await axios
     .put(`${headerUrl}/auctions/update/${auctionId}`, variables, config)
+    .then((res) => res.data);
+};
+
+export const createPaidAuction = async (
+  variables: CreatePaidAuction,
+  token: string
+) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await axios
+    .post(`${headerUrl}/auctions/create-paid-auction`, variables, config)
     .then((res) => res.data);
 };

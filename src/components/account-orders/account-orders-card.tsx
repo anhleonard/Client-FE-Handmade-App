@@ -23,16 +23,17 @@ type AccountOrdersCardProps = {
   status: EnumOrderStatus;
   isDetail?: boolean;
   order: Order;
+  handleRefetch?: () => void;
 };
 
 const AccountOrdersCard = ({
   status,
   isDetail = false,
   order,
+  handleRefetch,
 }: AccountOrdersCardProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [isOpenModal, setIsOpenModal] = useState(false);
   let currentStatus: OrderStatus | undefined;
 
   switch (status) {
@@ -63,7 +64,12 @@ const AccountOrdersCard = ({
         {status !== EnumOrderStatus.PROCESSING &&
           status !== EnumOrderStatus.DELIVERED &&
           status !== EnumOrderStatus.WAITING_PAYMENT && (
-            <Button className="!text-sm !font-normal">Mua lại</Button>
+            <Button
+              className="!text-sm !font-normal"
+              onClick={() => router.push("/cart")}
+            >
+              Mua lại
+            </Button>
           )}
         {(status === EnumOrderStatus.PROCESSING ||
           status === EnumOrderStatus.DELIVERED ||
@@ -96,7 +102,11 @@ const AccountOrdersCard = ({
           </Button>
         )}
         {status === EnumOrderStatus.CENCELLED && (
-          <Button className="!text-sm !font-normal" color="grey">
+          <Button
+            className="!text-sm !font-normal"
+            color="grey"
+            onClick={() => router.push(`/detail-account-order/${order.id}`)}
+          >
             Xem chi tiết đơn hủy
           </Button>
         )}
@@ -146,7 +156,9 @@ const AccountOrdersCard = ({
     const modal = {
       isOpen: true,
       title: "Lý do hủy đơn",
-      content: <ModalReasonCancelOrder order={order} />,
+      content: (
+        <ModalReasonCancelOrder order={order} handleRefetch={handleRefetch} />
+      ),
       className: "max-w-3xl",
     };
     dispatch(openModal(modal));

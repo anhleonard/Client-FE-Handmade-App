@@ -35,6 +35,7 @@ const RejectAuctionModal = ({ auctionId }: Props) => {
 
       if (res) {
         dispatch(closeModal());
+        storage.updateAuctionTab("7");
         router.push("/account-auction");
       }
     } catch (error: any) {

@@ -1,7 +1,8 @@
 "use client";
-import { updateAuction } from "@/apis/services/auctions";
+import { createPaidAuction, updateAuction } from "@/apis/services/auctions";
 import { checkingPayment } from "@/apis/services/payments";
 import storage from "@/apis/storage";
+import { CreatePaidAuction } from "@/apis/types";
 import { AlertStatus } from "@/enum/constants";
 import { AlertState } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
@@ -24,11 +25,17 @@ const CreateCompletedAuction = () => {
 
   const updatePaymentAuction = async () => {
     if (apptransid) {
+      if (apptransid !== storage.getLocalAppTransId()) {
+        storage.updateLocalAppTransId(apptransid);
+      } else return;
+
       const auctionId = getAuctionId(apptransid);
       try {
         dispatch(openLoading());
+
         //check xem auction được payment thành công chưa
         const res = await checkingPayment(apptransid);
+
         //nếu thành công thì update payment status for auction
         if (res?.return_code === 1) {
           const token = storage.getLocalAccessToken();
@@ -36,8 +43,18 @@ const CreateCompletedAuction = () => {
             isPaymentDeposit: true,
           };
 
-          const res2 = await updateAuction(+auctionId, values, token); //call api update auction
-          console.log(res2);
+          //call api update auction
+          await updateAuction(+auctionId, values, token);
+
+          //create deposit paid auction
+          const params: CreatePaidAuction = {
+            auctionId: +auctionId,
+            type: "deposit",
+            apptransid: apptransid,
+            zp_trans_id: res?.zp_trans_id.toString(),
+          };
+          const response = await createPaidAuction(params, token);
+          console.log(response);
         } else {
           let alert: AlertState = {
             isOpen: true,

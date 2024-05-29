@@ -33,9 +33,10 @@ const reasons = [
 
 export interface Props {
   order: Order;
+  handleRefetch?: () => void;
 }
 
-const ModalReasonCancelOrder: FC<Props> = ({ order }) => {
+const ModalReasonCancelOrder: FC<Props> = ({ order, handleRefetch }) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>("");
 
@@ -49,14 +50,13 @@ const ModalReasonCancelOrder: FC<Props> = ({ order }) => {
 
       if (order?.isPaid) {
         const variables: CreateRefundPaymentValues = {
-          // zp_trans_id: order?.zp_trans_id,
-          zp_trans_id: "240528000005971",
-          // amount: order?.totalPayment,
-          amount: 30000,
+          zp_trans_id: order?.zp_trans_id,
+          // zp_trans_id: "240528000005971",
+          amount: order?.totalPayment,
+          // amount: 30000,
         };
         const res = await createRefundPayment(variables);
         if (res) {
-          dispatch(closeModal());
           if (res?.return_code !== 1) {
             let alert: AlertState = {
               isOpen: true,
@@ -66,14 +66,6 @@ const ModalReasonCancelOrder: FC<Props> = ({ order }) => {
             };
             dispatch(openAlert(alert));
             return;
-          } else if (res?.return_code === 1) {
-            let alert: AlertState = {
-              isOpen: true,
-              title: "HOÀN TIỀN THÀNH CÔNG",
-              message: "Hệ thống đã hoàn tiền thành công!",
-              type: AlertStatus.SUCCESS,
-            };
-            dispatch(openAlert(alert));
           }
         } else return;
       }
@@ -88,7 +80,9 @@ const ModalReasonCancelOrder: FC<Props> = ({ order }) => {
         let alert: AlertState = {
           isOpen: true,
           title: "ĐÃ HỦY",
-          message: "Đã hủy đơn hàng thành công",
+          message: order?.isPaid
+            ? "Đã hủy đơn hàng thành công. Hệ thống đã hoàn tiền thành công!"
+            : "Đã hủy đơn hàng thành công.",
           type: AlertStatus.SUCCESS,
         };
         dispatch(openAlert(alert));
@@ -103,6 +97,10 @@ const ModalReasonCancelOrder: FC<Props> = ({ order }) => {
       dispatch(openAlert(alert));
     } finally {
       dispatch(closeLoading());
+      dispatch(closeModal());
+      if (handleRefetch) {
+        handleRefetch();
+      }
     }
   };
 

@@ -2,17 +2,20 @@
 import React, { useEffect, useState } from "react";
 import AccountOrdersCard from "../account-orders-card";
 import { AlertStatus, EnumOrderStatus } from "@/enum/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AlertState, Order } from "@/enum/defined-types";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import storage from "@/apis/storage";
 import { ordersByStatus } from "@/apis/services/orders";
 import { openAlert } from "@/redux/slices/alertSlice";
 import NoOrderCard from "../no-order-card";
+import { RootState } from "@/redux/store";
+import { refetchComponent } from "@/redux/slices/refetchSlice";
 
 const ProcessingOrders = () => {
   const dispatch = useDispatch();
   const [orders, setOrders] = useState<Order[]>([]);
+  const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
   const getUserOrdersByStatus = async () => {
     try {
@@ -40,7 +43,11 @@ const ProcessingOrders = () => {
 
   useEffect(() => {
     getUserOrdersByStatus();
-  }, []);
+  }, [refetchQueries]);
+
+  const handleRefetch = () => {
+    dispatch(refetchComponent());
+  };
 
   return (
     <div className="space-y-8">
@@ -52,6 +59,7 @@ const ProcessingOrders = () => {
                 key={index}
                 order={order}
                 status={order?.status as EnumOrderStatus}
+                handleRefetch={handleRefetch}
               />
             ) : null}
           </div>
