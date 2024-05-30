@@ -18,6 +18,7 @@ import { headerUrl } from "@/apis/services/authentication";
 import ModalReasonCancelOrder from "./reason-cancel-order-modal";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/redux/slices/modalSlice";
+import CreateReviewModal from "../reviews/create-review-modal";
 
 type AccountOrdersCardProps = {
   status: EnumOrderStatus;
@@ -82,7 +83,11 @@ const AccountOrdersCard = ({
           </Button>
         )}
         {status === EnumOrderStatus.SHIPPED && (
-          <Button className="!text-sm !font-normal" color="info">
+          <Button
+            className="!text-sm !font-normal"
+            color="info"
+            onClick={() => handleOpenReviewModal()}
+          >
             Đánh giá
           </Button>
         )}
@@ -164,6 +169,16 @@ const AccountOrdersCard = ({
     dispatch(openModal(modal));
   };
 
+  const handleOpenReviewModal = () => {
+    const modal = {
+      isOpen: true,
+      title: "Đánh giá sản phẩm",
+      content: <CreateReviewModal order={order} />,
+      className: "max-w-3xl",
+    };
+    dispatch(openModal(modal));
+  };
+
   return (
     <div className="rounded-2xl border-[2px] border-grey-c50 overflow-hidden">
       <ListItem className="bg-white border-b-2 border-grey-c50" disablePadding>
@@ -233,9 +248,6 @@ const AccountOrdersCard = ({
                         </div>
 
                         <div className="flex flex-row items-center gap-2">
-                          {/* <div className="text-xs font-medium text-grey-c600 line-through">
-                            {formatCurrency(259000)}
-                          </div> */}
                           <div className="text-sm font-semibold text-primary-c900">
                             {formatCurrency(
                               parseInt(orderProduct?.productUnitPrice)

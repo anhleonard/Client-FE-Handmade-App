@@ -32,6 +32,7 @@ import { headerUrl } from "@/apis/services/authentication";
 import { createOrderProduct } from "@/apis/services/order-products";
 import storage from "@/apis/storage";
 import { OrderProductValues } from "@/apis/types";
+import { filterStoreProducts } from "@/apis/services/stores";
 
 const ProductDetailPage = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const ProductDetailPage = () => {
   const [price, setPrice] = useState<number>();
   const [currentImage, setCurrentImage] = useState<string>();
   const [productImages, setProductImages] = useState<string[]>([]);
+  const [storeProducts, setStoreProducts] = useState<Product[]>([]);
 
   //
 
@@ -59,8 +61,19 @@ const ProductDetailPage = () => {
           lovedProducts = await getFavouriteProducts(localToken);
         }
 
-        const res = await singleProduct(parseInt(productId));
+        const res: Product = await singleProduct(parseInt(productId));
         if (res) {
+          const query = {
+            limit: 10,
+            sort: "MOST_POPULAR",
+          };
+
+          const response = await filterStoreProducts(res?.store?.id, query);
+
+          if (response) {
+            setStoreProducts(response?.data);
+          }
+
           if (res?.variants?.length) {
             const images = res?.variants?.map((item: Variant) => item?.image);
             setProductImages(images);
@@ -197,10 +210,13 @@ const ProductDetailPage = () => {
             <div className="flex items-center">
               <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
               <div className="ml-1.5 flex text-sm">
-                <span>{product?.averageRating}</span>
+                <span>
+                  {product?.averageRating &&
+                    parseFloat(product?.averageRating)?.toFixed(2)}
+                </span>
                 <span className="block mx-2">·</span>
                 <span className="text-primary-c900 dark:text-slate-400">
-                  {product?.totalReviews ?? 0} Đánh giá
+                  {product?.reviews?.length ?? 0} Đánh giá
                 </span>
               </div>
             </div>
@@ -330,6 +346,8 @@ const ProductDetailPage = () => {
     );
   };
 
+  console.log(storeProducts);
+
   return (
     <DefaultLayout>
       <div className="md:flex md:gap-10">
@@ -427,20 +445,40 @@ const ProductDetailPage = () => {
 
         <hr className="border-slate-200 dark:border-slate-700" />
 
-        <ProductReviews />
+        {product?.reviews?.length ? (
+          <ProductReviews product={product} />
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4 w-full rounded-xl bg-grey-c10 py-[80px]">
+            <Image
+              src={"/images/no-reviews.png"}
+              alt="no-reviews"
+              width={180}
+              height={180}
+            />
+            <div className="font-medium">Chưa có đánh giá nào!</div>
+          </div>
+        )}
 
         <hr className="border-slate-200 dark:border-slate-700" />
 
         {/* OTHER SECTION */}
-        <SectionSliderProductCard
-          data={exampleItems.items}
-          heading="Bán chạy nhất của shop"
-        />
-
-        {/* SECTION */}
-        {/* <div className="pb-20 xl:pb-28 lg:pt-14">
-          <SectionPromo2 />
-        </div> */}
+        {storeProducts?.length ? (
+          <SectionSliderProductCard
+            products={storeProducts}
+            heading="Bán chạy nhất của shop"
+            componentSeeAll={
+              <Button
+                className="!text-sm !px-3 !py-2"
+                onClick={() => {
+                  storage.updateStoreTab("2");
+                  router.push(`/store/${product?.store?.id}`);
+                }}
+              >
+                Xem tất cả
+              </Button>
+            }
+          />
+        ) : null}
       </div>
     </DefaultLayout>
   );

@@ -85,6 +85,7 @@ export type Product = {
   totalReviews: number;
   store: Store;
   isLiked?: boolean;
+  reviews: Review[];
 };
 
 export type VariantCategory = {
@@ -194,6 +195,18 @@ export type Order = {
   store: Store;
   apptransid: string;
   zp_trans_id: string;
+};
+
+export type Review = {
+  id: number;
+  ratings: number;
+  comment: string;
+  isReported: boolean;
+  reportedReason: string;
+  createdAt: Date;
+  user: User;
+  product: Product;
+  order: Order;
 };
 
 export type Auction = {

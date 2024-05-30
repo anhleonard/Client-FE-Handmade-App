@@ -93,3 +93,10 @@ export type CreatePaidAuction = {
   apptransid: string;
   zp_trans_id: string;
 };
+
+export type CreateReviewValues = {
+  orderId: number;
+  productId: number;
+  ratings: number;
+  comment: string;
+};

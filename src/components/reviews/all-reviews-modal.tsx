@@ -4,15 +4,18 @@ import ReviewItem from "@/components/reviews/review-item";
 import SortOrderFilter from "@/components/filters/sort-order-filter";
 import React, { FC, Fragment } from "react";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
+import { Product } from "@/enum/defined-types";
 
 export interface ModalViewAllReviewsProps {
   show: boolean;
   onCloseModalViewAllReviews: () => void;
+  product: Product;
 }
 
 const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
   show,
   onCloseModalViewAllReviews,
+  product,
 }) => {
   return (
     <Transition appear show={show} as={Fragment}>
@@ -66,7 +69,11 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
                 <div className="px-8 my-5 flex justify-between flex-wrap">
                   <h2 className="text-xl sm:text-2xl font-semibold flex items-center">
                     <StarIcon className="w-8 h-8 mb-0.5" />
-                    <span className="ml-1.5"> 4,87 - 142 Đánh giá</span>
+                    <span className="ml-1.5">
+                      {product?.averageRating &&
+                        parseFloat(product?.averageRating)?.toFixed(2)}{" "}
+                      - {product?.reviews?.length} Đánh giá
+                    </span>
                   </h2>
                   <SortOrderFilter
                     className="my-2"
@@ -79,16 +86,9 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
                   />
                 </div>
                 <div className="px-8 py-8 border-t border-slate-200 dark:border-slate-700 overflow-auto grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-10">
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
-                  <ReviewItem />
+                  {product?.reviews?.map((review, index) => {
+                    return <ReviewItem key={index} review={review} />;
+                  })}
                 </div>
               </div>
             </div>

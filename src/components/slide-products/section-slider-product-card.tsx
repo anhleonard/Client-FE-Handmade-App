@@ -6,8 +6,6 @@ import Heading from "@/components/Heading/Heading";
 import Glide from "@glidejs/glide/dist/glide.esm";
 import ProductCard from "../products/product-card";
 import { Product } from "@/enum/defined-types";
-import Button from "@/libs/button";
-import Link from "next/link";
 
 export interface SectionSliderProductCardProps {
   className?: string;

@@ -64,9 +64,7 @@ const ContentModal = () => {
                     <ButtonClose onClick={() => handleCloseModal()} />
                   </span>
                 </div>
-                <div className="px-8 my-5 flex justify-between flex-wrap">
-                  {modalData?.content}
-                </div>
+                <div className="px-8 my-5 w-full">{modalData?.content}</div>
               </div>
             </div>
           </Transition.Child>

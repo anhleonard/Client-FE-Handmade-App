@@ -1,11 +1,15 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import ReviewItem from "./review-item";
-import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import ModalViewAllReviews from "@/components/reviews/all-reviews-modal";
 import Button from "@/libs/button";
+import { Product, Review } from "@/enum/defined-types";
 
-const ProductReviews = () => {
+type Props = {
+  product: Product;
+};
+
+const ProductReviews = ({ product }: Props) => {
   const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] =
     useState(false);
 
@@ -15,42 +19,18 @@ const ProductReviews = () => {
       <h2 className="font-semibold flex items-center">
         <StarIcon className="w-8 h-8 mb-0.5" />
         <span className="ml-1.5 text-2xl text-grey-c900">
-          {" "}
-          4.9 - 142 Đánh giá
+          {product?.averageRating &&
+            parseFloat(product?.averageRating)?.toFixed(2)}{" "}
+          - {product?.reviews?.length} Đánh giá
         </span>
       </h2>
 
       {/* comment */}
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-27">
-          <ReviewItem />
-          <ReviewItem
-            data={{
-              comment: `I love the charcoal heavyweight hoodie. Still looks new after plenty of washes. 
-                  If you’re unsure which hoodie to pick.`,
-              date: "08/04/2024",
-              name: "Stiven Hokinhs",
-              starPoint: 5,
-            }}
-          />
-          <ReviewItem
-            data={{
-              comment: `The quality and sizing mentioned were accurate and really happy with the purchase. Such a cozy and comfortable hoodie. 
-                Now that it’s colder, my husband wears his all the time. I wear hoodies all the time. `,
-              date: "08/04/2024",
-              name: "Gropishta keo",
-              starPoint: 5,
-            }}
-          />
-          <ReviewItem
-            data={{
-              comment: `Before buying this, I didn't really know how I would tell a "high quality" sweatshirt, but after opening, I was very impressed. 
-                The material is super soft and comfortable and the sweatshirt also has a good weight to it.`,
-              date: "08/04/2024",
-              name: "Dahon Stiven",
-              starPoint: 5,
-            }}
-          />
+          {product?.reviews?.slice(0, 4).map((review, index) => {
+            return <ReviewItem key={index} review={review} />;
+          })}
         </div>
       </div>
       <Button
@@ -63,6 +43,7 @@ const ProductReviews = () => {
 
       {/* MODAL VIEW ALL REVIEW */}
       <ModalViewAllReviews
+        product={product}
         show={isOpenModalViewAllReviews}
         onCloseModalViewAllReviews={() => setIsOpenModalViewAllReviews(false)}
       />
