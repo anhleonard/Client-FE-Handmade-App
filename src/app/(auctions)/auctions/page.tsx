@@ -16,6 +16,7 @@ import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import storage from "@/apis/storage";
 
 const AuctionHomePage = () => {
   const dispatch = useDispatch();
@@ -81,18 +82,28 @@ const AuctionHomePage = () => {
       {/* auction search field */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
         <div className="md:col-span-4">
-          <MyTextField
-            id="auction-search-field"
-            placeholder="Nhập keyword mà bạn muốn tìm kiếm"
-            onChange={(event) => setTitle(event.target.value)} // sai o day
-            endIcon={
-              <div onClick={() => handleRefetch()}>
-                <SearchRoundedIcon sx={{ color: COLORS.grey.c400 }} />
-              </div>
-            }
-          />
+          <form
+            className="flex-1 text-slate-900 dark:text-slate-100"
+            onSubmit={(e) => {
+              getAllFilterAuctions();
+              e.preventDefault();
+            }}
+          >
+            <MyTextField
+              id="auction-search-field"
+              placeholder="Nhập keyword mà bạn muốn tìm kiếm"
+              onChange={(event) => setTitle(event.target.value)}
+              endIcon={<SearchRoundedIcon sx={{ color: COLORS.grey.c400 }} />}
+            />
+          </form>
         </div>
-        <Button color="info" onClick={() => router.push("/account-auction")}>
+        <Button
+          color="info"
+          onClick={() => {
+            storage.updateAuctionTab("1");
+            router.push("/account-auction");
+          }}
+        >
           Dự án của tôi
         </Button>
       </div>

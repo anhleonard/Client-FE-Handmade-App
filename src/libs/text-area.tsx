@@ -19,6 +19,7 @@ interface MyTextAreaProps {
   defaultValue?: string | number;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement & HTMLInputElement>;
   className?: string;
+  rows?: number;
 }
 
 const MyTextArea: React.FC<MyTextAreaProps> = ({
@@ -37,6 +38,7 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
   defaultValue,
   onChange,
   className = "",
+  rows = 3,
 }) => {
   return (
     <div className={`${width} ${className}`}>
@@ -50,7 +52,7 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({
         <textarea
           id={id}
           name={name}
-          rows={3}
+          rows={rows}
           placeholder={placeholder}
           onChange={onChange}
           value={value}

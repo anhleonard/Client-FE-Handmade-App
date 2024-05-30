@@ -31,6 +31,7 @@ import moment from "moment";
 import { createAuction } from "@/apis/services/auctions";
 import { useRouter } from "next/navigation";
 import { createAuctionPayment } from "@/apis/services/payments";
+import { uploadImages } from "@/apis/services/uploads";
 
 const CreateAuctionPage = () => {
   const dispatch = useDispatch();
@@ -98,6 +99,36 @@ const CreateAuctionPage = () => {
   };
 
   const onSubmit = async (values: CreateAuctionValues, { resetForm }: any) => {
+    //upload multiple images to create auction
+    let fileImages: string[] = [];
+    if (fileList?.length) {
+      const formData = new FormData();
+
+      if (fileList && fileList.length >= 1) {
+        for (let i = 0; i < fileList.length; i++) {
+          const fileObj = fileList[i].originFileObj;
+          if (fileObj) {
+            formData.append(`files`, fileObj);
+          }
+        }
+      }
+
+      const res = await uploadImages(formData);
+      if (res) {
+        fileImages = res;
+      } else {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: "Lỗi upload ảnh!",
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+
+        return;
+      }
+    }
+
     try {
       dispatch(openLoading());
       const variables = {
@@ -108,6 +139,9 @@ const CreateAuctionPage = () => {
         closedDate: moment(values.closedDate).format("YYYY-MM-DD"),
         shippingId: parseInt(value),
         maxDays: parseInt(values.maxDays),
+        ...(fileList?.length && {
+          images: fileImages,
+        }),
       };
       const token = storage.getLocalAccessToken();
 
@@ -177,17 +211,15 @@ const CreateAuctionPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.name}
                 />
-                <div>
-                  <MyTextArea
-                    id="description"
-                    name="description"
-                    title="Mô tả dự án"
-                    placeholder="Nhập mô tả cho yêu cầu của bạn"
-                    isRequired
-                    onChange={formik.handleChange}
-                    value={formik.values.description}
-                  />
-                </div>
+                <MyTextArea
+                  id="description"
+                  name="description"
+                  title="Mô tả dự án"
+                  placeholder="Nhập mô tả cho yêu cầu của bạn"
+                  isRequired
+                  onChange={formik.handleChange}
+                  value={formik.values.description}
+                />
                 <MyPrimaryTextField
                   id="requiredNumber"
                   name="requiredNumber"
@@ -266,6 +298,7 @@ const CreateAuctionPage = () => {
                     value={formik.values.maxDays}
                   />
                 </div>
+
                 <div className="">
                   <div className="font-semibold">2. Địa chỉ nhận hàng</div>
                   {shippings?.length ? (

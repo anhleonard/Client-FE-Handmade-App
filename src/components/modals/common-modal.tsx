@@ -64,7 +64,9 @@ const ContentModal = () => {
                     <ButtonClose onClick={() => handleCloseModal()} />
                   </span>
                 </div>
-                <div className="px-8 my-5 w-full">{modalData?.content}</div>
+                <div className="px-8 my-5 w-full max-h-[75vh] overflow-auto">
+                  {modalData?.content}
+                </div>
               </div>
             </div>
           </Transition.Child>

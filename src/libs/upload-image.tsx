@@ -16,10 +16,15 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 type Props = {
   fileList: UploadFile[];
+  defaultFileList?: UploadFile[];
   setFileList: any;
 };
 
-const UploadImage: React.FC<Props> = ({ fileList, setFileList }: Props) => {
+const UploadImage: React.FC<Props> = ({
+  fileList,
+  setFileList,
+  defaultFileList,
+}: Props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -61,9 +66,10 @@ const UploadImage: React.FC<Props> = ({ fileList, setFileList }: Props) => {
       <Upload
         customRequest={dummyRequest}
         listType="picture-card"
-        fileList={fileList}
+        defaultFileList={defaultFileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        // fileList={fileList}
       >
         {fileList.length >= 8 ? null : uploadButton}
       </Upload>

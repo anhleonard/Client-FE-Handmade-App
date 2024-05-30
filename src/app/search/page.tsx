@@ -98,15 +98,23 @@ const PageSearch = ({}) => {
     <DefaultLayout>
       <div className="space-y-6">
         <header className="max-w-2xl mx-auto relative">
-          <Input
-            className="border-2 border-grey-c50 dark:border"
-            id="search-input"
-            type="search"
-            placeholder="Nhập từ khóa để tìm kiếm"
-            sizeClass="pl-14 py-5 pr-5 md:pl-16"
-            rounded="rounded-full"
-            onChange={(e) => setProductName(e.target.value)}
-          />
+          <form
+            className="flex-1 text-slate-900 dark:text-slate-100"
+            onSubmit={(e) => {
+              handleRefetch();
+              e.preventDefault();
+            }}
+          >
+            <Input
+              className="border-2 border-grey-c50 dark:border"
+              id="search-input"
+              type="search"
+              placeholder="Nhập từ khóa để tìm kiếm"
+              sizeClass="pl-14 py-5 pr-5 md:pl-16"
+              rounded="rounded-full"
+              onChange={(e) => setProductName(e.target.value)}
+            />
+          </form>
           <ButtonCircle
             className="absolute right-2.5 top-1/2 transform -translate-y-1/2"
             size=" w-11 h-11"

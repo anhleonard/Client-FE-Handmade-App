@@ -18,6 +18,7 @@ import storage from "@/apis/storage";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/redux/slices/modalSlice";
 import RejectAuctionModal from "./reject-auction-modal";
+import { headerUrl } from "@/apis/services/authentication";
 
 type DetailAuctionProps = {
   status: AuctionStatus;
@@ -121,6 +122,28 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </div>
             </ListItem>
 
+            {auction?.images?.length ? (
+              <ListItem
+                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
+                disablePadding
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="font-bold text-grey-c900">Hình ảnh ví dụ</div>
+                  <div className="flex flex-row gap-5">
+                    {auction?.images?.map((image, index) => {
+                      return (
+                        <MyDisplayImage
+                          key={index}
+                          alt="example-image"
+                          src={`${headerUrl}/products/${image}`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </ListItem>
+            ) : null}
+
             <ListItem
               className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
               disablePadding
@@ -158,22 +181,6 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
                   <div className="font-bold text-grey-c900">Ngày đóng</div>
                   <div className="font-medium text-primary-c900">
                     {formatCommonTime(auction?.closedDate)}
-                  </div>
-                </div>
-              </ListItem>
-            )}
-
-            {auction?.images?.length && (
-              <ListItem
-                className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
-                disablePadding
-              >
-                <div className="flex flex-col gap-2">
-                  <div className="font-bold text-grey-c900">Hình ảnh ví dụ</div>
-                  <div className="flex flex-row gap-5">
-                    <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
-                    <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
-                    <MyDisplayImage src="/images/bags/bag-1.jpg" alt="" />
                   </div>
                 </div>
               </ListItem>
