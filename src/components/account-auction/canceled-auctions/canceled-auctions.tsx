@@ -5,14 +5,17 @@ import { AlertStatus, AuctionStatus } from "@/enum/constants";
 import { AlertState } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { allClientAuctions } from "@/apis/services/auctions";
 import NoOrderCard from "@/components/account-orders/no-order-card";
 import MyAunctionCard from "@/components/auctions/my-aunction-card";
+import { RootState } from "@/redux/store";
+import { refetchComponent } from "@/redux/slices/refetchSlice";
 
 const CanceledAuctions = () => {
   const dispatch = useDispatch();
   const [auctions, setAuctions] = useState<Auction[]>([]);
+  const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
   const getClientAuctionsByStatus = async () => {
     try {
@@ -40,12 +43,22 @@ const CanceledAuctions = () => {
 
   useEffect(() => {
     getClientAuctionsByStatus();
-  }, []);
+  }, [refetchQueries]);
+
+  const handleRefetch = () => {
+    dispatch(refetchComponent());
+  };
 
   return (
     <div className="space-y-8">
       {auctions?.map((auction, index) => {
-        return <MyAunctionCard key={index} auction={auction} />;
+        return (
+          <MyAunctionCard
+            key={index}
+            auction={auction}
+            handleRefetch={handleRefetch}
+          />
+        );
       })}
       {!auctions?.length && (
         <NoOrderCard title="Bạn không có dự án nào ở đây!" />

@@ -11,16 +11,17 @@ import {
 import Button from "@/libs/button";
 import { useParams, useRouter } from "next/navigation";
 import { Auction } from "@/enum/defined-types";
-import { AuctionStatus } from "@/enum/constants";
+import { AuctionStatus, Role } from "@/enum/constants";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/redux/slices/modalSlice";
 import EditAuctionModal from "./edit-auction-modal";
 
 type Props = {
   auction: Auction;
+  handleRefetch?: () => void;
 };
 
-const MyAunctionCard = ({ auction }: Props) => {
+const MyAunctionCard = ({ auction, handleRefetch }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -28,7 +29,9 @@ const MyAunctionCard = ({ auction }: Props) => {
     const modal = {
       isOpen: true,
       title: "Chỉnh sửa dự án",
-      content: <EditAuctionModal auction={auction} />,
+      content: (
+        <EditAuctionModal auction={auction} handleRefetch={handleRefetch} />
+      ),
       className: "max-w-4xl",
     };
     dispatch(openModal(modal));
@@ -167,13 +170,15 @@ const MyAunctionCard = ({ auction }: Props) => {
               </div>
               <MyLabel type="error">Đã hủy</MyLabel>
             </div>
-            <Button
-              className="!text-xs !py-1.5 !w-fit"
-              color="info"
-              onClick={() => handleEditAuction()}
-            >
-              Đặt lại
-            </Button>
+            {auction?.canceledBy?.role === Role.ADMIN ? (
+              <Button
+                className="!text-xs !py-1.5 !w-fit"
+                color="info"
+                onClick={() => handleEditAuction()}
+              >
+                Đặt lại
+              </Button>
+            ) : null}
           </div>
         );
       default:

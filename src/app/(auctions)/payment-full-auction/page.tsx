@@ -1,7 +1,8 @@
 "use client";
-import { updateAuction } from "@/apis/services/auctions";
+import { createPaidAuction, updateAuction } from "@/apis/services/auctions";
 import { checkingPayment } from "@/apis/services/payments";
 import storage from "@/apis/storage";
+import { CreatePaidAuction } from "@/apis/types";
 import { AlertStatus } from "@/enum/constants";
 import { AlertState } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
@@ -24,6 +25,10 @@ const PaymentFullAuction = () => {
 
   const updatePaymentAuction = async () => {
     if (apptransid) {
+      if (apptransid !== storage.getLocalAppTransId()) {
+        storage.updateLocalAppTransId(apptransid);
+      } else return;
+
       const auctionId = getAuctionId(apptransid);
       try {
         dispatch(openLoading());
@@ -37,6 +42,15 @@ const PaymentFullAuction = () => {
           };
 
           await updateAuction(+auctionId, values, token); //call api update auction
+
+          //create total paid auction (total = tổng - deposit)
+          const params: CreatePaidAuction = {
+            auctionId: +auctionId,
+            type: "total",
+            apptransid: apptransid,
+            zp_trans_id: res?.zp_trans_id.toString(),
+          };
+          await createPaidAuction(params, token);
         } else {
           let alert: AlertState = {
             isOpen: true,
@@ -83,6 +97,9 @@ const PaymentFullAuction = () => {
           <Link
             href={"/account-auction"}
             className="font-semibold text-primary-c900"
+            onClick={() => {
+              storage.updateAuctionTab("3");
+            }}
           >
             Dự án Handmade
           </Link>

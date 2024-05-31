@@ -79,7 +79,12 @@ const UploadImage: React.FC<Props> = ({
         footer={null}
         onCancel={handleCancel}
       >
-        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+        <img
+          alt="example"
+          style={{ width: "100%" }}
+          src={previewImage}
+          className="max-h-[65vh] object-cover"
+        />
       </Modal>
     </>
   );

@@ -54,7 +54,6 @@ const CreateCompletedAuction = () => {
             zp_trans_id: res?.zp_trans_id.toString(),
           };
           const response = await createPaidAuction(params, token);
-          console.log(response);
         } else {
           let alert: AlertState = {
             isOpen: true,
@@ -100,6 +99,9 @@ const CreateCompletedAuction = () => {
           <Link
             href={"/account-auction"}
             className="font-semibold text-primary-c900"
+            onClick={() => {
+              storage.updateAuctionTab("2");
+            }}
           >
             Dự án Handmade
           </Link>

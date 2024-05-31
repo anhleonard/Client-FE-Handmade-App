@@ -389,7 +389,7 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
             auction?.status !== AuctionStatus.CANCELED ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1">
-                  <div className="font-bold text-grey-c900">Tiền cọc</div>
+                  <div className="font-bold text-grey-c900">Tiền đã cọc</div>
                   <div className="font-medium text-primary-c900">
                     {formatCurrency(auction?.deposit)}
                   </div>

@@ -1,6 +1,14 @@
+import {
+  updateAuction,
+  updateDepositPaidAuction,
+} from "@/apis/services/auctions";
 import { headerUrl } from "@/apis/services/authentication";
-import { CreateAuctionValues } from "@/apis/types";
-import { Auction } from "@/enum/defined-types";
+import { createRefundPayment } from "@/apis/services/payments";
+import { uploadImages } from "@/apis/services/uploads";
+import storage from "@/apis/storage";
+import { CreateAuctionValues, CreateRefundPaymentValues } from "@/apis/types";
+import { AlertStatus, AuctionStatus } from "@/enum/constants";
+import { AlertState, Auction } from "@/enum/defined-types";
 import { formatCurrency } from "@/enum/functions";
 import Button from "@/libs/button";
 import MyDatePicker from "@/libs/date-picker";
@@ -9,15 +17,22 @@ import MyPrimaryTextField from "@/libs/primary-text-field";
 import MyTextArea from "@/libs/text-area";
 import MyTextField from "@/libs/text-field";
 import UploadImage from "@/libs/upload-image";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { closeModal } from "@/redux/slices/modalSlice";
 import { UploadFile } from "antd";
 import { Form, Formik } from "formik";
+import moment from "moment";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 type Props = {
   auction: Auction;
+  handleRefetch?: () => void;
 };
 
-const EditAuctionModal = ({ auction }: Props) => {
+const EditAuctionModal = ({ auction, handleRefetch }: Props) => {
+  const dispatch = useDispatch();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const defaultImages: UploadFile[] = [];
@@ -26,7 +41,7 @@ const EditAuctionModal = ({ auction }: Props) => {
     for (let image of auction?.images) {
       const item: UploadFile = {
         uid: Math.random().toString(),
-        name: "default-image.png",
+        name: image,
         url: `${headerUrl}/products/${image}`,
         status: "done",
       };
@@ -45,12 +60,144 @@ const EditAuctionModal = ({ auction }: Props) => {
     maxDays: auction?.maxDays?.toString() ?? "",
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: CreateAuctionValues) => {
+    let newUrls: string[] = [];
+
     let rawFiles: UploadFile[] = [];
     if (fileList?.length) rawFiles = fileList;
     else if (defaultImages?.length) rawFiles = defaultImages;
 
-    console.log({ rawFiles });
+    if (rawFiles?.length) {
+      //lọc lấy các ảnh default
+      const urlImages = rawFiles
+        .filter((file) => file?.originFileObj === undefined)
+        ?.map((file) => file.name);
+
+      //tạo url cho các ảnh mới
+      const formData = new FormData();
+
+      if (rawFiles && rawFiles.length >= 1) {
+        for (let i = 0; i < rawFiles.length; i++) {
+          if (rawFiles[i]?.originFileObj) {
+            const fileObj = rawFiles[i].originFileObj;
+            if (fileObj) {
+              formData.append(`files`, fileObj);
+            }
+          }
+        }
+      }
+
+      const res = await uploadImages(formData);
+      if (res) {
+        newUrls = [...urlImages, ...res];
+      } else {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: "Lỗi upload ảnh!",
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+
+        return;
+      }
+    }
+
+    try {
+      dispatch(openLoading());
+      const token = storage.getLocalAccessToken();
+
+      const variables = {
+        name: values.name,
+        description: values.description,
+        requiredNumber: parseInt(values.requiredNumber),
+        maxAmount: parseInt(values.maxAmount),
+        closedDate: moment(values.closedDate).format("YYYY-MM-DD"),
+        maxDays: parseInt(values.maxDays),
+        ...(newUrls?.length && {
+          images: newUrls,
+        }),
+        status: null,
+      };
+
+      //update auction
+      const res: Auction = await updateAuction(auction?.id, variables, token);
+      if (res) {
+        dispatch(closeModal());
+        if (handleRefetch) {
+          handleRefetch();
+        }
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  const handleConfirmCancel = async () => {
+    try {
+      dispatch(openLoading());
+      const token = storage.getLocalAccessToken();
+
+      //update deposit auction isFund: false -> true
+      const params1 = {
+        auctionId: auction?.id,
+      };
+      const res1 = await updateDepositPaidAuction(params1, token);
+
+      if (!res1) return;
+
+      //refund deposit money
+      const param2: CreateRefundPaymentValues = {
+        zp_trans_id: res1?.zp_trans_id,
+        amount: res1?.auction?.deposit,
+      };
+
+      const res = await createRefundPayment(param2);
+
+      if (res) {
+        if (res?.return_code !== 1) {
+          let alert: AlertState = {
+            isOpen: true,
+            title: "LỖI",
+            message: res?.return_message,
+            type: AlertStatus.ERROR,
+          };
+          dispatch(openAlert(alert));
+          return;
+        } else {
+          //update auction status
+          const variables = {
+            status: AuctionStatus.CANCELED,
+          };
+          const res2 = await updateAuction(auction?.id, variables, token);
+
+          if (res2) {
+            dispatch(closeModal());
+            if (handleRefetch) {
+              handleRefetch();
+            }
+          }
+        }
+      } else return;
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
   };
 
   return (
@@ -151,9 +298,18 @@ const EditAuctionModal = ({ auction }: Props) => {
                   value={formik.values.maxDays}
                 />
               </div>
-              <Button className="!w-fit" type="submit">
-                Cập nhật
-              </Button>
+              <div className="flex flex-row items-center justify-between pt-6 gap-6">
+                <Button
+                  className="w-full"
+                  color="black"
+                  onClick={() => handleConfirmCancel()}
+                >
+                  Yêu cầu hoàn tiền
+                </Button>
+                <Button className="w-full" type="submit">
+                  Cập nhật & Gửi duyệt
+                </Button>
+              </div>
             </div>
           </div>
         </Form>
