@@ -100,3 +100,12 @@ export type CreateReviewValues = {
   ratings: number;
   comment: string;
 };
+
+export type UpdateUserValues = {
+  name?: string;
+  avatar?: string;
+  gender?: string;
+  email?: string;
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+};

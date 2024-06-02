@@ -12,7 +12,7 @@ import { LoginFormValues } from "@/apis/types";
 import { Form, Formik, getIn } from "formik";
 import InputPassword from "@/components/change-password/input-password";
 import { AlertState } from "@/enum/defined-types";
-import { AlertStatus } from "@/enum/constants";
+import { AlertStatus, Role } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import storage from "@/apis/storage";
 import { useRouter } from "next/navigation";
@@ -39,6 +39,18 @@ const LoginPage = () => {
         password: values.password,
       };
       const responseLogin = await loginUser(variables);
+
+      if (responseLogin?.user?.role !== Role.USER) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: "Vui lòng đăng nhập account user!",
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+        return;
+      }
+
       const user = JSON.stringify(responseLogin?.user);
       storage.updateLocalUserId(responseLogin?.user?.id);
       storage.updateLocalAccessToken(responseLogin?.accessToken);

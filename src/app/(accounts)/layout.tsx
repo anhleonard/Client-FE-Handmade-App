@@ -80,22 +80,48 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
           {/* LOOP ITEMS */}
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/3 xl:w-1/4 flex flex-col gap-5">
-              {accountPages.map((item, index) => (
-                <SideBarAccount
-                  key={index}
-                  title={item.name}
-                  icon={item.icon}
-                  selected={pathname === item.link}
-                  onClicked={() => {
-                    if (item.link === "/account-auction") {
-                      storage.updateAuctionTab("");
-                    } else if (item.link === "/account-order") {
-                      storage.updateOrderTab("");
-                    }
-                    router.push(item.link, { scroll: true });
-                  }}
-                />
-              ))}
+              {accountPages.map((item, index) => {
+                function setSelected(index: number, path: string) {
+                  switch (index) {
+                    case 0:
+                      return (
+                        path === "/account" ||
+                        path === "/edit-account" ||
+                        path === "/change-password"
+                      );
+                    case 1:
+                      return (
+                        path === "/account-address" || path === "/add-address"
+                      );
+                    case 2:
+                      return path === "/account-savelists";
+                    case 3:
+                      return path === "/account-order";
+
+                    case 4:
+                      return path === "/account-auction";
+                    case 5:
+                      return path === "/account-billing";
+                  }
+                }
+
+                return (
+                  <SideBarAccount
+                    key={index}
+                    title={item.name}
+                    icon={item.icon}
+                    selected={setSelected(index, pathname)}
+                    onClicked={() => {
+                      if (item.link === "/account-auction") {
+                        storage.updateAuctionTab("");
+                      } else if (item.link === "/account-order") {
+                        storage.updateOrderTab("");
+                      }
+                      router.push(item.link, { scroll: true });
+                    }}
+                  />
+                );
+              })}
             </div>
             <div className="flex-shrink-0 mb-10 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
             {/* <div className="flex-1">{children}</div> */}
@@ -103,15 +129,6 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
           </div>
         </main>
       </div>
-
-      {/* === SECTION 5 === */}
-      <hr className="border-slate-200 dark:border-slate-700" />
-
-      <SectionSliderCollections />
-      <hr className="border-slate-200 dark:border-slate-700" />
-
-      {/* SUBCRIBES */}
-      <SectionPromo1 />
     </DefaultLayout>
   );
 };

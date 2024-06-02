@@ -183,3 +183,14 @@ export const getTopSoldProducts = (products: Product[], topN: number) => {
     .sort((a, b) => b.soldNumber - a.soldNumber) // Sort products by soldNumber in descending order
     .slice(0, topN); // Get the top N products
 };
+
+export const formatDOBDate = (inputDateString: Date) => {
+  const date = new Date(inputDateString);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+
+  const formattedDate = `${year}/${month}/${day}`;
+
+  return formattedDate;
+};

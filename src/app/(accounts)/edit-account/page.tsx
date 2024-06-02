@@ -1,18 +1,95 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import { useRouter } from "next/navigation";
 import MyPrimaryTextField from "@/libs/primary-text-field";
 import MyDatePicker from "@/libs/date-picker";
 import Button from "@/libs/button";
 import MyRadioButtonsGroup from "@/libs/radio-button-group";
-import { genderTypes } from "@/enum/constants";
+import { AlertStatus, genderTypes } from "@/enum/constants";
 import { Avatar, IconButton, Tooltip } from "@mui/material";
-import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import { COLORS } from "@/enum/colors";
+import { useDispatch } from "react-redux";
+import MainInputImage from "@/libs/main-input-image";
+import { formatDOBDate, getCurrentUser } from "@/enum/functions";
+import { AlertState, User } from "@/enum/defined-types";
+import { UpdateUserValues } from "@/apis/types";
+import { Form, Formik } from "formik";
+import { headerUrl } from "@/apis/services/authentication";
+import { uploadSingleImage } from "@/apis/services/uploads";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import storage from "@/apis/storage";
+import { updateUser } from "@/apis/services/users";
+import { closeModal } from "@/redux/slices/modalSlice";
 
 const EditAccountPage = () => {
+  const currentUser: User = getCurrentUser();
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [previewImage, setPreviewImage] = useState(
+    `${headerUrl}/products/${currentUser?.avatar}`
+  );
+  const [fileImage, setFileImage] = useState<File | null>();
+
+  const initialValues: UpdateUserValues = {
+    name: currentUser?.name ?? "",
+    email: currentUser?.email ?? "",
+    gender: currentUser?.gender ?? "",
+    phoneNumber: currentUser?.phoneNumber ?? "",
+    dateOfBirth: currentUser?.dateOfBirth ?? new Date(),
+  };
+
+  const onSubmit = async (values: UpdateUserValues) => {
+    //update user avatar
+    let newAvatar: string = "";
+    const formData = new FormData();
+    if (fileImage) {
+      formData.append("image", fileImage);
+      const file = await uploadSingleImage(formData);
+      if (file) newAvatar = file;
+    } else if (!fileImage && previewImage === "") {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: "Không thể upload ảnh!",
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+      return;
+    }
+
+    try {
+      dispatch(openLoading());
+      const variables: UpdateUserValues = {
+        name: values?.name,
+        phoneNumber: values?.phoneNumber,
+        gender: values?.gender,
+        ...(newAvatar !== "" && {
+          avatar: newAvatar,
+        }),
+      };
+
+      const token = storage.getLocalAccessToken();
+      const res = await updateUser(currentUser?.id, variables, token);
+      if (res) {
+        const user = JSON.stringify(res);
+        storage.updateLocalUser(user);
+        router.push("/account");
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
 
   return (
     <div className="space-y-3 text-grey-c900">
@@ -27,77 +104,107 @@ const EditAccountPage = () => {
         </div>
         <div className="text-lg font-bold">Sửa thông tin</div>
       </div>
-      <div className="space-y-4">
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-          <div className="flex mx-auto">
-            <div className="relative w-[120px] h-[120px]">
-              <Avatar
-                sx={{ width: 120, height: 120 }}
-                src="/images/bags/bag-1.jpg"
+      <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        {(formik) => (
+          <Form>
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4 md:gap-8">
+                <div className="mx-auto">
+                  <MainInputImage
+                    id="store-logo"
+                    name="store-logo"
+                    previewImage={previewImage}
+                    width="!w-[120px]"
+                    height="!h-[120px]"
+                    rounded="!rounded-full"
+                    onChange={(event) => {
+                      setFileImage(event.target.files?.[0]);
+                      setPreviewImage(
+                        URL.createObjectURL(
+                          event.target.files?.[0] ?? new Blob()
+                        )
+                      );
+                    }}
+                    onDeleteImage={() => {
+                      setFileImage(null);
+                      setPreviewImage("");
+                    }}
+                  />
+                </div>
+
+                <MyRadioButtonsGroup
+                  label="Giới tính"
+                  options={genderTypes}
+                  defaultValue={
+                    formik.values.gender === genderTypes[0].value
+                      ? genderTypes[0].value
+                      : genderTypes[1].value
+                  }
+                  onChanged={(value) => {
+                    formik.setFieldValue("gender", value);
+                  }}
+                />
+              </div>
+
+              <MyPrimaryTextField
+                id="name"
+                name="name"
+                title="Họ và tên"
+                placeholder="Nguyễn Văn A"
+                className="w-full"
+                onChange={formik.handleChange}
+                value={formik.values.name}
               />
-              <div className="absolute bottom-0 right-0">
-                <Tooltip title="Chỉnh sửa">
-                  <IconButton
-                    className="bg-primary-c100 hover:bg-primary-c200"
-                    size="small"
-                  >
-                    <ModeEditRoundedIcon
-                      sx={{ color: COLORS.primary.c900, fontSize: 18 }}
-                    />
-                  </IconButton>
-                </Tooltip>
+
+              <MyDatePicker
+                id=""
+                name=""
+                label="Ngày tháng năm sinh"
+                placeholder="yyyy/mm/dd"
+                defaultDate={
+                  formik.values?.dateOfBirth &&
+                  formatDOBDate(formik.values.dateOfBirth)
+                }
+                disabled
+                helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
+              />
+
+              <div className="grid md:grid-cols-2 gap-4 md:gap-8">
+                <MyPrimaryTextField
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  title="Số điện thoại"
+                  type="text"
+                  hasInputNumber
+                  placeholder="Nhập số điện thoại của bạn"
+                  className="w-full"
+                  onChange={formik.handleChange}
+                  value={formik.values.phoneNumber}
+                />
+                <MyPrimaryTextField
+                  id="email"
+                  name="email"
+                  title="Email"
+                  placeholder="Nhập email của bạn"
+                  className="w-full"
+                  disabled
+                  helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
+                />
+              </div>
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                <Button color="black" className="!w-full !py-3">
+                  HỦY
+                </Button>
+                <Button className="!w-full !py-3" type="submit">
+                  LƯU
+                </Button>
               </div>
             </div>
-          </div>
-          <MyRadioButtonsGroup
-            label="Giới tính"
-            options={genderTypes}
-            defaultValue={genderTypes[0].value}
-          />
-        </div>
-        <MyPrimaryTextField
-          id={Math.random().toString()}
-          title="Họ và tên"
-          placeholder="Nguyễn Văn A"
-          defaultValue={"Anh"}
-          className="w-full"
-        />
-        <MyDatePicker
-          id=""
-          name=""
-          label="Ngày tháng năm sinh"
-          placeholder="yyyy/mm/dd"
-          defaultDate={"2002/02/20"}
-          disabled
-          helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
-        />
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-          <MyPrimaryTextField
-            id={Math.random().toString()}
-            title="Số điện thoại"
-            type="text"
-            hasInputNumber
-            placeholder="Nhập số điện thoại của bạn"
-            defaultValue={"0394356433"}
-            className="w-full"
-          />
-          <MyPrimaryTextField
-            id={Math.random().toString()}
-            title="Email"
-            placeholder="Nhập email của bạn"
-            defaultValue={"anhleonard@gmail.com"}
-            className="w-full"
-            disabled
-            helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
-          />
-        </div>
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-          <Button color="black" className="!w-full !py-3">
-            HỦY
-          </Button>
-          <Button className="!w-full !py-3">LƯU</Button>
-        </div>
-      </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

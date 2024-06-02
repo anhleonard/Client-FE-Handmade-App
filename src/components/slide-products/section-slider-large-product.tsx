@@ -1,21 +1,20 @@
 "use client";
 
-import React, { FC, useEffect, useId, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import CollectionCard from "../CollectionCard";
 import CollectionCard2 from "../CollectionCard2";
 import { DEMO_LARGE_PRODUCTS } from "../SectionSliderLargeProduct2";
-import Link from "next/link";
 
-export interface SectionSliderLargeProductProps {
+export interface Props {
   className?: string;
   itemClassName?: string;
   cardStyle?: "style1" | "style2";
 }
 
-const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
+const SectionSliderLargeProduct: FC<Props> = ({
   className = "",
   cardStyle = "style2",
 }) => {

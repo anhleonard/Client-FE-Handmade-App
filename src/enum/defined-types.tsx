@@ -270,6 +270,7 @@ export type User = {
   phoneNumber: string;
   dateOfBirth: Date;
   role: Role;
+  gender: string;
 };
 
 export type Collection = {
