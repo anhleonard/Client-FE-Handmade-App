@@ -12,7 +12,7 @@ import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
 import { AlertState, Store } from "@/enum/defined-types";
 import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { singleStore } from "@/apis/services/stores";
+import { changeFollower, singleStore } from "@/apis/services/stores";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { addStore } from "@/redux/slices/storeSlice";
 import storage from "@/apis/storage";
@@ -20,6 +20,9 @@ import StoreHomePage from "../../store-homepage/page";
 import StoreItemsScreen from "../../store-items/page";
 import StoreCollection from "../../store-collection/page";
 import StoreHistory from "../../store-history/page";
+import { ChangeFollowerValues } from "@/apis/types";
+import { RootState } from "@/redux/store";
+import { refetchComponent } from "@/redux/slices/refetchSlice";
 
 export const StoreContext = createContext({
   store: "",
@@ -38,6 +41,9 @@ const SingleStoreScreen = () => {
 
   const tabId = storage.getStoreTab();
   const [value, setValue] = useState<number>(tabId ? +tabId : 1);
+  const [followed, setFollowed] = useState<boolean>(false);
+
+  const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
   const handleResetValue = (value: number, searchText: string) => {
     setValue(value);
@@ -74,6 +80,15 @@ const SingleStoreScreen = () => {
       dispatch(openLoading());
       const res: Store = await singleStore(storeId);
       if (res) {
+        if (res?.followers?.length) {
+          const userId = storage.getLocalUserId();
+          const user = res?.followers?.some(
+            (follower) => follower.id === +userId
+          );
+          if (user) {
+            setFollowed(true);
+          }
+        } else setFollowed(false);
         setStore(res);
         dispatch(addStore({ store: res }));
       }
@@ -92,7 +107,7 @@ const SingleStoreScreen = () => {
 
   useEffect(() => {
     getSingleStore();
-  }, []);
+  }, [refetchQueries]);
 
   const storeSellerTabs = [
     {
@@ -121,6 +136,36 @@ const SingleStoreScreen = () => {
       content: <StoreHistory />,
     },
   ];
+
+  const handleRefetch = () => {
+    dispatch(refetchComponent());
+  };
+
+  const handleChangeFollower = async () => {
+    try {
+      dispatch(openLoading());
+      const variables: ChangeFollowerValues = {
+        userId: +storage.getLocalUserId(),
+        storeId: storeId,
+      };
+      const token = storage.getLocalAccessToken();
+      const res = await changeFollower(variables, token);
+
+      if (res) {
+        handleRefetch();
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -161,7 +206,23 @@ const SingleStoreScreen = () => {
                 <Button className="!text-xs !px-3 !py-1.5" color="info">
                   Chat ngay
                 </Button>
-                <Button className="!text-xs !px-3 !py-1.5">Theo dõi</Button>
+                {!followed ? (
+                  <Button
+                    onClick={() => handleChangeFollower()}
+                    className="!text-xs !px-3 !py-1.5"
+                  >
+                    Theo dõi
+                  </Button>
+                ) : null}
+                {followed ? (
+                  <Button
+                    onClick={() => handleChangeFollower()}
+                    className="!text-xs !px-3 !py-1.5"
+                    color="success"
+                  >
+                    Đã theo dõi
+                  </Button>
+                ) : null}
               </div>
             </div>
           </div>

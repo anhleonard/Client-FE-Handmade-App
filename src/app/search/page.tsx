@@ -19,6 +19,7 @@ import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import { CommonContext } from "../page";
 import storage from "@/apis/storage";
+import Button from "@/libs/button";
 
 const PageSearch = ({}) => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const PageSearch = ({}) => {
   const [isFilterPrice, setIsFilterPrice] = useState(false);
   const refetchQueries = useSelector((state: RootState) => state.refetch.time);
   const [productName, setProductName] = useState<string>("");
+  const [limit, setLimit] = useState<number>(25);
 
   const getAllProducts = async (hasPrice: boolean) => {
     try {
@@ -52,6 +54,7 @@ const PageSearch = ({}) => {
           minPrice: rangePrices[0],
           maxPrice: rangePrices[1],
         }),
+        limit: limit,
       };
       const res = await getProducts(query);
       if (res) {
@@ -84,7 +87,7 @@ const PageSearch = ({}) => {
 
   useEffect(() => {
     getAllProducts(isFilterPrice);
-  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries]);
+  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries, limit]);
 
   const handleFilterPrice = (value: boolean) => {
     setIsFilterPrice(value);
@@ -181,8 +184,14 @@ const PageSearch = ({}) => {
             </div>
 
             {/* PAGINATION */}
-            <div className="flex flex-col mt-8 lg:mt-10 items-end border-t-[1px] border-b-[1px] border-grey-c100">
-              <PaginationExample />
+            <div className="flex mt-10 justify-center items-center">
+              <Button
+                onClick={() => {
+                  setLimit((pre) => pre + 10);
+                }}
+              >
+                Xem thêm
+              </Button>
             </div>
           </main>
           {/* === SECTION 5 === */}

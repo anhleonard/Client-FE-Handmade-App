@@ -10,7 +10,14 @@ type Props = {
   type?: "submit" | "button" | "reset";
   variant?: "outline" | "contained" | "other";
   fullWidth?: boolean;
-  color?: "primary" | "secondary" | "error" | "info" | "grey" | "black";
+  color?:
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "grey"
+    | "black"
+    | "success";
   size?: "small" | "normal" | "large";
   disabled?: boolean;
 };
@@ -43,6 +50,7 @@ const Button = forwardRef<
       primary: `bg-primary-c900 text-white px-5 py-2 text-sm hover:opacity-90 font-medium border-none`,
       info: `bg-blue-c900 text-white px-5 py-2 text-sm hover:opacity-90 font-medium border-none`,
       black: `bg-black text-white px-5 py-2 text-sm hover:opacity-90 font-medium border-none`,
+      success: `bg-success-c900 text-white px-5 py-2 text-sm hover:opacity-90 font-medium border-none`,
     };
   }, []);
 

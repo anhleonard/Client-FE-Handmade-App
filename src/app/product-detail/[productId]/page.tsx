@@ -31,7 +31,7 @@ import { openAlert } from "@/redux/slices/alertSlice";
 import { headerUrl } from "@/apis/services/authentication";
 import { createOrderProduct } from "@/apis/services/order-products";
 import storage from "@/apis/storage";
-import { OrderProductValues } from "@/apis/types";
+import { ChangeFollowerValues, OrderProductValues } from "@/apis/types";
 import { filterStoreProducts } from "@/apis/services/stores";
 
 const ProductDetailPage = () => {
@@ -346,8 +346,6 @@ const ProductDetailPage = () => {
     );
   };
 
-  console.log(storeProducts);
-
   return (
     <DefaultLayout>
       <div className="md:flex md:gap-10">
@@ -415,19 +413,6 @@ const ProductDetailPage = () => {
                 </div>
                 <div>Lượt theo dõi: 1234</div>
                 <div>Điểm uy tín: 1200</div>
-              </div>
-
-              {/* store action buttons */}
-              <div className="flex items-center gap-4 mt-3">
-                <Button
-                  className="!py-1.5 !px-3 !text-xs !font-normal !rounded-xl"
-                  color="info"
-                >
-                  Chat ngay
-                </Button>
-                <Button className="!py-1.5 !px-3 !text-xs !font-normal !rounded-xl">
-                  Theo dõi
-                </Button>
               </div>
             </div>
           </div>

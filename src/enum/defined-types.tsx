@@ -134,6 +134,7 @@ export type Store = {
   notApproveReason: string;
   status: StoreStatus;
   collections: Collection[];
+  followers: User[];
 };
 
 export type OrderProduct = {
@@ -271,6 +272,7 @@ export type User = {
   dateOfBirth: Date;
   role: Role;
   gender: string;
+  lovedStores: Store[];
 };
 
 export type Collection = {

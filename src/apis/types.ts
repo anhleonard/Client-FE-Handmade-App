@@ -109,3 +109,14 @@ export type UpdateUserValues = {
   phoneNumber?: string;
   dateOfBirth?: Date;
 };
+
+export type ChangePasswordValues = {
+  oldPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+};
+
+export type ChangeFollowerValues = {
+  storeId: number;
+  userId: number;
+};

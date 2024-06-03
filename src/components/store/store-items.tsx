@@ -30,6 +30,7 @@ const StoreItems = () => {
   const [rangePrices, setRangePrices] = useState<number[]>(PRICE_RANGE);
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
   const [isFilterPrice, setIsFilterPrice] = useState(false);
+  const [limit, setLimit] = useState<number>(10);
 
   const getFilterProducts = async (hasPrice: boolean) => {
     try {
@@ -45,6 +46,7 @@ const StoreItems = () => {
           ...(theme.searchText !== "" && {
             productName: theme.searchText,
           }),
+          limit: limit,
         };
 
         const res = await filterStoreProducts(store.id, query);
@@ -68,7 +70,7 @@ const StoreItems = () => {
 
   useEffect(() => {
     getFilterProducts(isFilterPrice);
-  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries]);
+  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries, limit]);
 
   const handleFilterPrice = (value: boolean) => {
     setIsFilterPrice(value);
@@ -107,7 +109,13 @@ const StoreItems = () => {
         ))}
       </div>
       <div className="flex mt-10 justify-center items-center">
-        <Button>Xem thêm</Button>
+        <Button
+          onClick={() => {
+            setLimit((pre) => pre + 10);
+          }}
+        >
+          Xem thêm
+        </Button>
       </div>
     </div>
   );

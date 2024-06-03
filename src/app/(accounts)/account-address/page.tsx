@@ -11,10 +11,7 @@ import { getShippingByUserId, updateShipping } from "@/apis/services/shipping";
 import { AlertState } from "@/enum/defined-types";
 import { AlertStatus, addressTypes } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
-import {
-  contentShippingAddress,
-  formatShippingAddress,
-} from "@/enum/functions";
+import { contentShippingAddress } from "@/enum/functions";
 
 const AccountAddressPage = () => {
   const router = useRouter();
