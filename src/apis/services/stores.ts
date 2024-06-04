@@ -29,3 +29,9 @@ export const changeFollower = async (
     .post(`${headerUrl}/stores/change-follower`, variables, config)
     .then((res) => res.data);
 };
+
+export const sortedStores = async (variables: any) => {
+  return await axios
+    .post(`${headerUrl}/embeddings/sort`, variables)
+    .then((res) => res.data);
+};

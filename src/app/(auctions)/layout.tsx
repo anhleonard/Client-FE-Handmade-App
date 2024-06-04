@@ -17,11 +17,10 @@ const MainAuctionLayout = ({ children }: Props) => {
       <div className="space-y-8">
         {/* header background */}
         <div className="h-[120px] w-full relative rounded-2xl overflow-hidden">
-          <Image
+          <img
             src={"/images/auction-background.svg"}
             alt="auction-background"
-            objectFit="cover"
-            fill
+            className="object-cover w-full h-full"
           />
           <div className="inset-0 bg-black opacity-50 absolute"></div>
           <div className="inset-0 absolute flex flex-row items-center justify-between px-5">

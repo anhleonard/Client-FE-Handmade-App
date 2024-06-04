@@ -135,6 +135,7 @@ export type Store = {
   status: StoreStatus;
   collections: Collection[];
   followers: User[];
+  score: number;
 };
 
 export type OrderProduct = {

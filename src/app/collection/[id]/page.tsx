@@ -18,6 +18,7 @@ import { PRICE_RANGE } from "@/components/filters/filter-data";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import { CommonContext } from "@/app/page";
+import Button from "@/libs/button";
 
 const PageCollection = ({}) => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const PageCollection = ({}) => {
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
   const [isFilterPrice, setIsFilterPrice] = useState(false);
   const refetchQueries = useSelector((state: RootState) => state.refetch.time);
+  const [limit, setLimit] = useState<number>(25);
 
   const getSingleCategory = async (hasPrice: boolean) => {
     if (params?.id && typeof params?.id === "string") {
@@ -41,6 +43,7 @@ const PageCollection = ({}) => {
             minPrice: rangePrices[0],
             maxPrice: rangePrices[1],
           }),
+          limit: limit,
         };
         const res = await singleCategory(parseInt(params?.id), query);
         if (res) {
@@ -62,7 +65,7 @@ const PageCollection = ({}) => {
 
   useEffect(() => {
     getSingleCategory(isFilterPrice);
-  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries]);
+  }, [isOnSale, sortOrderStates, isFilterPrice, refetchQueries, limit]);
 
   const handleFilterPrice = (value: boolean) => {
     setIsFilterPrice(value);
@@ -112,8 +115,14 @@ const PageCollection = ({}) => {
           </div>
 
           {/* PAGINATION */}
-          <div className="mt-12 lg:mt-16 flex items-center justify-center">
-            <ButtonPrimary loading>Show me more</ButtonPrimary>
+          <div className="flex mt-10 justify-center items-center">
+            <Button
+              onClick={() => {
+                setLimit((pre) => pre + 10);
+              }}
+            >
+              Xem thêm
+            </Button>
           </div>
         </main>
       </div>
