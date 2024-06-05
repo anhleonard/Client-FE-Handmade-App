@@ -1,7 +1,4 @@
-import {
-  updateAuction,
-  updateDepositPaidAuction,
-} from "@/apis/services/auctions";
+import { updateAuction, updatePaidAuction } from "@/apis/services/auctions";
 import { createRefundPayment } from "@/apis/services/payments";
 import storage from "@/apis/storage";
 import { CreateRefundPaymentValues } from "@/apis/types";
@@ -33,8 +30,9 @@ const RejectAuctionModal = ({ auctionId }: Props) => {
       //update deposit auction isFund: false -> true
       const params1 = {
         auctionId: auctionId,
+        type: "deposit",
       };
-      const res1 = await updateDepositPaidAuction(params1, token);
+      const res1 = await updatePaidAuction(params1, token);
 
       if (!res1) return;
 

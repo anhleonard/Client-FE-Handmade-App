@@ -29,7 +29,6 @@ import { CreateAuctionPaymentValues, CreateAuctionValues } from "@/apis/types";
 import MyDatePicker from "@/libs/date-picker";
 import moment from "moment";
 import { createAuction } from "@/apis/services/auctions";
-import { useRouter } from "next/navigation";
 import { createAuctionPayment } from "@/apis/services/payments";
 import { uploadImages } from "@/apis/services/uploads";
 import ListCandidates from "@/components/auctions/list-candidates";
@@ -40,8 +39,14 @@ const CreateAuctionPage = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [shippings, setShippings] = useState([]);
   const [value, setValue] = useState("");
-  const [hiddenSelectHandmader, setHiddenSelectHandmader] = useState(true);
   const [selectedStores, setSelectedStores] = useState<Store[]>([]);
+  const [pickedSeller, setPickedSeller] = useState("");
+
+  const handleChangeStore = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPickedSeller((event.target as HTMLInputElement).value);
+  };
 
   const initialValues: CreateAuctionValues = {
     name: "",
@@ -143,6 +148,9 @@ const CreateAuctionPage = () => {
         ...(fileList?.length && {
           images: fileImages,
         }),
+        ...(pickedSeller !== "" && {
+          selectedStoreId: +pickedSeller,
+        }),
       };
       const token = storage.getLocalAccessToken();
 
@@ -152,8 +160,12 @@ const CreateAuctionPage = () => {
         //create auction payment
         const data: CreateAuctionPaymentValues = {
           auctionId: res.id,
-          amount: res.deposit,
+          amount:
+            pickedSeller !== "" ? parseInt(values.maxAmount) : res.deposit,
           isDepositPayment: true,
+          ...(pickedSeller !== "" && {
+            isPaymentFull: true,
+          }),
         };
         const paymentGate = await createAuctionPayment(data, token);
 
@@ -202,10 +214,14 @@ const CreateAuctionPage = () => {
         desc: desc,
       };
 
-      const res = await sortedStores(params);
-      if (res) {
-        setSelectedStores(res);
-        setHiddenSelectHandmader(!hiddenSelectHandmader);
+      if (!selectedStores.length) {
+        const res = await sortedStores(params);
+        if (res) {
+          setSelectedStores(res);
+        }
+      } else {
+        setPickedSeller("");
+        setSelectedStores([]);
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -392,9 +408,13 @@ const CreateAuctionPage = () => {
                 </div>
 
                 {/* Danh sách sellers đã ra giá */}
-                <Collapse in={!hiddenSelectHandmader} timeout={600}>
+                <Collapse in={selectedStores?.length > 0} timeout={600}>
                   <div className="py-8 flex flex-col gap-8">
-                    <ListCandidates candidates={selectedStores} />
+                    <ListCandidates
+                      candidates={selectedStores}
+                      pickedSeller={pickedSeller}
+                      handleChange={handleChangeStore}
+                    />
                   </div>
                 </Collapse>
 
@@ -406,15 +426,15 @@ const CreateAuctionPage = () => {
                       handleSortedStores(formik.values.description)
                     }
                   >
-                    {hiddenSelectHandmader
+                    {!selectedStores?.length
                       ? "Mở tùy chọn handmader"
                       : "Ẩn tùy chọn handmader"}
                   </Button>
 
-                  {hiddenSelectHandmader ? (
+                  {!selectedStores?.length ? (
                     <Button type="submit">Trả tiền cọc & Đặt dự án</Button>
                   ) : (
-                    <Button color="info" onClick={() => {}}>
+                    <Button color="info" type="submit">
                       Lựa chọn & Thanh toán
                     </Button>
                   )}

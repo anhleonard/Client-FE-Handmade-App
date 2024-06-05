@@ -53,6 +53,7 @@ export type CreateAuctionValues = {
   closedDate: string;
   shippingId: string;
   maxDays: string;
+  selectedStoreId?: number;
 };
 
 export type CreateProgressValues = {
@@ -78,6 +79,7 @@ export type CreateAuctionPaymentValues = {
   auctionId: number;
   amount: number;
   isDepositPayment: boolean;
+  isPaymentFull?: boolean;
 };
 
 //refund money

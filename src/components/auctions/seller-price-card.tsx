@@ -4,7 +4,6 @@ import { FormControlLabel, Radio, Rating } from "@mui/material";
 import MyCollapseLongText from "@/libs/collapse-long-text";
 import { formatCurrency, hiddenEmail } from "@/enum/functions";
 import { Bidder } from "@/enum/defined-types";
-import Checkbox from "@/shared/Checkbox/Checkbox";
 
 type Props = {
   bidder: Bidder;

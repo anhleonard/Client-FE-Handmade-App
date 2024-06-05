@@ -1,7 +1,4 @@
-import {
-  updateAuction,
-  updateDepositPaidAuction,
-} from "@/apis/services/auctions";
+import { updateAuction, updatePaidAuction } from "@/apis/services/auctions";
 import { headerUrl } from "@/apis/services/authentication";
 import { createRefundPayment } from "@/apis/services/payments";
 import { uploadImages } from "@/apis/services/uploads";
@@ -149,8 +146,9 @@ const EditAuctionModal = ({ auction, handleRefetch }: Props) => {
       //update deposit auction isFund: false -> true
       const params1 = {
         auctionId: auction?.id,
+        type: "deposit",
       };
-      const res1 = await updateDepositPaidAuction(params1, token);
+      const res1 = await updatePaidAuction(params1, token);
 
       if (!res1) return;
 

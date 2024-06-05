@@ -38,6 +38,7 @@ const PaymentFullAuction = () => {
         if (res?.return_code === 1) {
           const token = storage.getLocalAccessToken();
           const values = {
+            isPaymentDeposit: true,
             isPaymentFull: true,
           };
 
@@ -90,10 +91,7 @@ const PaymentFullAuction = () => {
       <div className="flex flex-col justify-center gap-2 items-center">
         <div className="text-3xl font-bold">THANH TOÁN THÀNH CÔNG</div>
         <div className="max-w-[600px] text-center text-sm font-medium">
-          Dự án của bạn đã hoàn tất thanh toán.
-          <br />
-          Dự án sẽ được chuyển giao cho đối tác và thực hiện ngay bây giờ! Hãy
-          theo dõi trong mục{" "}
+          Dự án của bạn đã hoàn tất thanh toán. Hãy theo dõi trong mục{" "}
           <Link
             href={"/account-auction"}
             className="font-semibold text-primary-c900"

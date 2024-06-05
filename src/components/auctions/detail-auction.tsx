@@ -48,6 +48,9 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
 
       case AuctionStatus.CANCELED:
         return <MyLabel type="error">Đã hủy</MyLabel>;
+
+      default:
+        return <MyLabel type="grey">Chờ duyệt</MyLabel>;
     }
   };
 
@@ -386,7 +389,8 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
             ) : null}
 
             {auction?.owner?.id === +storage.getLocalUserId() &&
-            auction?.status !== AuctionStatus.CANCELED ? (
+            auction?.status !== AuctionStatus.CANCELED &&
+            auction?.isPaymentFull === false ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1">
                   <div className="font-bold text-grey-c900">Tiền đã cọc</div>
@@ -398,7 +402,8 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
             ) : null}
 
             {auction?.owner?.id === +storage.getLocalUserId() &&
-            auction?.status !== AuctionStatus.CANCELED ? (
+            auction?.status !== AuctionStatus.CANCELED &&
+            auction?.isPaymentFull === false ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1 ">
                   <div className="font-bold text-grey-c900">
@@ -417,7 +422,8 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
 
             {(status === AuctionStatus.PROGRESS ||
               status === AuctionStatus.DELIVERY ||
-              status === AuctionStatus.COMPLETED) &&
+              status === AuctionStatus.COMPLETED ||
+              (!status && auction?.isPaymentFull)) &&
             auction?.owner?.id === +storage.getLocalUserId() ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1">
@@ -433,7 +439,8 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
 
             {(status === AuctionStatus.PROGRESS ||
               status === AuctionStatus.DELIVERY ||
-              status === AuctionStatus.COMPLETED) &&
+              status === AuctionStatus.COMPLETED ||
+              (!status && auction?.isPaymentFull)) &&
             auction?.owner?.id === +storage.getLocalUserId() ? (
               <ListItem>
                 <div className="flex flex-col gap-1">

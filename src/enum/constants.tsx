@@ -1,5 +1,5 @@
 import AllOrders from "@/components/account-orders/all-orders/all-orders";
-import { OrderStatus, TestCustomTab } from "./defined-types";
+import { OrderStatus } from "./defined-types";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import WaitingPaymentOrders from "@/components/account-orders/waiting-payment-orders/waiting-payment-orders";
 import ProcessingOrders from "@/components/account-orders/processing-orders/processing-orders";
@@ -9,11 +9,6 @@ import CanceledOrders from "@/components/account-orders/canceled-orders/canceled
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import StoreHomePage from "@/app/(stores)/store-homepage/page";
-import StoreItemsScreen from "@/app/(stores)/store-items/page";
-import SingleStoreCollection from "@/components/store/single-store-collection";
-import StoreCollection from "@/app/(stores)/store-collection/page";
-import StoreHistory from "@/app/(stores)/store-history/page";
 import AuctioningAuctions from "@/components/account-auction/auctioning-auctions/auctioning-auctions";
 import ProcessingAuctions from "@/components/account-auction/processing-auctions/processing-auctions";
 import DeliveryAuctions from "@/components/account-auction/delivery-auctions/delivery-auctions";
@@ -305,6 +300,7 @@ export enum EnumOrderStatus {
 }
 
 export enum AuctionStatus {
+  SENT_SELLER = "SENT_SELLER",
   AUCTIONING = "AUCTIONING",
   PROGRESS = "PROGRESS",
   DELIVERY = "DELIVERY",

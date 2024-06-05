@@ -184,16 +184,25 @@ const MyAunctionCard = ({ auction, handleRefetch }: Props) => {
       default:
         return (
           <div className="col-span-1 flex flex-col gap-3">
-            <div className="flex flex-col gap-2">
-              <div className="text-xs font-bold text-grey-c900">
-                Thanh toán cọc:
+            {auction?.isPaymentFull ? (
+              <div className="flex flex-col gap-2">
+                <div className="text-xs font-bold text-grey-c900">
+                  Thanh toán toàn bộ:
+                </div>
+                <MyLabel type="delivery">Đã thanh toán</MyLabel>
               </div>
-              {auction?.isPaymentDeposit ? (
-                <MyLabel type="success">Đã thanh toán</MyLabel>
-              ) : (
-                <MyLabel type="error">Chưa thanh toán</MyLabel>
-              )}
-            </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <div className="text-xs font-bold text-grey-c900">
+                  Thanh toán cọc:
+                </div>
+                {auction?.isPaymentDeposit ? (
+                  <MyLabel type="success">Đã thanh toán</MyLabel>
+                ) : (
+                  <MyLabel type="error">Chưa thanh toán</MyLabel>
+                )}
+              </div>
+            )}
             <div className="flex flex-col gap-2">
               <div className="text-xs font-bold text-grey-c900">
                 Trạng thái:

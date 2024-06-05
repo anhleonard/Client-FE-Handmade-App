@@ -70,10 +70,7 @@ export const createPaidAuction = async (
     .then((res) => res.data);
 };
 
-export const updateDepositPaidAuction = async (
-  variables: any,
-  token: string
-) => {
+export const updatePaidAuction = async (variables: any, token: string) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -81,6 +78,6 @@ export const updateDepositPaidAuction = async (
   };
 
   return await axios
-    .put(`${headerUrl}/auctions/update-deposit-paid-auction`, variables, config)
+    .put(`${headerUrl}/auctions/update-paid-auction`, variables, config)
     .then((res) => res.data);
 };
