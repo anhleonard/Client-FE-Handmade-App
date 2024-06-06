@@ -15,7 +15,10 @@ import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import ContentUpdatedWork from "@/components/auctions/content-updated-work";
 import ShippingCard from "@/components/account-address/shipping-card";
-import { contentShippingAddress } from "@/enum/functions";
+import {
+  calculateRemainingDays,
+  contentShippingAddress,
+} from "@/enum/functions";
 
 const DetailAuctionPage = () => {
   const params = useParams();
@@ -130,6 +133,15 @@ const DetailAuctionPage = () => {
             : null}
         </div>
       ) : null}
+
+      {(!auction?.status || auction.status === AuctionStatus.AUCTIONING) &&
+        auction?.closedDate &&
+        !(calculateRemainingDays(auction?.closedDate) > 0) && (
+          <div className="text-support-c500 bg-support-c10 w-full rounded-2xl py-6 flex flex-col gap-1 items-center justify-center text-sm font-semibold">
+            <div className="text-base font-bold">OOPS!</div>
+            <div>Dự án đã quá hạn đấu giá</div>
+          </div>
+        )}
     </SecondaryAuctionLayout>
   );
 };

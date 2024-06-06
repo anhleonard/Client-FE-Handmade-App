@@ -53,7 +53,7 @@ const ListSellerPrice = ({ auction }: Props) => {
       const data: CreateAuctionPaymentValues = {
         auctionId: res.auction.id,
         amount: res.bidderMoney - res.auction.deposit, //tính số tiền còn phải trả còn lại
-        isDepositPayment: false,
+        isPaymentFull: true,
       };
       const paymentGate = await createAuctionPayment(data, token);
 

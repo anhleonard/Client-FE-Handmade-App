@@ -50,9 +50,11 @@ const AuctionHomePage = () => {
         ...(title !== "" && {
           title: title,
         }),
+        overDate: isOpen ? false : true,
       };
 
       const res = await filterAuctions(query);
+
       if (res) {
         setAuctions(res);
       }
@@ -123,9 +125,10 @@ const AuctionHomePage = () => {
         </div>
         <div className="flex-shrink-0 mb-10 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
         <div className="flex-1 space-y-8">
-          {auctions?.map((auction, index) => {
-            return <AunctionCard key={index} auction={auction} />;
-          })}
+          {auctions &&
+            auctions?.map((auction, index) => {
+              return <AunctionCard key={index} auction={auction} />;
+            })}
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ import CompletedAuctions from "@/components/account-auction/completed-auctions/c
 import CanceledAuctions from "@/components/account-auction/canceled-auctions/canceled-auctions";
 import AllAuctions from "@/components/account-auction/all-auctions/all-auctions";
 import WaitingAuctions from "@/components/account-auction/waiting-auctions/waiting-auctions";
+import OverdateAuctions from "@/components/account-auction/overdate-auctions/overdate-auctions-table";
 
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
@@ -137,6 +138,11 @@ export const accountAuctionTabs = [
     label: "Đã hủy",
     value: 7,
     content: <CanceledAuctions />,
+  },
+  {
+    label: "Quá hạn",
+    value: 8,
+    content: <OverdateAuctions />,
   },
 ];
 

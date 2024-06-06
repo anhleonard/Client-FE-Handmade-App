@@ -20,6 +20,7 @@ const ProcessingAuctions = () => {
       const token = storage.getLocalAccessToken();
       const variables = {
         status: AuctionStatus?.PROGRESS,
+        overDate: false,
       };
       const res = await allClientAuctions(token, variables);
       if (res) {

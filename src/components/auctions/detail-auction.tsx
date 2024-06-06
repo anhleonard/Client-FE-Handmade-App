@@ -98,10 +98,6 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
                 )
               ) : null}
 
-              {status === AuctionStatus.AUCTIONING &&
-              calculateRemainingDays(auction?.closedDate) > 0
-                ? renderAuctionStatus(auction?.status as AuctionStatus)
-                : null}
               {status !== AuctionStatus.AUCTIONING
                 ? renderAuctionStatus(auction?.status as AuctionStatus)
                 : null}
@@ -189,7 +185,7 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             )}
 
-            {status === AuctionStatus.AUCTIONING || !auction?.status ? (
+            {auction.status === AuctionStatus.AUCTIONING || !auction?.status ? (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
                 disablePadding
@@ -242,11 +238,11 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             )}
 
-            {status === AuctionStatus.PROGRESS ||
+            {auction?.status === AuctionStatus.PROGRESS ||
             !auction?.status ||
-            status === AuctionStatus.AUCTIONING ||
-            status === AuctionStatus.DELIVERY ||
-            status === AuctionStatus.COMPLETED ? (
+            auction?.status === AuctionStatus.AUCTIONING ||
+            auction?.status === AuctionStatus.DELIVERY ||
+            auction?.status === AuctionStatus.COMPLETED ? (
               <ListItem
                 className={`block w-full border-b-[2px] border-grey-c50 px-4 py-4`}
                 disablePadding
@@ -295,7 +291,7 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             )}
 
-            {status === AuctionStatus.PROGRESS && bidder ? (
+            {auction?.status === AuctionStatus.PROGRESS && bidder ? (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
                 disablePadding
@@ -315,9 +311,9 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             ) : null}
 
-            {status === AuctionStatus.PROGRESS ||
-            status === AuctionStatus.DELIVERY ||
-            status === AuctionStatus.COMPLETED ? (
+            {auction?.status === AuctionStatus.PROGRESS ||
+            auction?.status === AuctionStatus.DELIVERY ||
+            auction?.status === AuctionStatus.COMPLETED ? (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
                 disablePadding
@@ -335,7 +331,7 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             ) : null}
 
-            {status === AuctionStatus.AUCTIONING ? (
+            {auction?.status === AuctionStatus.AUCTIONING ? (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
                 disablePadding
@@ -351,7 +347,7 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             ) : null}
 
-            {status === AuctionStatus.AUCTIONING ? (
+            {auction?.status === AuctionStatus.AUCTIONING ? (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
                 disablePadding
@@ -370,7 +366,7 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
                 </div>
               </ListItem>
             ) : null}
-            {status === AuctionStatus.AUCTIONING ? (
+            {auction?.status === AuctionStatus.AUCTIONING ? (
               <ListItem
                 className="block w-full px-4 py-4 border-b-[2px] border-grey-c50"
                 disablePadding
@@ -420,10 +416,10 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             ) : null}
 
-            {(status === AuctionStatus.PROGRESS ||
-              status === AuctionStatus.DELIVERY ||
-              status === AuctionStatus.COMPLETED ||
-              (!status && auction?.isPaymentFull)) &&
+            {(auction?.status === AuctionStatus.PROGRESS ||
+              auction?.status === AuctionStatus.DELIVERY ||
+              auction?.status === AuctionStatus.COMPLETED ||
+              (!auction?.status && auction?.isPaymentFull)) &&
             auction?.owner?.id === +storage.getLocalUserId() ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1">
@@ -437,10 +433,10 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
               </ListItem>
             ) : null}
 
-            {(status === AuctionStatus.PROGRESS ||
-              status === AuctionStatus.DELIVERY ||
-              status === AuctionStatus.COMPLETED ||
-              (!status && auction?.isPaymentFull)) &&
+            {(auction?.status === AuctionStatus.PROGRESS ||
+              auction?.status === AuctionStatus.DELIVERY ||
+              auction?.status === AuctionStatus.COMPLETED ||
+              (!auction?.status && auction?.isPaymentFull)) &&
             auction?.owner?.id === +storage.getLocalUserId() ? (
               <ListItem>
                 <div className="flex flex-col gap-1">
@@ -460,17 +456,19 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
           </List>
         </Collapse>
       </div>
-      {(!auction?.status || status === AuctionStatus.AUCTIONING) && (
-        <div className="mt-4 flex flex-row justify-end gap-3">
-          <Button
-            className="!w-fit !px-3 !py-1.5"
-            color="grey"
-            onClick={() => handleOpenDetailModal(auction?.id)}
-          >
-            <span className="text-xs font-semibold">Hủy dự án</span>
-          </Button>
-        </div>
-      )}
+      {(!auction?.status || auction?.status === AuctionStatus.AUCTIONING) &&
+        auction?.owner?.id === +storage.getLocalUserId() &&
+        calculateRemainingDays(auction?.closedDate) > 0 && (
+          <div className="mt-4 flex flex-row justify-end gap-3">
+            <Button
+              className="!w-fit !px-3 !py-1.5"
+              color="grey"
+              onClick={() => handleOpenDetailModal(auction?.id)}
+            >
+              <span className="text-xs font-semibold">Hủy dự án</span>
+            </Button>
+          </div>
+        )}
     </div>
   );
 };

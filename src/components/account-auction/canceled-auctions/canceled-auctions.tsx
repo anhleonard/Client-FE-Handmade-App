@@ -23,6 +23,7 @@ const CanceledAuctions = () => {
       const token = storage.getLocalAccessToken();
       const variables = {
         status: AuctionStatus?.CANCELED,
+        overDate: false,
       };
       const res = await allClientAuctions(token, variables);
       if (res) {

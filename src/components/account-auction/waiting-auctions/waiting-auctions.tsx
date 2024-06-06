@@ -20,6 +20,7 @@ const WaitingAuctions = () => {
       const token = storage.getLocalAccessToken();
       const variables = {
         status: null,
+        overDate: false,
       };
       const res = await allClientAuctions(token, variables);
       if (res) {

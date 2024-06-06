@@ -162,11 +162,12 @@ const CreateAuctionPage = () => {
           auctionId: res.id,
           amount:
             pickedSeller !== "" ? parseInt(values.maxAmount) : res.deposit,
-          isDepositPayment: true,
           ...(pickedSeller !== "" && {
             isPaymentFull: true,
           }),
+          isDepositPayment: true,
         };
+
         const paymentGate = await createAuctionPayment(data, token);
 
         if (paymentGate?.return_code === 2) {

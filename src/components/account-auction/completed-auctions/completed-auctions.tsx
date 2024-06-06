@@ -20,6 +20,7 @@ const CompletedAuctions = () => {
       const token = storage.getLocalAccessToken();
       const variables = {
         status: AuctionStatus.COMPLETED,
+        overDate: false,
       };
       const res = await allClientAuctions(token, variables);
       if (res) {
