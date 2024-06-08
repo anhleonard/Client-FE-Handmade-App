@@ -16,6 +16,7 @@ import {
   updatedOrderProduct,
 } from "@/apis/services/order-products";
 import storage from "@/apis/storage";
+import Link from "next/link";
 
 type Props = {
   item: OrderProduct;
@@ -92,9 +93,12 @@ const TestBuyingItem = ({
         />
         <div className="flex h-[70px] flex-1 flex-col justify-between">
           <div className="flex flex-row items-center justify-between">
-            <div className="text-base font-semibold text-grey-c900">
+            <Link
+              className="text-sm font-semibold text-grey-c900 hover:text-primary-c900 hover:underline"
+              href={`/product-detail/${item?.product?.id}`}
+            >
               {item?.product?.productName}
-            </div>
+            </Link>
             <MySingleCheckBox
               value={item.code}
               isChecked={selected.includes(item.code)}

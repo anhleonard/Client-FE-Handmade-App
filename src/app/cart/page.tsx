@@ -96,26 +96,7 @@ const CartPage = () => {
   return (
     <DefaultLayout>
       {/* Heading */}
-      <ChildHeading
-        title="Giỏ hàng"
-        support={
-          <Breadcrumbs aria-label="breadcrumb" className="text-sm">
-            <Link className="hover:underline" color="inherit" href="/">
-              Trang chủ
-            </Link>
-            <Link
-              className="hover:underline"
-              color="inherit"
-              href="/collection"
-            >
-              Đồ len
-            </Link>
-            <div className="text-sm text-grey-c900 font-medium">
-              Hoa hồng đan len
-            </div>
-          </Breadcrumbs>
-        }
-      />
+      <ChildHeading title="Giỏ hàng" />
 
       <div className="flex flex-col lg:flex-row gap-[30px]">
         <div className="w-full lg:w-[68%] divide-y divide-slate-200 dark:divide-slate-700 ">
@@ -172,29 +153,11 @@ const CartPage = () => {
                             )}
                         </div>
                       </div>
-                      <div className="flex flex-row justify-between items-center">
+                      {/* <div className="flex flex-row justify-between items-center">
                         <div className="text-grey-c700 font-semibold">
                           Mã giảm giá
                         </div>
                         <div className="font-bold">- {formatCurrency(0)}</div>
-                      </div>
-                      {/* <div className="space-y-2">
-                        <div className="flex flex-row justify-between items-center">
-                          <MyVoucherLabel type="warning" py="py-0.5">
-                            G-LAMQUEN -30K
-                          </MyVoucherLabel>
-                          <div className="text-xs">
-                            - {formatCurrency(30000)}
-                          </div>
-                        </div>
-                        <div className="flex flex-row justify-between items-center">
-                          <MyVoucherLabel type="progress" py="py-0.5">
-                            Miễn phí vận chuyển -20k
-                          </MyVoucherLabel>
-                          <div className="text-xs">
-                            - {formatCurrency(20000)}
-                          </div>
-                        </div>
                       </div> */}
                     </div>
                   </ListItem>
@@ -214,7 +177,7 @@ const CartPage = () => {
                 </List>
               </Collapse>
             </div>
-            <ListItem
+            {/* <ListItem
               className="bg-white border-2 border-grey-c50 rounded-2xl"
               disablePadding
             >
@@ -226,7 +189,7 @@ const CartPage = () => {
                   sx={{ fontSize: 22, color: COLORS.grey.c900 }}
                 />
               </ListItemButton>
-            </ListItem>
+            </ListItem> */}
             <Button
               className="w-full"
               onClick={() => router.push("/delivery", { scroll: true })}

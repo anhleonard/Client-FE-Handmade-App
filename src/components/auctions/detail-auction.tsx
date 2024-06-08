@@ -6,19 +6,26 @@ import {
   findMinMaxBidderMoney,
   formatCommonTime,
   formatCurrency,
+  remainingDaysAfterAccepted,
 } from "@/enum/functions";
 import MyLabel from "@/libs/label";
-import { Collapse, List, ListItem } from "@mui/material";
+import { Alert, Collapse, List, ListItem } from "@mui/material";
 import React from "react";
 import MyDisplayImage from "@/libs/display-image";
 import Button from "@/libs/button";
-import { Auction, Bidder } from "@/enum/defined-types";
-import { AuctionStatus, Role } from "@/enum/constants";
+import { AlertState, Auction, Bidder } from "@/enum/defined-types";
+import { AlertStatus, AuctionStatus, Role } from "@/enum/constants";
 import storage from "@/apis/storage";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/redux/slices/modalSlice";
 import RejectAuctionModal from "./reject-auction-modal";
 import { headerUrl } from "@/apis/services/authentication";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { closeLoading } from "@/redux/slices/loadingSlice";
+import { CreateAuctionPaymentValues } from "@/apis/types";
+import { createAuctionPayment } from "@/apis/services/payments";
+import CheckIcon from "@mui/icons-material/Check";
+import { openConfirm } from "@/redux/slices/confirmSlice";
 
 type DetailAuctionProps = {
   status: AuctionStatus;
@@ -75,8 +82,124 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
     }
   };
 
+  const handlePaymentDeposit = async (auctionId: number) => {
+    try {
+      const data: CreateAuctionPaymentValues = {
+        auctionId: auctionId,
+        amount: auction?.deposit,
+        isDepositPayment: true,
+      };
+      const token = storage.getLocalAccessToken();
+
+      const paymentGate = await createAuctionPayment(data, token);
+
+      if (paymentGate?.return_code === 2) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: "Giao dịch gặp lỗi. Vui lòng thử lại sau.",
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+
+        return;
+      } else if (paymentGate?.return_code === 1) {
+        window.open(paymentGate?.order_url, "_blank");
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  const handlePaymentTotal = async (auctionId: number) => {
+    if (!bidder) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: "Không có đối tác nào cho dự án này!",
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+      return;
+    }
+
+    try {
+      const data: CreateAuctionPaymentValues = {
+        auctionId: auctionId,
+        amount: auction?.isPaymentDeposit
+          ? bidder?.bidderMoney - auction?.deposit
+          : bidder?.bidderMoney,
+        isPaymentFull: true,
+        ...(!auction?.isPaymentDeposit && {
+          isDepositPayment: true,
+        }),
+      };
+      const token = storage.getLocalAccessToken();
+
+      const paymentGate = await createAuctionPayment(data, token);
+
+      if (paymentGate?.return_code === 2) {
+        let alert: AlertState = {
+          isOpen: true,
+          title: "LỖI",
+          message: "Giao dịch gặp lỗi. Vui lòng thử lại sau.",
+          type: AlertStatus.ERROR,
+        };
+        dispatch(openAlert(alert));
+
+        return;
+      } else if (paymentGate?.return_code === 1) {
+        window.open(paymentGate?.order_url, "_blank");
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  const handleOpenConfirmRefund = (auction: Auction) => {
+    const confirm: any = {
+      isOpen: true,
+      title: "XÁC NHẬN HỦY ĐƠN HÀNG",
+      message: "Bạn đã chắc chắn hủy dự án này chưa?",
+      feature: "CONFIRM_CONTACT_US",
+      onConfirm: () => {},
+    };
+
+    dispatch(openConfirm(confirm));
+  };
+
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      {bidder?.estimatedDay &&
+      calculateDaysAfterAccepted(bidder?.estimatedDay, bidder?.acceptedAt) ===
+        0 ? (
+        <Alert severity="error" className="font-medium text-support-c500">
+          Đã quá thời gian làm dự án{" "}
+          {bidder?.estimatedDay &&
+            bidder?.acceptedAt &&
+            remainingDaysAfterAccepted(
+              bidder?.estimatedDay,
+              bidder?.acceptedAt
+            ) * -1}{" "}
+          ngày
+        </Alert>
+      ) : null}
       <div className="rounded-2xl border-[2px] border-grey-c50">
         <ListItem
           className={`rounded-tl-2xl rounded-tr-2xl border-b-[2px] border-grey-c50 bg-white`}
@@ -459,16 +582,53 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
       {(!auction?.status || auction?.status === AuctionStatus.AUCTIONING) &&
         auction?.owner?.id === +storage.getLocalUserId() &&
         calculateRemainingDays(auction?.closedDate) > 0 && (
-          <div className="mt-4 flex flex-row justify-end gap-3">
+          <div className="mt-4 flex flex-row justify-end gap-4">
             <Button
-              className="!w-fit !px-3 !py-1.5"
+              className="!w-fit !px-3 !py-2"
               color="grey"
               onClick={() => handleOpenDetailModal(auction?.id)}
             >
               <span className="text-xs font-semibold">Hủy dự án</span>
             </Button>
+            {!auction?.isPaymentDeposit ? (
+              <Button
+                className="!w-fit !px-3 !py-2"
+                color="info"
+                onClick={() => handlePaymentDeposit(auction?.id)}
+              >
+                <span className="text-xs font-semibold">
+                  Thanh toán tiền cọc
+                </span>
+              </Button>
+            ) : null}
           </div>
         )}
+      <div className="mt-4 flex flex-row justify-end gap-4">
+        {!auction?.isPaymentFull &&
+        auction?.status === AuctionStatus.PROGRESS ? (
+          <Button
+            className="!w-fit !px-3 !py-2"
+            color="info"
+            onClick={() => handlePaymentTotal(auction?.id)}
+          >
+            <span className="text-xs font-semibold">Thanh toán toàn bộ</span>
+          </Button>
+        ) : null}
+        {bidder?.estimatedDay &&
+        calculateDaysAfterAccepted(bidder?.estimatedDay, bidder?.acceptedAt) ===
+          0 &&
+        auction?.status === AuctionStatus.PROGRESS ? (
+          <Button
+            className="!w-fit !px-3 !py-2"
+            color="primary"
+            onClick={() => handleOpenConfirmRefund(auction)}
+          >
+            <span className="text-xs font-semibold">
+              Hủy & Yêu cầu hoàn tiền
+            </span>
+          </Button>
+        ) : null}
+      </div>
     </div>
   );
 };

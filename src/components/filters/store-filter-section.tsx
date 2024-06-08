@@ -16,7 +16,7 @@ export interface StoreFilterSectionProps {
   setRangePrices: any;
   sortOrderStates: string;
   setSortOrderStates: any;
-
+  totalProducts: number;
   products?: Product[];
 }
 
@@ -28,6 +28,7 @@ const StoreFilterSection: FC<StoreFilterSectionProps> = ({
   setRangePrices,
   sortOrderStates,
   setSortOrderStates,
+  totalProducts,
   products,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -38,7 +39,7 @@ const StoreFilterSection: FC<StoreFilterSectionProps> = ({
 
       <div className="flex flex-row items-center justify-between">
         <div className="font-medium text-sm text-grey-c900">
-          Tổng cộng {products?.length} sản phẩm
+          Tổng cộng {totalProducts} sản phẩm
         </div>
         <FilterButton
           isOpen={isOpen}

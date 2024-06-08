@@ -31,6 +31,7 @@ const StoreItems = () => {
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
   const [isFilterPrice, setIsFilterPrice] = useState(false);
   const [limit, setLimit] = useState<number>(10);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
 
   const getFilterProducts = async (hasPrice: boolean) => {
     try {
@@ -53,6 +54,7 @@ const StoreItems = () => {
 
         if (res) {
           setProducts(res?.data);
+          setTotalProducts(res?.total);
         }
       }
     } catch (error: any) {
@@ -98,6 +100,7 @@ const StoreItems = () => {
           sortOrderStates={sortOrderStates}
           setSortOrderStates={setSortOrderStates}
           products={products}
+          totalProducts={totalProducts}
         />
       </CommonContext.Provider>
 
