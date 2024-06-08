@@ -24,7 +24,7 @@ const MainAuctionLayout = ({ children }: Props) => {
           />
           <div className="inset-0 bg-black opacity-50 absolute"></div>
           <div className="inset-0 absolute flex flex-row items-center justify-between px-5">
-            <div className="text-white font-bold text-2xl">ĐẤU GIÁ</div>
+            <div className="text-white font-bold text-2xl">DỰ ÁN HANDMADE</div>
             <Button
               className="!text-sm !py-2 !px-3"
               onClick={() => router.push("/create-auction")}

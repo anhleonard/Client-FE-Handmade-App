@@ -62,7 +62,7 @@ const MainTabsHeader: FC<MainTabsHeaderProps> = ({ className = "" }) => {
               <div className="hidden md:block">
                 <Link href="/auctions">
                   <div className="text-sm font-semibold text-grey-c900 hover:cursor-pointer hover:text-blue-c900 transition duration-150 hover:bg-slate-100 px-3 py-2 rounded-full">
-                    Đấu giá
+                    Dự án Handmade
                   </div>
                 </Link>
               </div>
