@@ -313,7 +313,11 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
         {/*  */}
 
         {/* ---------- 5 ----------  */}
-        <AccordionInfo title="Mô tả chi tiết" content={product?.description} />
+        <AccordionInfo
+          title="Mô tả chi tiết"
+          content={product?.description}
+          isOpen
+        />
       </div>
     );
   };

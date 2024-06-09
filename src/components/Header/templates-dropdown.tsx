@@ -2,26 +2,49 @@
 
 import { Popover, Transition } from "@/app/headlessui";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { MEGAMENU_TEMPLATES } from "@/data/navigation";
 import CardCategory3 from "@/components/card-categories/CardCategory3";
-import { NavItemType } from "@/shared/Navigation/NavigationItem";
-import Link from "next/link";
+import { AlertState, Category } from "@/enum/defined-types";
+import { AlertStatus } from "@/enum/constants";
+import { useDispatch } from "react-redux";
+import { openAlert } from "@/redux/slices/alertSlice";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import { findAllCategories } from "@/apis/services/categories";
+import { useRouter } from "next/navigation";
 
 export default function TemplatesDropdown() {
-  const renderMegaMenuNavlink = (item: NavItemType) => {
-    return (
-      <li key={item.id} className={`${item.isNew ? "menuIsNew" : ""}`}>
-        <Link
-          className="font-normal text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white"
-          href={{
-            pathname: item.href || undefined,
-          }}
-        >
-          {item.name}
-        </Link>
-      </li>
-    );
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  const getAllCategories = async () => {
+    try {
+      dispatch(openLoading());
+      const res = await findAllCategories();
+      if (res) {
+        setCategories(res);
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  const openCollection = (id: number, close: any) => {
+    close();
+    router.push(`/collection/${id}`);
   };
 
   return (
@@ -55,17 +78,18 @@ export default function TemplatesDropdown() {
               <Popover.Panel className="absolute z-20 w-full mt-3.5 inset-x-0 md:px-15 lg:px-30 px-8">
                 <div className="bg-white dark:bg-neutral-900 shadow-lg rounded-b-xl">
                   <div className="flex text-sm border-t border-slate-200 dark:border-slate-700 p-8 ">
-                    <div className="flex-1 grid grid-cols-4 gap-6 xl:gap-8 pr-6 xl:pr-8">
-                      {MEGAMENU_TEMPLATES.map((item, index) => (
-                        <div key={index}>
-                          <p className="font-medium text-slate-900 dark:text-neutral-200">
-                            {item.name}
-                          </p>
-                          <ul className="grid space-y-4 mt-4">
-                            {item.children?.map(renderMegaMenuNavlink)}
-                          </ul>
-                        </div>
-                      ))}
+                    <div className="flex-1 grid grid-cols-4 pr-6 xl:pr-8">
+                      {categories?.map((cate, index) => {
+                        return (
+                          <div
+                            key={cate?.id}
+                            onClick={() => openCollection(cate?.id, close)}
+                            className="font-medium hover:text-primary-c900 hover:cursor-pointer"
+                          >
+                            {cate?.title}
+                          </div>
+                        );
+                      })}
                     </div>
                     <div className="w-[40%] xl:w-[35%]">
                       <CardCategory3 />

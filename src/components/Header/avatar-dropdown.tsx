@@ -1,20 +1,21 @@
 "use client";
 
 import { Popover, Transition } from "@/app/headlessui";
-import { avatarImgs } from "@/contains/fakeData";
-import { Fragment, useEffect } from "react";
-import Avatar from "@/shared/Avatar/Avatar";
+import { Fragment } from "react";
 import SwitchDarkMode2 from "@/shared/SwitchDarkMode/SwitchDarkMode2";
 import Link from "next/link";
 import { getCurrentUser } from "@/enum/functions";
 import storage from "@/apis/storage";
 import { useRouter } from "next/navigation";
+import { Avatar } from "@mui/material";
+import { headerUrl } from "@/apis/services/authentication";
 
 export default function AvatarDropdown() {
   const user = getCurrentUser();
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = (close: any) => {
+    close();
     localStorage.clear();
     router.push("/login");
   };
@@ -62,7 +63,11 @@ export default function AvatarDropdown() {
                 <div className="overflow-hidden rounded-xl shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
                     <div className="flex items-center space-x-3">
-                      <Avatar imgUrl={avatarImgs[7]} sizeClass="w-11 h-11" />
+                      <Avatar
+                        src={`${headerUrl}/products/${user?.avatar}`}
+                        alt="user-image"
+                        className="h-11 w-11"
+                      />
 
                       <div className="flex-grow">
                         <h4 className="font-semibold text-sm">{user?.name}</h4>
@@ -306,7 +311,7 @@ export default function AvatarDropdown() {
                     {/* ------------------ 2 --------------------- */}
                     <div
                       className="cursor-pointer flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                      onClick={() => handleLogout()}
+                      onClick={() => handleLogout(close)}
                     >
                       <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
                         <svg

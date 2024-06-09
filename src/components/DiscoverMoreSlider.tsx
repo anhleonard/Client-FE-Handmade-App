@@ -5,11 +5,16 @@ import Heading from "./Heading/Heading";
 import CardCategory3 from "./card-categories/CardCategory3";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import { CATS_DISCOVER } from "./card-categories/data";
+import { useDispatch } from "react-redux";
+import { TopAuctionCard } from "@/app/page";
 
-const DiscoverMoreSlider = () => {
+type Props = {
+  auctions: TopAuctionCard[];
+};
+
+const DiscoverMoreSlider = ({ auctions }: Props) => {
+  const dispatch = useDispatch();
   const sliderRef = useRef(null);
-
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
@@ -61,17 +66,18 @@ const DiscoverMoreSlider = () => {
         desc=""
         hasNextPrev
       >
-        Theo dòng sự kiện
+        Dự án handmade
       </Heading>
       <div className="overflow-hidden" data-glide-el="track">
         <ul className="glide__slides">
-          {CATS_DISCOVER.map((item, index) => (
+          {auctions?.map((item, index) => (
             <li key={index} className={`glide__slide`}>
               <CardCategory3
+                id={item.id}
                 name={item.name}
                 desc={item.desc}
-                featuredImage={item.featuredImage}
                 color={item.color}
+                // auctionImage={item.auctionImage}
               />
             </li>
           ))}

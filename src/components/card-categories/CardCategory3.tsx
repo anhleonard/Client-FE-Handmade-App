@@ -3,25 +3,31 @@ import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import { CATS_DISCOVER } from "./data";
+import { Avatar } from "@mui/material";
+import { headerUrl } from "@/apis/services/authentication";
 
 export interface CardCategory3Props {
+  id?: number;
   className?: string;
   featuredImage?: StaticImageData | string;
   name?: string;
   desc?: string;
   color?: string;
+  auctionImage?: string;
 }
 
 const CardCategory3: FC<CardCategory3Props> = ({
+  id,
   className = "",
   featuredImage = CATS_DISCOVER[2].featuredImage,
   name = CATS_DISCOVER[2].name,
   desc = CATS_DISCOVER[2].desc,
   color = CATS_DISCOVER[2].color,
+  auctionImage = "/images/default-auction.jpg",
 }) => {
   return (
     <Link
-      href={"/collection/1"}
+      href={`/detail-auction/${id}`}
       className={`nc-CardCategory3 block ${className}`}
     >
       <div
@@ -29,10 +35,10 @@ const CardCategory3: FC<CardCategory3Props> = ({
       >
         <div>
           <div className="absolute inset-5 sm:inset-8">
-            <Image
-              alt=""
-              src={featuredImage || ""}
-              className="absolute end-0 w-1/2 max-w-[260px] h-full object-contain drop-shadow-xl"
+            <Avatar
+              src={`${auctionImage}`}
+              alt="img"
+              className="absolute bottom-0 right-0 h-30 w-30 drop-shadow-xl"
             />
           </div>
         </div>
@@ -46,7 +52,7 @@ const CardCategory3: FC<CardCategory3Props> = ({
               </span>
               {desc && (
                 <h2
-                  className={`text-xl md:text-2xl text-slate-900 font-semibold`}
+                  className={`text-xl max-w-[250px] text-slate-900 font-semibold`}
                   dangerouslySetInnerHTML={{ __html: desc }}
                 ></h2>
               )}
@@ -57,7 +63,7 @@ const CardCategory3: FC<CardCategory3Props> = ({
                 fontSize="text-sm font-medium"
                 className="nc-shadow-lg"
               >
-                Show me all
+                Xem chi tiết
               </ButtonSecondary>
             </div>
           </div>

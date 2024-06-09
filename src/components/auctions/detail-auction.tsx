@@ -32,7 +32,7 @@ import {
   createRefundPayment,
 } from "@/apis/services/payments";
 import CheckIcon from "@mui/icons-material/Check";
-import { openConfirm } from "@/redux/slices/confirmSlice";
+import { closeConfirm, openConfirm } from "@/redux/slices/confirmSlice";
 import { SCREEN } from "@/enum/setting";
 import ExtendDaysModal from "./extend-days-modal";
 import { updateAuction, updatePaidAuction } from "@/apis/services/auctions";
@@ -296,7 +296,7 @@ const DetailAuction = ({
       const updatedAuction = await updateAuction(auction?.id, variables, token);
 
       if (updatedAuction && resDeposit && resTotal) {
-        dispatch(closeModal());
+        dispatch(closeConfirm());
         let alert: AlertState = {
           isOpen: true,
           title: "HỦY DỰ ÁN & HOÀN TIỀN",
@@ -323,7 +323,8 @@ const DetailAuction = ({
     <div className="flex flex-col gap-4">
       {bidder?.estimatedDay &&
       calculateDaysAfterAccepted(bidder?.estimatedDay, bidder?.acceptedAt) ===
-        0 ? (
+        0 &&
+      auction?.status === AuctionStatus.PROGRESS ? (
         <Alert severity="error" className="font-medium text-support-c500">
           Đã quá thời gian làm dự án{" "}
           {bidder?.estimatedDay &&
@@ -528,22 +529,11 @@ const DetailAuction = ({
                   </div>
                   <div className="font-medium text-primary-c900">
                     {bidder?.estimatedDay &&
-                    bidder?.estimatedDay -
-                      calculateDaysAfterAccepted(
-                        bidder?.estimatedDay,
-                        bidder?.acceptedAt
-                      ) >
-                      0 ? (
-                      `${
-                        bidder?.estimatedDay -
-                        calculateDaysAfterAccepted(
+                      bidder?.estimatedDay -
+                        remainingDaysAfterAccepted(
                           bidder?.estimatedDay,
                           bidder?.acceptedAt
-                        )
-                      } ngày`
-                    ) : (
-                      <MyLabel type="error">Quá hạn</MyLabel>
-                    )}
+                        )}
                   </div>
                 </div>
               </ListItem>
@@ -719,11 +709,11 @@ const DetailAuction = ({
         calculateRemainingDays(auction?.closedDate) > 0 && (
           <div className="mt-4 flex flex-row justify-end gap-4">
             <Button
-              className="!w-fit !px-3 !py-2"
+              className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
               color="grey"
               onClick={() => handleOpenDetailModal(auction?.id)}
             >
-              <span className="text-xs font-semibold">Hủy dự án</span>
+              Hủy dự án
             </Button>
             {!auction?.isPaymentDeposit ? (
               <Button

@@ -22,6 +22,15 @@ import { getProducts } from "@/apis/services/products";
 import { allCategories } from "@/apis/services/categories";
 import Link from "next/link";
 import Button from "@/libs/button";
+import { filterTopAuctions } from "@/apis/services/auctions";
+
+export type TopAuctionCard = {
+  id: number;
+  name: string;
+  desc: string;
+  color: string;
+  auctionImage?: string;
+};
 
 export const CommonContext = createContext({
   isFilterPrice: false,
@@ -33,6 +42,55 @@ function PageHome() {
   const dispatch = useDispatch();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [auctions, setAuctions] = useState<TopAuctionCard[]>([]);
+
+  const renderBgColor = (index: number) => {
+    switch (index) {
+      case 0:
+        return "bg-yellow-50";
+      case 1:
+        return "bg-red-50";
+      case 2:
+        return "bg-blue-50";
+      case 3:
+        return "bg-green-50";
+      case 4:
+        return "bg-purple-c50";
+      default:
+        return "bg-grey-c10";
+    }
+  };
+
+  const getTopAuctions = async () => {
+    try {
+      dispatch(openLoading());
+      const res = await filterTopAuctions();
+      if (res) {
+        const tops: TopAuctionCard[] = [];
+        for (let i = 0; i < res.length; i++) {
+          const auction = res[i];
+          const item: TopAuctionCard = {
+            id: auction?.auctions_id,
+            name: "Dự án handmade",
+            desc: auction?.auctions_name,
+            color: renderBgColor(i),
+          };
+          tops.push(item);
+        }
+        setAuctions(tops);
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
+  };
 
   const getAllDatas = async () => {
     try {
@@ -47,6 +105,9 @@ function PageHome() {
 
       //2. call api categories
       const categories = await allCategories();
+
+      //3. call get top auctions
+      await getTopAuctions();
 
       if (products) {
         setProducts(products?.data);
@@ -76,8 +137,6 @@ function PageHome() {
       <SectionHero2 />
 
       <DefaultLayout>
-        <DiscoverMoreSlider />
-
         {products?.length ? (
           <SectionSliderProductCard
             products={products}
@@ -90,11 +149,14 @@ function PageHome() {
           />
         ) : null}
 
+        {auctions?.length ? <DiscoverMoreSlider auctions={auctions} /> : null}
+
         <div className="border-t border-b border-slate-200 dark:border-slate-700 py-10">
           <SectionHowItWork />
         </div>
 
-        <SectionSliderLargeProduct cardStyle="style2" />
+        {/* open it */}
+        {/* <SectionSliderLargeProduct cardStyle="style2" /> */}
 
         {/* <SectionPromo1 /> */}
 
@@ -113,14 +175,16 @@ function PageHome() {
 
         {/* <SectionPromo2 /> */}
 
-        <SectionSliderCategories />
+        {/* open it */}
+        {/* <SectionSliderCategories /> */}
 
         {/* <SectionPromo3 /> */}
 
         {/* chỗ này có filter, chỉnh ở đây */}
         {/* <SectionGridFeatureItems /> */}
 
-        <div className="relative">
+        {/* open it */}
+        {/* <div className="relative">
           <BackgroundSection />
           <div>
             <Heading rightDescText="From the Ciseco blog">
@@ -131,7 +195,7 @@ function PageHome() {
               <ButtonSecondary>Show all blog articles</ButtonSecondary>
             </div>
           </div>
-        </div>
+        </div> */}
         <SectionClientSay />
       </DefaultLayout>
     </div>

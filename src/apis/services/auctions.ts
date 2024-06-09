@@ -81,3 +81,7 @@ export const updatePaidAuction = async (variables: any, token: string) => {
     .put(`${headerUrl}/auctions/update-paid-auction`, variables, config)
     .then((res) => res.data);
 };
+
+export const filterTopAuctions = async () => {
+  return await axios.get(`${headerUrl}/auctions/top`).then((res) => res.data);
+};

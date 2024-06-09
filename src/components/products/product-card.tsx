@@ -98,7 +98,7 @@ const ProductCard: FC<ProductCardProps> = ({
               <div className="text-primary-c900 font-semibold text-sm">
                 {item?.price && formatCurrency(item?.price)}
               </div>
-              {item?.discount && (
+              {/* {item?.discount && (
                 <div className="text-grey-c400 font-normal text-xs line-through">
                   {item?.price //giá bán
                     ? item?.discount
@@ -113,7 +113,7 @@ const ProductCard: FC<ProductCardProps> = ({
                 <div className="text-primary-c900 font-normal text-sm">
                   -{item?.discount}%
                 </div>
-              )}
+              )} */}
             </div>
             <div className="flex justify-between items-center">
               {/* rating item */}

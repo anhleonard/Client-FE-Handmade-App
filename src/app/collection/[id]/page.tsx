@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/products/product-card";
@@ -108,7 +107,7 @@ const PageCollection = ({}) => {
           </CommonContext.Provider>
 
           {/* LOOP ITEMS */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-8 mt-8 lg:mt-10">
+          <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
             {category?.products?.map((item, index) => (
               <ProductCard key={index} item={item} />
             ))}

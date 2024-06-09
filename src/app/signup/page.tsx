@@ -17,6 +17,7 @@ import { Form, Formik, getIn } from "formik";
 import moment from "moment";
 import { AlertState } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
+import { useRouter } from "next/navigation";
 
 const validationSchema = yup.object({
   name: yup.string().required("Vui lòng không để trống họ tên."),
@@ -50,6 +51,7 @@ const validationSchema = yup.object({
 
 const PageSignUp = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [gender, setGender] = useState(genderTypes[0].value);
 
@@ -77,7 +79,14 @@ const PageSignUp = () => {
 
       const response = await signUpUser(variables);
       if (response) {
-        dispatch(closeLoading());
+        router.push("/login");
+        let alert: AlertState = {
+          isOpen: true,
+          title: "THÀNH CÔNG",
+          message: "Đăng ký thành công",
+          type: AlertStatus.SUCCESS,
+        };
+        dispatch(openAlert(alert));
       }
     } catch (error: any) {
       let alert: AlertState = {

@@ -139,11 +139,11 @@ export const accountAuctionTabs = [
     value: 7,
     content: <CanceledAuctions />,
   },
-  {
-    label: "Quá hạn",
-    value: 8,
-    content: <OverdateAuctions />,
-  },
+  // {
+  //   label: "Quá hạn",
+  //   value: 8,
+  //   content: <OverdateAuctions />,
+  // },
 ];
 
 export const exampleItems = {
