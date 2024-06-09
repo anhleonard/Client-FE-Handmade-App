@@ -78,6 +78,7 @@ const DetailAuctionPage = () => {
           status={auction.status as AuctionStatus}
           auction={auction}
           bidder={selectedBidder}
+          handleRefetch={handleRefetch}
         />
       )}
 

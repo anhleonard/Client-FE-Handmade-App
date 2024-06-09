@@ -13,27 +13,43 @@ import { Alert, Collapse, List, ListItem } from "@mui/material";
 import React from "react";
 import MyDisplayImage from "@/libs/display-image";
 import Button from "@/libs/button";
-import { AlertState, Auction, Bidder } from "@/enum/defined-types";
+import { AlertState, Auction, Bidder, PaidAuction } from "@/enum/defined-types";
 import { AlertStatus, AuctionStatus, Role } from "@/enum/constants";
 import storage from "@/apis/storage";
 import { useDispatch } from "react-redux";
-import { openModal } from "@/redux/slices/modalSlice";
+import { closeModal, openModal } from "@/redux/slices/modalSlice";
 import RejectAuctionModal from "./reject-auction-modal";
 import { headerUrl } from "@/apis/services/authentication";
 import { openAlert } from "@/redux/slices/alertSlice";
-import { closeLoading } from "@/redux/slices/loadingSlice";
-import { CreateAuctionPaymentValues } from "@/apis/types";
-import { createAuctionPayment } from "@/apis/services/payments";
+import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
+import {
+  CreateAuctionPaymentValues,
+  CreateRefundPaymentValues,
+  PaidAuctionValues,
+} from "@/apis/types";
+import {
+  createAuctionPayment,
+  createRefundPayment,
+} from "@/apis/services/payments";
 import CheckIcon from "@mui/icons-material/Check";
 import { openConfirm } from "@/redux/slices/confirmSlice";
+import { SCREEN } from "@/enum/setting";
+import ExtendDaysModal from "./extend-days-modal";
+import { updateAuction, updatePaidAuction } from "@/apis/services/auctions";
 
 type DetailAuctionProps = {
   status: AuctionStatus;
   auction: Auction;
   bidder?: Bidder;
+  handleRefetch: () => void;
 };
 
-const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
+const DetailAuction = ({
+  status,
+  auction,
+  bidder,
+  handleRefetch,
+}: DetailAuctionProps) => {
   const dispatch = useDispatch();
   const minMax = auction?.candidates?.length
     ? findMinMaxBidderMoney(auction?.candidates)
@@ -172,16 +188,135 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
     }
   };
 
-  const handleOpenConfirmRefund = (auction: Auction) => {
+  const handleOpenDetailAddition = async () => {
+    const modal = {
+      isOpen: true,
+      title: "Chi tiết yêu cầu gia hạn",
+      content: (
+        <ExtendDaysModal auction={auction} handleRefetch={handleRefetch} />
+      ),
+      className: "max-w-3xl",
+    };
+    dispatch(openModal(modal));
+  };
+
+  const handleOpenConfirmRefund = () => {
     const confirm: any = {
       isOpen: true,
-      title: "XÁC NHẬN HỦY ĐƠN HÀNG",
+      title: "XÁC NHẬN HỦY DỰ ÁN",
       message: "Bạn đã chắc chắn hủy dự án này chưa?",
       feature: "CONFIRM_CONTACT_US",
-      onConfirm: () => {},
+      onConfirm: () => handleRefundMoney(),
     };
 
     dispatch(openConfirm(confirm));
+  };
+
+  const handleRefundMoney = async () => {
+    try {
+      dispatch(openLoading());
+
+      //update auction
+      const variables = {
+        status: AuctionStatus.CANCELED,
+        additionalComment: "Hủy dự án do quá hạn tiến hành.",
+      };
+      const token = storage.getLocalAccessToken();
+
+      //refund amount of money
+      const userPaids: PaidAuction[] = auction?.paids;
+
+      let deposit = 0; //khởi tạo deposit
+      let depositValues: CreateRefundPaymentValues | null = null;
+      let totalValues: CreateRefundPaymentValues | null = null;
+
+      const selectedBidder = auction?.candidates?.filter(
+        (bidder) => bidder.isSelected === true
+      )[0];
+
+      for (let paid of userPaids) {
+        if (paid.type === "deposit") {
+          depositValues = {
+            zp_trans_id: paid.zp_trans_id,
+            amount: auction.deposit,
+          };
+
+          deposit = auction?.deposit;
+        }
+
+        if (paid.type === "total") {
+          totalValues = {
+            zp_trans_id: paid.zp_trans_id,
+            amount: selectedBidder?.bidderMoney - deposit,
+          };
+        }
+      }
+
+      let resDeposit: any;
+      let resTotal: any;
+
+      if (depositValues) {
+        resDeposit = await createRefundPayment(depositValues);
+        if (resDeposit?.return_code === 2) {
+          let alert: AlertState = {
+            isOpen: true,
+            title: "LỖI HOÀN TIỀN CỌC",
+            message: resDeposit?.return_message,
+            type: AlertStatus.ERROR,
+          };
+          dispatch(openAlert(alert));
+          return;
+        }
+        const params: PaidAuctionValues = {
+          auctionId: auction?.id,
+          type: "deposit",
+        };
+        await updatePaidAuction(params, token);
+      }
+
+      if (totalValues) {
+        resTotal = await createRefundPayment(totalValues);
+        if (resTotal?.return_code === 2) {
+          let alert: AlertState = {
+            isOpen: true,
+            title: "LỖI HOÀN TIỀN",
+            message: resDeposit?.return_message,
+            type: AlertStatus.ERROR,
+          };
+          dispatch(openAlert(alert));
+          return;
+        }
+        const params: PaidAuctionValues = {
+          auctionId: auction?.id,
+          type: "total",
+        };
+        await updatePaidAuction(params, token);
+      }
+
+      const updatedAuction = await updateAuction(auction?.id, variables, token);
+
+      if (updatedAuction && resDeposit && resTotal) {
+        dispatch(closeModal());
+        let alert: AlertState = {
+          isOpen: true,
+          title: "HỦY DỰ ÁN & HOÀN TIỀN",
+          message: "Đã hủy dự án và hoàn tiền lại cho khách hàng thành công",
+          type: AlertStatus.SUCCESS,
+        };
+        dispatch(openAlert(alert));
+        handleRefetch();
+      }
+    } catch (error: any) {
+      let alert: AlertState = {
+        isOpen: true,
+        title: "LỖI",
+        message: error?.response?.data?.message,
+        type: AlertStatus.ERROR,
+      };
+      dispatch(openAlert(alert));
+    } finally {
+      dispatch(closeLoading());
+    }
   };
 
   return (
@@ -618,15 +753,24 @@ const DetailAuction = ({ status, auction, bidder }: DetailAuctionProps) => {
         calculateDaysAfterAccepted(bidder?.estimatedDay, bidder?.acceptedAt) ===
           0 &&
         auction?.status === AuctionStatus.PROGRESS ? (
-          <Button
-            className="!w-fit !px-3 !py-2"
-            color="primary"
-            onClick={() => handleOpenConfirmRefund(auction)}
-          >
-            <span className="text-xs font-semibold">
+          <div className="flex flex-row items-center gap-4">
+            {auction?.addition && (
+              <Button
+                className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
+                color="primary"
+                onClick={() => handleOpenDetailAddition()}
+              >
+                Xem yêu cầu gia hạn
+              </Button>
+            )}
+            <Button
+              className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
+              color="black"
+              onClick={() => handleOpenConfirmRefund()}
+            >
               Hủy & Yêu cầu hoàn tiền
-            </span>
-          </Button>
+            </Button>
+          </div>
         ) : null}
       </div>
     </div>

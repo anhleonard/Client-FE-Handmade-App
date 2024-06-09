@@ -234,6 +234,8 @@ export type Auction = {
   isPaymentFull: boolean;
   owner: User;
   canceledBy: User;
+  addition: Addition;
+  paids: PaidAuction[];
 };
 
 export type Bidder = {
@@ -254,6 +256,13 @@ export type Progress = {
   createdAt: Date;
   updatedAt: Date;
   user: User;
+};
+
+export type Addition = {
+  id: number;
+  days: number;
+  comment: string;
+  isAccepted: boolean;
 };
 
 export type FilterTime = {
@@ -298,4 +307,13 @@ export type ModalState = {
   title: string;
   content: React.ReactNode;
   className?: string;
+};
+
+export type PaidAuction = {
+  id: number;
+  isRefund: boolean;
+  type: string;
+  apptransid: string;
+  zp_trans_id: string;
+  auction: Auction;
 };

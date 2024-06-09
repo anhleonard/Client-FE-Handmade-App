@@ -24,7 +24,7 @@ export default function ConfirmModal() {
 
   return (
     <div
-      className="relative z-[50000]"
+      className="relative z-[60]"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"

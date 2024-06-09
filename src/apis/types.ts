@@ -122,3 +122,8 @@ export type ChangeFollowerValues = {
   storeId: number;
   userId: number;
 };
+
+export type PaidAuctionValues = {
+  auctionId: number;
+  type: string;
+};
