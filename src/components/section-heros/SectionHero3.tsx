@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import backgroundLineSvg from "@/images/Moon.svg";
 import imageRightPng2 from "@/images/hero-2-right-1.png";
@@ -8,7 +7,7 @@ export interface SectionHero3Props {
   className?: string;
 }
 
-const SectionHero3: FC<SectionHero3Props> = ({ className = "" }) => {
+const SectionHero3 = ({ className = "" }: SectionHero3Props) => {
   return (
     <div
       className={`nc-SectionHero3 relative ${className}`}

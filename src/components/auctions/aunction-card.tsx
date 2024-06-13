@@ -7,7 +7,7 @@ import {
   formatCurrency,
 } from "@/enum/functions";
 import Button from "@/libs/button";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Auction } from "@/enum/defined-types";
 import { AuctionStatus } from "@/enum/constants";
 
@@ -99,14 +99,14 @@ const AunctionCard = ({ auction }: Props) => {
                   </div>
                 </div>
                 <Button
-                  className="!w-fit !px-3 !py-1.5"
+                  className="!w-fit !px-3 !py-1.5 !text-xs !font-medium"
                   onClick={() =>
                     router.push(`/detail-auction/${auction?.id}`, {
                       scroll: true,
                     })
                   }
                 >
-                  <span className="text-xs font-medium">Xem chi tiết</span>
+                  Xem chi tiết
                 </Button>
               </div>
             </div>

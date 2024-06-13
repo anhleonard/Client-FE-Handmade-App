@@ -78,8 +78,12 @@ const UpdateWorkForm = ({ auction, handleRefetch }: Props) => {
               onChange={formik.handleChange}
             />
             <div className="flex flex-row justify-end">
-              <Button className="!w-fit" color="primary" type="submit">
-                <span className="text-sm font-medium">Thêm</span>
+              <Button
+                className="!w-fit !text-sm !font-medium"
+                color="primary"
+                type="submit"
+              >
+                Thêm
               </Button>
             </div>
           </div>

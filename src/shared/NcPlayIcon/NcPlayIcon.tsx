@@ -1,14 +1,12 @@
-import React, { FC } from "react";
-
 export interface NcPlayIconProps {
   className?: string;
   svgClass?: string;
 }
 
-const NcPlayIcon: FC<NcPlayIconProps> = ({
+const NcPlayIcon = ({
   className = "w-20 h-20 p-3 lg:w-52 lg:h-52 lg:p-12",
   svgClass = "w-8 h-8 md:w-12 md:h-12",
-}) => {
+}: NcPlayIconProps) => {
   return (
     <div
       className={`nc-NcPlayIcon bg-white bg-opacity-30 backdrop-filter backdrop-blur rounded-full  ${className}`}

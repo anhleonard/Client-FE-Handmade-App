@@ -22,7 +22,7 @@ export default function AvatarDropdown() {
   return (
     <div className="AvatarDropdown ">
       <Popover className="relative">
-        {({ open, close }) => (
+        {({ open, close }: any) => (
           <>
             <Popover.Button
               className={`w-10 h-10 sm:w-12 sm:h-12 text-black rounded-full dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`}

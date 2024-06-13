@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function CartDropdown() {
   return (
     <Popover className="relative">
-      {({ open, close }) => (
+      {({ open, close }: any) => (
         <>
           <Popover.Button
             className={`

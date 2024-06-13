@@ -2,12 +2,12 @@
 import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
-import React, { createContext, useEffect, useState } from "react";
+import React, { Context, createContext, useEffect, useState } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
 import { AlertStatus } from "@/enum/constants";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import ScrollTabs from "@/components/scroll-tabs/scroll-tabs";
 import { AlertState, Store } from "@/enum/defined-types";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,14 @@ import { ChangeFollowerValues } from "@/apis/types";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 
-export const StoreContext = createContext({
+interface StoreContextType {
+  store: string;
+  value: number;
+  searchText: string;
+  handleResetValue: (value: number, searchText: string) => void;
+}
+
+export const StoreContext: Context<StoreContextType> = createContext({
   store: "",
   value: 0,
   searchText: "",
@@ -32,7 +39,6 @@ export const StoreContext = createContext({
 });
 
 const SingleStoreScreen = () => {
-  const router = useRouter();
   const params = useParams();
   const dispatch = useDispatch();
   const [store, setStore] = useState<Store>();

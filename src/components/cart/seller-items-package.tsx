@@ -135,28 +135,6 @@ const SellerItemsPackage = ({
             )
           )}
 
-          {/* list applied voucher */}
-          {/* <ListItem
-            className="block w-full px-4 py-4 border-b-2 border-grey-c50 space-y-4"
-            disablePadding
-          >
-            <div className="flex flex-row items-start gap-4 justify-between">
-              <div className="font-bold">Shop khuyến mãi</div>
-              <Button className="!px-5 !py-2 !bg-blue-c100 !text-blue-c900 !text-xs !font-bold">
-                Xem ưu đãi
-              </Button>
-            </div>
-            <div className="flex flex-row flex-wrap gap-6">
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-              <MyVoucherLabel type="warning">G-LAMQUEN -30K</MyVoucherLabel>
-            </div>
-          </ListItem> */}
-
           {/* payment */}
           <ListItem className="block w-full px-4 py-4" disablePadding>
             <div className="grid md:grid-cols-2 gap-5">

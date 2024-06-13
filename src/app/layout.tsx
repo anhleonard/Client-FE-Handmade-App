@@ -86,10 +86,10 @@ export default function RootLayout({
       >
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <CommonClient />
           <Provider store={store}>
             <SiteHeader />
             {children}
-            <CommonClient />
             <Footer />
             <Loading></Loading>
             <AlertModal></AlertModal>

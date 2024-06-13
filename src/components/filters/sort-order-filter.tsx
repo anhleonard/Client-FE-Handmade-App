@@ -49,7 +49,7 @@ const SortOrderFilter: FC<Props> = ({ data = DEMO_DATA, className = "" }) => {
               {data.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
-                  className={({ active }) =>
+                  className={({ active }: any) =>
                     `${
                       active
                         ? "text-primary-c900 bg-primary-c100"
@@ -58,7 +58,7 @@ const SortOrderFilter: FC<Props> = ({ data = DEMO_DATA, className = "" }) => {
                   }
                   value={person}
                 >
-                  {({ selected, active }) => (
+                  {({ selected, active }: any) => (
                     <>
                       <span
                         className={`${

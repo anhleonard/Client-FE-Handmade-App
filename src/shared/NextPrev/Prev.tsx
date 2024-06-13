@@ -1,5 +1,4 @@
 "use client";
-import React, { FC } from "react";
 
 export interface PrevProps {
   btnClassName?: string;
@@ -8,12 +7,12 @@ export interface PrevProps {
   onClickPrev?: () => void;
 }
 
-const Prev: FC<PrevProps> = ({
+const Prev = ({
   className = "relative",
   onClickPrev = () => {},
   btnClassName = "w-10 h-10",
   svgSize = "w-5 h-5",
-}) => {
+}: PrevProps) => {
   return (
     <div
       className={`nc-Prev text-slate-500 dark:text-slate-400 ${className}`}

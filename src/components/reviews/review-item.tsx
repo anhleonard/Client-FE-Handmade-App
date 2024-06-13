@@ -1,15 +1,13 @@
 import { Review } from "@/enum/defined-types";
 import { formatCommonTime } from "@/enum/functions";
-import { StarIcon } from "@heroicons/react/24/solid";
 import { Avatar, Rating } from "@mui/material";
-import React, { FC } from "react";
 
 type Props = {
   className?: string;
   review: Review;
 };
 
-const ReviewItem: FC<Props> = ({ className = "", review }) => {
+const ReviewItem = ({ className = "", review }: Props) => {
   return (
     <div
       className={`nc-ReviewItem flex flex-col ${className}`}

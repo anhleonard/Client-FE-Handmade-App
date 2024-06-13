@@ -1,9 +1,8 @@
-import React, { FC } from "react";
 import MainTabsHeader from "./main-tabs-header";
 
 export interface PrimaryHeaderProps {}
 
-const PrimaryHeader: FC<PrimaryHeaderProps> = () => {
+const PrimaryHeader = ({}: PrimaryHeaderProps) => {
   return (
     <div className="sticky top-0 w-full z-40">
       <MainTabsHeader />

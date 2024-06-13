@@ -1,6 +1,5 @@
 "use client";
 
-import React, { FC } from "react";
 import Heading from "@/components/Heading/Heading";
 import { Category } from "@/enum/defined-types";
 import MainCategoryCard from "../card-categories/main-card-category";
@@ -11,11 +10,11 @@ export interface SectionGridCategoriesProps {
   categories: Category[];
 }
 
-const SectionGridCategories: FC<SectionGridCategoriesProps> = ({
+const SectionGridCategories = ({
   className = "",
   gridClassName = "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
   categories,
-}) => {
+}: SectionGridCategoriesProps) => {
   const renderCard = (item: Category) => {
     return (
       <MainCategoryCard

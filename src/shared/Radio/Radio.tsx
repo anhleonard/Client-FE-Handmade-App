@@ -1,5 +1,3 @@
-import React, { FC } from "react";
-
 export interface RadioProps {
   className?: string;
   name: string;
@@ -10,7 +8,7 @@ export interface RadioProps {
   label?: string;
 }
 
-const Radio: FC<RadioProps> = ({
+const Radio = ({
   className = "",
   name,
   id,
@@ -18,7 +16,7 @@ const Radio: FC<RadioProps> = ({
   label,
   sizeClassName = "w-5 h-5",
   defaultChecked,
-}) => {
+}: RadioProps) => {
   return (
     <div className={`flex items-center text-sm sm:text-base ${className}`}>
       <input

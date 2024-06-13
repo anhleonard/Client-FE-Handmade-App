@@ -169,31 +169,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "" }) => {
                 onClick={() => router.push("/search")}
                 className="nc-SectionHero2Item__button dark:bg-slate-900 w-fit hover:cursor-pointer py-4 px-8 sm:block hidden"
               >
-                <div className="flex flex-row items-center gap-2">
-                  <div>{item.btnText}</div>
-                  <div>
-                    <svg
-                      className="w-4.5 h-4.5 ms-2.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M22 22L20 20"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                <span className="mr-2">{item.btnText}</span>
               </Button>
             </div>
           </div>

@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
@@ -16,7 +15,7 @@ export interface CardCategory3Props {
   auctionImage?: string;
 }
 
-const CardCategory3: FC<CardCategory3Props> = ({
+const CardCategory3 = ({
   id,
   className = "",
   featuredImage = CATS_DISCOVER[2].featuredImage,
@@ -24,7 +23,7 @@ const CardCategory3: FC<CardCategory3Props> = ({
   desc = CATS_DISCOVER[2].desc,
   color = CATS_DISCOVER[2].color,
   auctionImage = "/images/default-auction.jpg",
-}) => {
+}: CardCategory3Props) => {
   return (
     <Link
       href={`/detail-auction/${id}`}

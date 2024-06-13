@@ -1,14 +1,12 @@
-import React, { FC } from "react";
-
 export interface NcPlayIcon2Props {
   className?: string;
   iconClass?: string;
 }
 
-const NcPlayIcon2: FC<NcPlayIcon2Props> = ({
+const NcPlayIcon2 = ({
   className = "w-8 h-8 md:w-10 md:h-10",
   iconClass = "w-5 h-5",
-}) => {
+}: NcPlayIcon2Props) => {
   return (
     <div
       className={`nc-NcPlayIcon2 bg-white relative rounded-full shadow-inner ${className}`}

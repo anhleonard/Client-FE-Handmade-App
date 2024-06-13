@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-const getBase64 = (file: FileType): Promise<string> =>
+const getBase64 = (file: Blob): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -32,8 +32,8 @@ const UploadImage: React.FC<Props> = ({
   const handleCancel = () => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
+    if (!file.url && !file.preview && file?.originFileObj) {
+      file.preview = await getBase64(file.originFileObj as Blob);
     }
 
     setPreviewImage(file.url || (file.preview as string));
@@ -43,8 +43,9 @@ const UploadImage: React.FC<Props> = ({
     );
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const handleChange: UploadProps["onChange"] = ({
+    fileList: newFileList,
+  }: any) => setFileList(newFileList);
 
   const uploadButton = (
     <button style={{ border: 0, background: "none" }} type="button">

@@ -1,7 +1,6 @@
-import { Variant, VariantType } from "@/enum/defined-types";
+import { Variant } from "@/enum/defined-types";
 import { formatVariant } from "@/enum/functions";
-import Button from "@/libs/button";
-import React, { useState } from "react";
+import React from "react";
 
 type RenderVariantsProps = {
   label?: string;

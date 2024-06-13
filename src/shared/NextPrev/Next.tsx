@@ -1,5 +1,4 @@
 "use client";
-import React, { FC } from "react";
 
 export interface NextProps {
   btnClassName?: string;
@@ -8,12 +7,12 @@ export interface NextProps {
   onClickNext?: () => void;
 }
 
-const Next: FC<NextProps> = ({
+const Next = ({
   className = "relative",
   onClickNext = () => {},
   btnClassName = "w-10 h-10",
   svgSize = "w-5 h-5",
-}) => {
+}: NextProps) => {
   return (
     <div
       className={`nc-Next text-slate-500 dark:text-slate-400 ${className}`}

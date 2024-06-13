@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import HIW1img from "@/images/HIW1img.png";
 import HIW2img from "@/images/HIW2img.png";
@@ -44,10 +43,10 @@ const DEMO_DATA = [
   },
 ];
 
-const SectionHowItWork: FC<SectionHowItWorkProps> = ({
+const SectionHowItWork = ({
   className = "",
   data = DEMO_DATA,
-}) => {
+}: SectionHowItWorkProps) => {
   return (
     <div className={`nc-SectionHowItWork ${className}`}>
       <div className="relative grid sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-16 xl:gap-20">

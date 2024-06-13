@@ -1,5 +1,4 @@
 import { SocialType } from "@/shared/SocialsShare/SocialsShare";
-import React, { FC } from "react";
 import facebook from "@/images/socials/facebook.svg";
 import twitter from "@/images/socials/twitter.svg";
 import telegram from "@/images/socials/telegram.svg";
@@ -17,7 +16,7 @@ const socials: SocialType[] = [
   { name: "Twitter", icon: twitter, href: "#" },
 ];
 
-const SocialsList1: FC<SocialsList1Props> = ({ className = "space-y-3" }) => {
+const SocialsList1 = ({ className = "space-y-3" }: SocialsList1Props) => {
   const renderItem = (item: SocialType, index: number) => {
     return (
       <a

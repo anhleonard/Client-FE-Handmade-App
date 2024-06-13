@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import { Transition } from "@/app/headlessui";
 import Image from "next/image";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
@@ -15,12 +14,12 @@ interface Props {
   product: Product;
 }
 
-const NotifyAddToCart: FC<Props> = ({
+const NotifyAddToCart = ({
   show,
   qualitySelected,
   selectedVariant,
   product,
-}) => {
+}: Props) => {
   const router = useRouter();
 
   console.log({ selectedVariant });

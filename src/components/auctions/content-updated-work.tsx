@@ -79,30 +79,30 @@ const ContentUpdatedWork = ({ status, progress, handleRefetch }: Props) => {
           (isEdit ? (
             <div className="flex flex-row items-center gap-2">
               <Button
-                className="!w-fit !px-3 !py-1.5"
+                className="!w-fit !px-3 !py-1.5 !text-xs !font-medium"
                 color="grey"
                 onClick={() => {
                   setContent(progress.comment);
                   setIsEdit(false);
                 }}
               >
-                <span className="text-xs font-medium">Hủy bỏ</span>
+                Hủy bỏ
               </Button>
               <Button
-                className="!w-fit !px-3 !py-1.5"
+                className="!w-fit !px-3 !py-1.5 !text-xs !font-medium"
                 color="primary"
                 onClick={() => handleEditComment()}
               >
-                <span className="text-xs font-medium">Cập nhật</span>
+                Cập nhật
               </Button>
             </div>
           ) : (
             <Button
-              className="!w-fit !px-3 !py-1.5"
+              className="!w-fit !px-3 !py-1.5 !text-xs !font-medium"
               color="info"
               onClick={() => setIsEdit(true)}
             >
-              <span className="text-xs font-medium">Chỉnh sửa</span>
+              Chỉnh sửa
             </Button>
           ))}
       </div>

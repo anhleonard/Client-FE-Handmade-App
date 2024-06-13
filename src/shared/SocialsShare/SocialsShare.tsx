@@ -1,5 +1,3 @@
-import React, { FC } from "react";
-
 export interface SocialsShareProps {
   className?: string;
   itemClass?: string;
@@ -18,10 +16,10 @@ const socials: SocialType[] = [
   { name: "Instagram", icon: "lab la-instagram", href: "#" },
 ];
 
-const SocialsShare: FC<SocialsShareProps> = ({
+const SocialsShare = ({
   className = "grid gap-[6px]",
   itemClass = "w-7 h-7 text-base hover:bg-neutral-100",
-}) => {
+}: SocialsShareProps) => {
   const renderItem = (item: SocialType, index: number) => {
     return (
       <a

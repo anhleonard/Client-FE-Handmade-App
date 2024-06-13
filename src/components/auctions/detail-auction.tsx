@@ -717,13 +717,11 @@ const DetailAuction = ({
             </Button>
             {!auction?.isPaymentDeposit ? (
               <Button
-                className="!w-fit !px-3 !py-2"
+                className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
                 color="info"
                 onClick={() => handlePaymentDeposit(auction?.id)}
               >
-                <span className="text-xs font-semibold">
-                  Thanh toán tiền cọc
-                </span>
+                Thanh toán tiền cọc
               </Button>
             ) : null}
           </div>
@@ -732,11 +730,11 @@ const DetailAuction = ({
         {!auction?.isPaymentFull &&
         auction?.status === AuctionStatus.PROGRESS ? (
           <Button
-            className="!w-fit !px-3 !py-2"
+            className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
             color="info"
             onClick={() => handlePaymentTotal(auction?.id)}
           >
-            <span className="text-xs font-semibold">Thanh toán toàn bộ</span>
+            Thanh toán toàn bộ
           </Button>
         ) : null}
         {bidder?.estimatedDay &&

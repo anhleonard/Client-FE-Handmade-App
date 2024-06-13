@@ -1,5 +1,3 @@
-import React, { FC } from "react";
-
 export interface CheckboxProps {
   label?: string;
   subLabel?: string;
@@ -11,7 +9,7 @@ export interface CheckboxProps {
   onChange?: (checked: boolean) => void;
 }
 
-const Checkbox: FC<CheckboxProps> = ({
+const Checkbox = ({
   subLabel = "",
   label = "",
   name,
@@ -20,7 +18,7 @@ const Checkbox: FC<CheckboxProps> = ({
   labelClassName = "",
   defaultChecked,
   onChange,
-}) => {
+}: CheckboxProps) => {
   return (
     <div className={`flex items-center text-sm sm:text-base ${className}`}>
       <input

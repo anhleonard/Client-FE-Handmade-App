@@ -40,7 +40,7 @@ const MyDatePicker: React.FC<MyDatePickerProps> = ({
   const inputRef = useCallback((node: any) => {
     if (node !== null) {
       fp1.current = flatpickr(node, {
-        onChange: function (selectedDates, dateStr, instance) {
+        onChange: function (selectedDates: any, dateStr: any, instance: any) {
           if (onChange) onChange(selectedDates);
         },
         defaultDate: defaultDate,
