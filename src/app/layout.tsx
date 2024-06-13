@@ -14,7 +14,6 @@ import { store } from "@/redux/store";
 import AlertModal from "@/components/modals/alert";
 import ConfirmModal from "@/components/modals/confirm-modal";
 import ContentModal from "@/components/modals/common-modal";
-import { StrictMode } from "react";
 
 export const quicksand = localFont({
   src: [

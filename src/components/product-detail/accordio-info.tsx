@@ -22,7 +22,7 @@ const AccordionInfo = ({
       <ListItem className={`rounded-2xl bg-grey-c10`} disablePadding>
         <ListItemButton
           onClick={() => setOpen(!open)}
-          className="flex flex-row justify-between px-4 py-3 hover:bg-transparent"
+          className="flex flex-row justify-between px-4 py-3.5 hover:bg-transparent w-full"
         >
           <div className="text-sm font-semibold text-grey-c900">{title}</div>
           {!open ? <ExpandMoreRoundedIcon /> : <ExpandLessRoundedIcon />}

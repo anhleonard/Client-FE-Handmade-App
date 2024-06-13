@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
-import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/products/product-card";
 import TabFilters from "@/components/filters/tab-filters";
 import DefaultLayout from "@/layout/default-layout";
@@ -125,15 +123,6 @@ const PageCollection = ({}) => {
           </div>
         </main>
       </div>
-
-      {/* === SECTION 5 === */}
-      <hr className="border-slate-200 dark:border-slate-700" />
-
-      <SectionSliderCollections />
-      <hr className="border-slate-200 dark:border-slate-700" />
-
-      {/* SUBCRIBES */}
-      <SectionPromo1 />
     </DefaultLayout>
   );
 };

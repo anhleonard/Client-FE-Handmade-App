@@ -2,11 +2,11 @@
 
 import React, { useEffect, useId, useRef, useState } from "react";
 import Heading from "./Heading/Heading";
-import CardCategory3 from "./card-categories/CardCategory3";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import { useDispatch } from "react-redux";
 import { TopAuctionCard } from "@/app/page";
+import CardCategory3 from "./card-categories/CardCategory3";
 
 type Props = {
   auctions: TopAuctionCard[];

@@ -1,15 +1,9 @@
 import React, { FC } from "react";
 import { Transition } from "@/app/headlessui";
-import Prices from "@/components/Prices";
-import { PRODUCTS } from "@/data/data";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import { COLORS } from "@/enum/colors";
-import {
-  formatCurrency,
-  formatPickedVariant,
-  formatVariant,
-} from "@/enum/functions";
+import { formatCurrency, formatPickedVariant } from "@/enum/functions";
 import { useRouter } from "next/navigation";
 import { Product, Variant } from "@/enum/defined-types";
 import { headerUrl } from "@/apis/services/authentication";

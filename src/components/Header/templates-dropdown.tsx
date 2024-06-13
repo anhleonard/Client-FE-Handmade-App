@@ -3,8 +3,6 @@
 import { Popover, Transition } from "@/app/headlessui";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Fragment, useEffect, useState } from "react";
-import { MEGAMENU_TEMPLATES } from "@/data/navigation";
-import CardCategory3 from "@/components/card-categories/CardCategory3";
 import { AlertState, Category } from "@/enum/defined-types";
 import { AlertStatus } from "@/enum/constants";
 import { useDispatch } from "react-redux";
@@ -12,6 +10,7 @@ import { openAlert } from "@/redux/slices/alertSlice";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { findAllCategories } from "@/apis/services/categories";
 import { useRouter } from "next/navigation";
+import CardCategory3 from "../card-categories/CardCategory3";
 
 export default function TemplatesDropdown() {
   const dispatch = useDispatch();

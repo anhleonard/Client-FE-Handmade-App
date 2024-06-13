@@ -39,8 +39,6 @@ const ProductCard: FC<ProductCardProps> = ({
 
   const [showModalQuickView, setShowModalQuickView] = useState(false);
 
-  const [picked, setPicked] = useState(false);
-
   const pathname = usePathname();
 
   const renderGroupButtons = () => {
@@ -73,7 +71,6 @@ const ProductCard: FC<ProductCardProps> = ({
               alt="product"
             />
           </Link>
-          {/* <ProductStatus status={status as string} /> */}
           {localToken ? (
             <LikeButton
               hasUpdate //bấm vào có update hay không

@@ -1,33 +1,18 @@
 "use client";
-import React, { FC, useEffect, useMemo, useState } from "react";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+import React, { FC, useEffect, useState } from "react";
 import LikeButton from "@/components/products/like-button";
 import { StarIcon } from "@heroicons/react/24/solid";
-import BagIcon from "@/components/BagIcon";
 import InputQuantityItem from "@/components/product-detail/input-quantity-item";
-import { PRODUCTS } from "@/data/data";
-import {
-  NoSymbolIcon,
-  ClockIcon,
-  SparklesIcon,
-} from "@heroicons/react/24/outline";
-import IconDiscount from "@/components/IconDiscount";
-import Prices from "@/components/Prices";
 import toast from "react-hot-toast";
-import detail1JPG from "@/images/products/detail1.jpg";
-import detail2JPG from "@/images/products/detail2.jpg";
-import detail3JPG from "@/images/products/detail3.jpg";
 import NotifyAddTocart from "../cart/notify-add-to-cart";
 import AccordionInfo from "@/components/product-detail/accordio-info";
 import Image from "next/image";
-import Link from "next/link";
 import { formatCurrency } from "@/enum/functions";
 import MyLabel from "@/libs/label";
 import RenderVariants from "../product-detail/render-variants";
 import Button from "@/libs/button";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { COLORS } from "@/enum/colors";
-import { imageUrls, types } from "@/enum/fake-datas";
 import { AlertState, Product, Variant } from "@/enum/defined-types";
 import { useDispatch } from "react-redux";
 import { getFavouriteProducts, singleProduct } from "@/apis/services/products";
@@ -35,9 +20,9 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { headerUrl } from "@/apis/services/authentication";
-import storage from "@/apis/storage";
 import { OrderProductValues } from "@/apis/types";
 import { createOrderProduct } from "@/apis/services/order-products";
+import storage from "@/apis/storage";
 
 export interface ProductQuickViewProps {
   className?: string;
@@ -193,23 +178,6 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
     }
   };
 
-  const renderStatus = () => {
-    if (!status) {
-      return null;
-    }
-    const CLASSES =
-      "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
-    if (status === "Giảm 30%") {
-      return (
-        <div className={CLASSES}>
-          <IconDiscount className="w-3.5 h-3.5" />
-          <span className="ms-1 leading-none">{status}</span>
-        </div>
-      );
-    }
-    return null;
-  };
-
   const renderSectionContent = () => {
     return (
       <div className="space-y-4">
@@ -339,9 +307,6 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
                 alt="product detail 1"
               />
             </div>
-
-            {/* STATUS */}
-            {renderStatus()}
           </div>
           <div className="hidden lg:grid grid-cols-4 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
             {productImages?.map((url, index) => {

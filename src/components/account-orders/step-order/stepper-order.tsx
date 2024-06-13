@@ -71,23 +71,31 @@ function ColorlibStepIcon(props: StepIconProps) {
 
 const CustomizedSteppers = ({ order }: Props) => {
   const steps = [
-    <StatusStepOrder
-      label="Đơn hàng đã đặt"
-      time={formatCommonTime(order?.orderAt)}
-    />,
-    <StatusStepOrder
-      label="Đơn hàng được người bán duyệt"
-      time={formatCommonTime(order?.processingAt)}
-    />,
-    <StatusStepOrder
-      label="Đơn hàng đang được giao"
-      time={formatCommonTime(order?.deliveredAt)}
-    />,
-    <StatusStepOrder
-      label="Đã nhận được hàng"
-      time={formatCommonTime(order?.shippedAt)}
-    />,
-    <StatusStepOrder label="Đánh giá" />,
+    {
+      label: "Đơn hàng đã đặt",
+      time: formatCommonTime(order?.orderAt),
+      key: "orderAt",
+    },
+    {
+      label: "Đơn hàng được người bán duyệt",
+      time: formatCommonTime(order?.processingAt),
+      key: "processingAt",
+    },
+    {
+      label: "Đơn hàng đang được giao",
+      time: formatCommonTime(order?.deliveredAt),
+      key: "deliveredAt",
+    },
+    {
+      label: "Đã nhận được hàng",
+      time: formatCommonTime(order?.shippedAt),
+      key: "shippedAt",
+    },
+    {
+      label: "Đánh giá",
+      time: undefined,
+      key: "review",
+    },
   ];
 
   return (
@@ -97,9 +105,11 @@ const CustomizedSteppers = ({ order }: Props) => {
         activeStep={5}
         connector={<ColorlibConnector />}
       >
-        {steps.map((label, index) => (
-          <Step key={index}>
-            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+        {steps.map((step) => (
+          <Step key={step.key}>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>
+              <StatusStepOrder label={step.label} time={step.time} />
+            </StepLabel>
           </Step>
         ))}
       </Stepper>

@@ -2,8 +2,7 @@
 import { getFavouriteProducts } from "@/apis/services/products";
 import storage from "@/apis/storage";
 import ProductCard from "@/components/products/product-card";
-import { PRODUCTS } from "@/data/data";
-import { AlertStatus, exampleItems } from "@/enum/constants";
+import { AlertStatus } from "@/enum/constants";
 import { AlertState, Product } from "@/enum/defined-types";
 import Button from "@/libs/button";
 import MySingleCheckBox from "@/libs/single-checkbox";

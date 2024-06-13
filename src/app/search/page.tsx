@@ -1,19 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
 import HeaderFilterSearchPage from "@/components/filters/header-filter-search-page";
 import Input from "@/shared/Input/Input";
 import ButtonCircle from "@/shared/Button/ButtonCircle";
 import ProductCard from "@/components/products/product-card";
 import DefaultLayout from "@/layout/default-layout";
 import { AlertStatus } from "@/enum/constants";
-import PaginationExample from "@/shared/pagination/pagination-example";
-import { AlertState, Category, Product } from "@/enum/defined-types";
+import { AlertState, Product } from "@/enum/defined-types";
 import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { getFavouriteProducts, getProducts } from "@/apis/services/products";
 import { openAlert } from "@/redux/slices/alertSlice";
-import { allCategories } from "@/apis/services/categories";
 import { PRICE_RANGE } from "@/components/filters/filter-data";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
@@ -194,10 +191,6 @@ const PageSearch = ({}) => {
               </Button>
             </div>
           </main>
-          {/* === SECTION 5 === */}
-          <SectionSliderCollections />
-          {/* SUBCRIBES */}
-          {/* <SectionPromo1 /> */}
         </div>
       </div>
     </DefaultLayout>

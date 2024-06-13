@@ -1,10 +1,9 @@
 "use client";
-import storage from "@/apis/storage";
 import VerticalScrollTabs from "@/components/scroll-tabs/vertical-scroll-tabs";
 import SingleStoreCollection from "@/components/store/single-store-collection";
 import { CustomTab } from "@/enum/defined-types";
 import { RootState } from "@/redux/store";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 type Props = {

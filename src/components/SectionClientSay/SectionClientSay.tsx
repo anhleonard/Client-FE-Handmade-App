@@ -3,9 +3,8 @@
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Heading from "@/components/Heading/Heading";
-import React, { FC, useId, useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { useEffect } from "react";
-import clientSayMain from "@/images/clientSayMain.png";
 import clientSay1 from "@/images/clientSay1.png";
 import clientSay2 from "@/images/clientSay2.png";
 import clientSay3 from "@/images/clientSay3.png";

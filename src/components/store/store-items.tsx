@@ -1,3 +1,4 @@
+"use client";
 import React, { useContext, useEffect, useState } from "react";
 import StoreFilterSection from "../filters/store-filter-section";
 import ProductCard from "../products/product-card";
@@ -13,10 +14,6 @@ import { PRICE_RANGE } from "../filters/filter-data";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import { CommonContext } from "@/app/page";
 import { StoreContext } from "@/app/(stores)/store/[id]/page";
-
-type Props = {
-  handleRefetch: () => void;
-};
 
 const StoreItems = () => {
   const theme = useContext(StoreContext);

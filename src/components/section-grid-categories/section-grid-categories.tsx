@@ -2,8 +2,8 @@
 
 import React, { FC } from "react";
 import Heading from "@/components/Heading/Heading";
-import MainCategoryCard from "../card-categories/main-card-category";
 import { Category } from "@/enum/defined-types";
+import MainCategoryCard from "../card-categories/main-card-category";
 
 export interface SectionGridCategoriesProps {
   className?: string;

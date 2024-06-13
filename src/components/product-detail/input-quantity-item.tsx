@@ -1,12 +1,10 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import React, { FC, useState } from "react";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 export interface InputQuantityItemProps {
-  className?: string;
   defaultValue?: number;
   min?: number;
   max?: number;
@@ -16,7 +14,6 @@ export interface InputQuantityItemProps {
 }
 
 const InputQuantityItem: FC<InputQuantityItemProps> = ({
-  className = "w-full",
   defaultValue = 1,
   min = 1,
   max = 99,

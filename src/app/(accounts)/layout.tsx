@@ -1,12 +1,10 @@
 "use client";
 
-import SectionPromo1 from "@/components/SectionPromo1";
 import DefaultLayout from "@/layout/default-layout";
 import { Route } from "@/routers/types";
 import { usePathname } from "next/navigation";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import { FC } from "react";
-import SectionSliderCollections from "@/components/slide-products/section-slider-large-product";
 import AccountPage from "./account/page";
 import SideBarAccount from "@/components/account/side-bar-account";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
@@ -124,7 +122,6 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
               })}
             </div>
             <div className="flex-shrink-0 mb-10 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
-            {/* <div className="flex-1">{children}</div> */}
             <div className="lg:w-2/3 xl:w-3/4">{children}</div>
           </div>
         </main>

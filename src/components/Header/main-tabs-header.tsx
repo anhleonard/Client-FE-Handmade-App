@@ -2,7 +2,6 @@
 
 import React, { FC, useState } from "react";
 import Logo from "@/shared/Logo/Logo";
-import MenuBar from "@/shared/MenuBar/MenuBar";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { renderSearchIcon } from "@/enum/icons";
@@ -51,10 +50,6 @@ const MainTabsHeader: FC<MainTabsHeaderProps> = ({ className = "" }) => {
     <div className="relative z-10 bg-white dark:bg-slate-900 py-3.5 md:px-15 lg:px-30 px-8 border-b-[1px] border-grey-c50">
       <div>
         <div className="flex justify-between">
-          <div className="flex items-center md:hidden flex-1">
-            <MenuBar />
-          </div>
-
           <div className="flex lg:flex-1 items-center space-x-3 sm:space-x-8">
             <Logo />
             {!showSearchForm && (
@@ -100,14 +95,6 @@ const MainTabsHeader: FC<MainTabsHeaderProps> = ({ className = "" }) => {
               </div>
             ) : null}
 
-            {/* {!showSearchForm && (
-              <button
-                className="hidden lg:flex w-10 h-10 sm:w-12 sm:h-12 rounded-full text-black dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none items-center justify-center"
-                onClick={() => setShowSearchForm(!showSearchForm)}
-              >
-                {renderSearchIcon()}
-              </button>
-            )} */}
             {token ? <AvatarDropdown /> : null}
             {token ? <CartDropdown /> : null}
           </div>
