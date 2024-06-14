@@ -16,10 +16,7 @@ const Logo: React.FC<LogoProps> = ({
   className = "flex-shrink-0",
 }) => {
   return (
-    <Link
-      href="/"
-      className={`ttnc-logo inline-block text-slate-600 ${className}`}
-    >
+    <Link href="/">
       {/* THIS USE FOR MY CLIENT */}
       {/* PLEASE UN COMMENT BELLOW CODE AND USE IT */}
       {img ? (

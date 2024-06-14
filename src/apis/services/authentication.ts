@@ -1,10 +1,6 @@
 import axios from "axios";
 import { LoginFormValues } from "../types";
 
-export const getAllPosts = async () => {
-  return fetch("https://dummyjson.com/posts").then((res) => res.json());
-};
-
 export let headerUrl = `${process.env.NEXT_PUBLIC_BK_PROTOCOL}${process.env.NEXT_PUBLIC_BK_HOST}:${process.env.NEXT_PUBLIC_BK_PORT}`;
 
 export const loginUser = async (variables: LoginFormValues) => {

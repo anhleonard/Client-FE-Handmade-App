@@ -1,3 +1,4 @@
+"use client";
 import storage from "@/apis/storage";
 import SectionSliderProductCard from "@/components/slide-products/section-slider-product-card";
 import StoreItems from "@/components/store/store-items";
@@ -5,14 +6,13 @@ import { getTopSoldProducts } from "@/enum/functions";
 import Button from "@/libs/button";
 import { RootState } from "@/redux/store";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 type Props = {
   changeCollectTab: (tabId: number, collectTabId: number) => void;
 };
 
 const StoreHomePage = ({ changeCollectTab }: Props) => {
-  const dispatch = useDispatch();
   const store = useSelector((state: RootState) => state.store.store);
 
   return (

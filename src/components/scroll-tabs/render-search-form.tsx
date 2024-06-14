@@ -6,8 +6,6 @@ const RenderSearchForm = () => {
   const theme = useContext(StoreContext);
   const [searchText, setSearchText] = useState("");
 
-  //   const store = JSON.parse(theme.store);
-
   return (
     <form
       className="flex-1 text-slate-900 dark:text-slate-100"

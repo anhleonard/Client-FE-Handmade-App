@@ -25,14 +25,18 @@ import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 
 interface StoreContextType {
-  store: string;
+  createdAt: Date;
+  description: string;
+  totalNumber: number;
   value: number;
   searchText: string;
   handleResetValue: (value: number, searchText: string) => void;
 }
 
 export const StoreContext: Context<StoreContextType> = createContext({
-  store: "",
+  createdAt: new Date(),
+  description: "",
+  totalNumber: 0,
   value: 0,
   searchText: "",
   handleResetValue: (value: number, searchText: string) => {},
@@ -243,21 +247,25 @@ const SingleStoreScreen = () => {
         </div>
       </div>
 
-      <StoreContext.Provider
-        value={{
-          store: JSON.stringify(store),
-          value: value,
-          searchText: searchText,
-          handleResetValue: handleResetValue,
-        }}
-      >
-        <ScrollTabs
-          tabs={storeSellerTabs}
-          hasSearchTab
-          value={value}
-          handleChange={handleChange}
-        />
-      </StoreContext.Provider>
+      {store ? (
+        <StoreContext.Provider
+          value={{
+            createdAt: store.createdAt,
+            description: store.description,
+            totalNumber: store.products.length,
+            value: value,
+            searchText: searchText,
+            handleResetValue: handleResetValue,
+          }}
+        >
+          <ScrollTabs
+            tabs={storeSellerTabs}
+            hasSearchTab
+            value={value}
+            handleChange={handleChange}
+          />
+        </StoreContext.Provider>
+      ) : null}
     </DefaultLayout>
   );
 };

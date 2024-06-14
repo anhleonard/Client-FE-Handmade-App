@@ -6,7 +6,7 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import KeyboardBackspaceRoundedIcon from "@mui/icons-material/KeyboardBackspaceRounded";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import storage from "@/apis/storage";
 import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";

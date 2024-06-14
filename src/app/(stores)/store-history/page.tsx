@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactNode, useContext } from "react";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { Tooltip } from "@mui/material";
@@ -7,7 +8,6 @@ import { StoreContext } from "../store/[id]/page";
 
 const StoreHistory = () => {
   const theme = useContext(StoreContext);
-  const store = JSON.parse(theme.store);
 
   const storeHistoryItem = (title: string, content: ReactNode) => {
     return (
@@ -55,12 +55,12 @@ const StoreHistory = () => {
       <div className="space-y-4">
         {storeHistoryItem(
           "Thành viên từ năm",
-          new Date(store?.createdAt).getFullYear()
+          new Date(theme.createdAt).getFullYear()
         )}
 
-        {storeHistoryItem("Sản phẩm", store?.products?.length)}
+        {storeHistoryItem("Sản phẩm", theme.totalNumber)}
 
-        {storeHistoryItem("Mô tả cửa hàng", store?.description)}
+        {storeHistoryItem("Mô tả cửa hàng", theme.description)}
 
         {storeHistoryItem(
           "Đánh giá",
