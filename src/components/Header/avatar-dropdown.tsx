@@ -8,14 +8,18 @@ import storage from "@/apis/storage";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@mui/material";
 import { headerUrl } from "@/apis/services/authentication";
+import { useDispatch } from "react-redux";
+import { removeUser } from "@/redux/slices/userSlice";
 
 export default function AvatarDropdown() {
+  const dispatch = useDispatch();
   const user = getCurrentUser();
   const router = useRouter();
 
   const handleLogout = (close: any) => {
     close();
     localStorage.clear();
+    dispatch(removeUser());
     router.push("/login");
   };
 

@@ -70,11 +70,6 @@ const AunctionCard = ({ auction }: Props) => {
                 <div className="line-clamp-4 text-justify text-sm font-normal text-grey-c900">
                   {auction?.description}
                 </div>
-                {/* <div className="flex flex-row items-center gap-3 text-sm font-medium text-primary-c900">
-                  <div className="hover:cursor-pointer">Đan len</div>
-                  <div className="hover:cursor-pointer">Thú nhồi bông</div>
-                  <div className="hover:cursor-pointer">Quà tặng</div>
-                </div> */}
               </div>
               {/* right content */}
               <div className="col-span-1 flex flex-col gap-3">

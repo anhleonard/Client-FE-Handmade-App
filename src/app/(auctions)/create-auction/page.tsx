@@ -3,18 +3,15 @@ import SecondaryAuctionLayout from "@/components/auctions/secondary-auction-layo
 import { contentShippingAddress, formatCurrency } from "@/enum/functions";
 import FormatEndCurrencyIcon from "@/libs/format-end-currency-icon";
 import MyPrimaryTextField from "@/libs/primary-text-field";
-import MySelect from "@/libs/select";
 import MyTextArea from "@/libs/text-area";
 import MyTextField from "@/libs/text-field";
 import React, { useEffect, useState } from "react";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import { COLORS } from "@/enum/colors";
-import ListSellerPrice from "@/components/auctions/list-seller-price";
 import Button from "@/libs/button";
 import { Collapse, FormControl, RadioGroup } from "@mui/material";
 import { UploadFile } from "antd";
 import UploadImage from "@/libs/upload-image";
-import * as yup from "yup";
 import { Form, Formik, getIn } from "formik";
 import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
@@ -65,7 +62,6 @@ const CreateAuctionPage = () => {
       const variables = {
         userId: +storage.getLocalUserId(),
       };
-
       const token = storage.getLocalAccessToken();
       const response = await getShippingByUserId(variables, token);
 

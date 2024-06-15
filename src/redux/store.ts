@@ -6,6 +6,7 @@ import storeSlice from "./slices/storeSlice";
 import orderSlice from "./slices/orderSlice";
 import confirmSlice from "./slices/confirmSlice";
 import modalSlice from "./slices/modalSlice";
+import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     order: orderSlice,
     confirm: confirmSlice,
     modal: modalSlice,
+    user: userSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

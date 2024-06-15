@@ -9,16 +9,13 @@ import Link from "next/link";
 import TemplatesDropdown from "./templates-dropdown";
 import AvatarDropdown from "./avatar-dropdown";
 import CartDropdown from "./cart-dropdown";
-import storage from "@/apis/storage";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
-export interface MainTabsHeaderProps {
-  className?: string;
-}
-
-const MainTabsHeader: FC<MainTabsHeaderProps> = ({ className = "" }) => {
+const MainTabsHeader = () => {
   const [showSearchForm, setShowSearchForm] = useState(false);
   const router = useRouter();
-  const token = storage.getLocalAccessToken();
+  const token = useSelector((state: RootState) => state.user.token);
 
   const renderSearchForm = () => {
     return (

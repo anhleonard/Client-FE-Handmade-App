@@ -6,7 +6,7 @@ import MyPrimaryTextField from "@/libs/primary-text-field";
 import Button from "@/libs/button";
 import { useDispatch } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
-import { getAllPosts, loginUser } from "@/apis/services/authentication";
+import { loginUser } from "@/apis/services/authentication";
 import * as yup from "yup";
 import { LoginFormValues } from "@/apis/types";
 import { Form, Formik, getIn } from "formik";
@@ -16,6 +16,8 @@ import { AlertStatus, Role } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import storage from "@/apis/storage";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { addUser } from "@/redux/slices/userSlice";
 
 const validationSchema = yup.object({
   email: yup
@@ -51,13 +53,31 @@ const LoginPage = () => {
         return;
       }
 
+      // await axios.post(
+      //   "/api/auth",
+      //   {
+      //     token: responseLogin?.accessToken,
+      //   },
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+
       const user = JSON.stringify(responseLogin?.user);
       storage.updateLocalUserId(responseLogin?.user?.id);
       storage.updateLocalAccessToken(responseLogin?.accessToken);
       storage.updateLocalUser(user);
+      dispatch(
+        addUser({
+          token: responseLogin?.accessToken,
+        })
+      );
 
       router.push("/");
     } catch (error: any) {
+      console.log({ error });
       let alert: AlertState = {
         isOpen: true,
         title: "LỖI",
