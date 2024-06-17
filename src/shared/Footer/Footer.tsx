@@ -12,42 +12,21 @@ export interface WidgetFooterMenu {
 const widgetMenus: WidgetFooterMenu[] = [
   {
     id: "5",
-    title: "Getting started",
+    title: "Truy cập",
     menus: [
-      { href: "/", label: "Release Notes" },
-      { href: "/", label: "Upgrade Guide" },
-      { href: "/", label: "Browser Support" },
-      { href: "/", label: "Dark Mode" },
+      { href: "/", label: "Trang chủ" },
+      { href: "/search", label: "Tất cả sản phẩm" },
+      { href: "/auctions", label: "Dự án handmade" },
+      { href: "/account", label: "Thông tin người dùng" },
     ],
   },
   {
     id: "1",
-    title: "Explore",
+    title: "Kết nối",
     menus: [
-      { href: "/", label: "Prototyping" },
-      { href: "/", label: "Design systems" },
-      { href: "/", label: "Pricing" },
-      { href: "/", label: "Security" },
-    ],
-  },
-  {
-    id: "2",
-    title: "Resources",
-    menus: [
-      { href: "/", label: "Best practices" },
-      { href: "/", label: "Support" },
-      { href: "/", label: "Developers" },
-      { href: "/", label: "Learn design" },
-    ],
-  },
-  {
-    id: "4",
-    title: "Community",
-    menus: [
-      { href: "/", label: "Discussion Forums" },
-      { href: "/", label: "Code of Conduct" },
-      { href: "/", label: "Contributing" },
-      { href: "/", label: "API Reference" },
+      { href: "/", label: "Hotline: 0394356433" },
+      { href: "/", label: "Email: handmade-support@gmail.com" },
+      { href: "/", label: "Address: Số 1, Đại Cồ Việt, Hai Bà Trưng, Hà Nội" },
     ],
   },
 ];
@@ -79,14 +58,18 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <div className="relative border-t border-neutral-200 dark:border-neutral-700 p-8">
-      <div className="grid grid-cols-2 gap-y-10 gap-x-5 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 ">
-        <div className="grid grid-cols-4 gap-5 col-span-2 md:col-span-4 lg:md:col-span-1 lg:flex lg:flex-col">
-          <div className="col-span-2 md:col-span-1">
+    <div className="relative border-t border-neutral-200 dark:border-neutral-700 py-8 px-[250px]">
+      <div className="grid grid-cols-3 gap-21">
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5">
             <Logo />
+            <div className="text-sm font-medium text-justify">
+              Chúng tôi tự hào là thương hiệu đầu tiên ở Việt Nam trong lĩnh vực
+              đồ thủ công. Handmade - nơi dừng chân của mọi khách hàng!
+            </div>
           </div>
           <div className="col-span-2 flex items-center md:col-span-3">
-            <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
+            <SocialsList1 />
           </div>
         </div>
         {widgetMenus.map(renderWidgetMenuItem)}

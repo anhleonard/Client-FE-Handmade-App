@@ -16,7 +16,7 @@ const socials: SocialType[] = [
   { name: "Twitter", icon: twitter, href: "#" },
 ];
 
-const SocialsList1 = ({ className = "space-y-3" }: SocialsList1Props) => {
+const SocialsList1 = () => {
   const renderItem = (item: SocialType, index: number) => {
     return (
       <a
@@ -27,13 +27,12 @@ const SocialsList1 = ({ className = "space-y-3" }: SocialsList1Props) => {
         <div className="flex-shrink-0 w-5 ">
           <Image sizes="40px" src={item.icon} alt="" />
         </div>
-        <span className="hidden lg:block text-sm">{item.name}</span>
       </a>
     );
   };
 
   return (
-    <div className={`nc-SocialsList1 ${className}`} data-nc-id="SocialsList1">
+    <div className={"flex flex-row gap-3 items-center"}>
       {socials.map(renderItem)}
     </div>
   );

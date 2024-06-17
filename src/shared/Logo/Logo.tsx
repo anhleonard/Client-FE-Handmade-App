@@ -10,37 +10,14 @@ export interface LogoProps {
   className?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({
-  img = logoImg,
-  imgLight = logoLightImg,
-  className = "flex-shrink-0",
-}) => {
+const Logo: React.FC<LogoProps> = ({ imgLight = logoLightImg }) => {
   return (
     <Link href="/">
-      {/* THIS USE FOR MY CLIENT */}
-      {/* PLEASE UN COMMENT BELLOW CODE AND USE IT */}
-      {img ? (
-        <Image
-          className={`block h-8 sm:h-10 w-auto ${
-            imgLight ? "dark:hidden" : ""
-          }`}
-          src={img}
-          alt="Logo"
-          sizes="200px"
-          priority
-        />
-      ) : (
-        "Logo Here"
-      )}
-      {imgLight && (
-        <Image
-          className="hidden h-8 sm:h-10 w-auto dark:block"
-          src={imgLight}
-          alt="Logo-Light"
-          sizes="200px"
-          priority
-        />
-      )}
+      <img
+        src="/images/handmade-logo.png"
+        alt="handmade-logo"
+        className="h-12"
+      />
     </Link>
   );
 };
