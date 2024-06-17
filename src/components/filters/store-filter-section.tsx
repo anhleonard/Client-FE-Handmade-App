@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FC, useContext, useState } from "react";
-import Heading from "@/components/heading/Heading";
+import Heading from "@/components/Heading/Heading";
 import TabFilters from "@/components/filters/tab-filters";
 import { Transition } from "@/app/headlessui";
 import FilterButton from "./filter-button";

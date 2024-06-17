@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
-import Heading from "@/components/heading/Heading";
+import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import ProductCard from "../products/product-card";

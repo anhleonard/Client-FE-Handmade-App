@@ -1,6 +1,6 @@
 "use client";
 
-import Heading from "@/components/heading/Heading";
+import Heading from "@/components/Heading/Heading";
 import { Category } from "@/enum/defined-types";
 import MainCategoryCard from "../card-categories/main-card-category";
 
