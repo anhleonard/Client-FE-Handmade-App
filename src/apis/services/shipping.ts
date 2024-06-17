@@ -2,13 +2,13 @@ import axios from "axios";
 import { headerUrl } from "./authentication";
 
 const headers = {
-  token: "aa9e9285-0d56-11ef-b1d4-92b443b7a897",
+  token: "bebd3fbf-2c85-11ef-b33d-56f88582bd22",
 };
 
 export const getProvinces = async () => {
   return await axios
     .get(
-      `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province`,
+      `https://online-gateway.ghn.vn/shiip/public-api/master-data/province`,
       {
         headers,
       }
