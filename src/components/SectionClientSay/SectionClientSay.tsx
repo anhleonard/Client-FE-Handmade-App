@@ -2,7 +2,7 @@
 
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import Heading from "@/components/Heading/Heading";
+import Heading from "@/components/heading/Heading";
 import React, { FC, useRef, useState } from "react";
 import { useEffect } from "react";
 import clientSay1 from "@/images/clientSay1.png";

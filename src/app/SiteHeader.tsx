@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useThemeMode } from "@/hooks/useThemeMode";
-import PrimaryHeader from "@/components/header/PrimaryHeader";
+import PrimaryHeader from "@/components/headers/PrimaryHeader";
 
 const SiteHeader = () => {
   useThemeMode();
