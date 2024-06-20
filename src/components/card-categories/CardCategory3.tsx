@@ -1,34 +1,33 @@
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
 import { CATS_DISCOVER } from "./data";
 import { Avatar } from "@mui/material";
-import { headerUrl } from "@/apis/services/authentication";
+import { useRouter } from "next/navigation";
 
 export interface CardCategory3Props {
   id?: number;
   className?: string;
-  featuredImage?: StaticImageData | string;
   name?: string;
   desc?: string;
   color?: string;
   auctionImage?: string;
+  collection?: boolean;
+  close?: any;
 }
 
 const CardCategory3 = ({
   id,
   className = "",
-  featuredImage = CATS_DISCOVER[2].featuredImage,
   name = CATS_DISCOVER[2].name,
   desc = CATS_DISCOVER[2].desc,
   color = CATS_DISCOVER[2].color,
   auctionImage = "/images/default-auction.jpg",
+  collection = false,
+  close,
 }: CardCategory3Props) => {
+  const router = useRouter();
   return (
-    <Link
-      href={`/detail-auction/${id}`}
-      className={`nc-CardCategory3 block ${className}`}
-    >
+    <div className={`nc-CardCategory3 block ${className}`}>
       <div
         className={`relative w-full aspect-w-16 aspect-h-11 sm:aspect-h-9 h-0 rounded-2xl overflow-hidden group ${color}`}
       >
@@ -61,6 +60,14 @@ const CardCategory3 = ({
                 sizeClass="py-3 px-4 sm:py-3.5 sm:px-6"
                 fontSize="text-sm font-medium"
                 className="nc-shadow-lg"
+                onClick={() => {
+                  if (close) {
+                    close();
+                  }
+                  router.push(
+                    !collection ? `/detail-auction/${id}` : `/collection/${id}`
+                  );
+                }}
               >
                 Xem chi tiết
               </ButtonSecondary>
@@ -68,7 +75,7 @@ const CardCategory3 = ({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

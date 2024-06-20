@@ -389,14 +389,14 @@ const ProductDetailPage = () => {
             {/* seller avatar */}
             <Avatar
               src={`${headerUrl}/products/${product?.store?.avatar}`}
-              sx={{ width: 45, height: 45 }}
+              sx={{ width: 50, height: 50 }}
               alt="store-avatar"
             ></Avatar>
 
-            <div>
+            <div className="flex flex-col gap-1">
               {/* store information */}
               <div
-                className="font-bold hover:underline cursor-pointer"
+                className="font-bold hover:underline cursor-pointer hover:text-primary-c900"
                 onClick={() => {
                   storage.updateStoreTab("1");
                   router.push(`/store/${product?.store?.id}`);
@@ -405,14 +405,8 @@ const ProductDetailPage = () => {
                 {product?.store?.name}
               </div>
               <div className="flex items-center gap-6 font-medium text-sm">
-                <div className="flex items-center gap-1">
-                  <div>4.7/5</div>
-                  <StarRoundedIcon
-                    sx={{ fontSize: 18, color: COLORS.primary.c900 }}
-                  />
-                </div>
-                <div>Lượt theo dõi: 1234</div>
-                <div>Điểm uy tín: 1200</div>
+                <div>Lượt theo dõi: {product?.store?.followers?.length}</div>
+                <div>Điểm uy tín: {product?.store?.score}</div>
               </div>
             </div>
           </div>

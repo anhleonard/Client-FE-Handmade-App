@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "handmade-app.io.vn",
       },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+      },
     ],
   },
   typescript: {

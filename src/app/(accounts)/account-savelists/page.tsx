@@ -1,6 +1,7 @@
 "use client";
 import { getFavouriteProducts } from "@/apis/services/products";
 import storage from "@/apis/storage";
+import NoOrderCard from "@/components/account-orders/no-order-card";
 import ProductCard from "@/components/products/product-card";
 import { AlertStatus } from "@/enum/constants";
 import { AlertState, Product } from "@/enum/defined-types";
@@ -101,21 +102,22 @@ const AccountSavelists = () => {
       <div className="font-medium">Có tất cả {products?.length} sản phẩm</div>
 
       <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 md:grid-cols-3">
-        {products?.map((product, index) => (
-          <ProductCard
-            key={product.id}
-            item={product}
-            selectedItems={selected}
-            handleChecked={handleChange}
-            isLiked={product?.isLiked}
-            localToken={localToken}
-            handleRefetch={handleRefetch}
-          />
-        ))}
-      </div>
-
-      <div className="flex !mt-20 justify-center items-center">
-        <ButtonSecondary loading>Show me more</ButtonSecondary>
+        {products?.length
+          ? products?.map((product, index) => (
+              <ProductCard
+                key={product.id}
+                item={product}
+                selectedItems={selected}
+                handleChecked={handleChange}
+                isLiked={product?.isLiked}
+                localToken={localToken}
+                handleRefetch={handleRefetch}
+              />
+            ))
+          : null}
+        {!products?.length && (
+          <NoOrderCard title="Bạn chưa có sản phẩm nào ở đây!" />
+        )}
       </div>
     </div>
   );

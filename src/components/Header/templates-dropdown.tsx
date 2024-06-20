@@ -11,17 +11,31 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { findAllCategories } from "@/apis/services/categories";
 import { useRouter } from "next/navigation";
 import CardCategory3 from "../card-categories/CardCategory3";
+import { headerUrl } from "@/apis/services/authentication";
 
 export default function TemplatesDropdown() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [hotCategory, setHotCategory] = useState<Category | null>();
 
   const getAllCategories = async () => {
     try {
       dispatch(openLoading());
-      const res = await findAllCategories();
+      const res: Category[] = await findAllCategories();
       if (res) {
+        // Tìm danh mục có số lượng sản phẩm nhiều nhất
+        let maxCount = 0;
+        let foundCategory: Category | null = null;
+        for (let cate of res) {
+          if (cate?.products?.length) {
+            if (cate?.products?.length > maxCount) {
+              maxCount = cate?.products?.length;
+              foundCategory = cate;
+            }
+          }
+        }
+        setHotCategory(foundCategory);
         setCategories(res);
       }
     } catch (error: any) {
@@ -91,7 +105,14 @@ export default function TemplatesDropdown() {
                       })}
                     </div>
                     <div className="w-[40%] xl:w-[35%]">
-                      <CardCategory3 />
+                      <CardCategory3
+                        id={8}
+                        name="Danh mục"
+                        desc="Quà tặng"
+                        auctionImage={`https://i.pinimg.com/736x/d1/62/29/d1622919d386f4dffaf0f406305b91e6.jpg`}
+                        collection
+                        close={close}
+                      />
                     </div>
                   </div>
                 </div>

@@ -23,6 +23,7 @@ import StoreHistory from "../../store-history/page";
 import { ChangeFollowerValues } from "@/apis/types";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
+import { headerUrl } from "@/apis/services/authentication";
 
 interface StoreContextType {
   createdAt: Date;
@@ -198,24 +199,15 @@ const SingleStoreScreen = () => {
             >
               <Avatar
                 sx={{ width: 64, height: 64 }}
-                src="/images/bags/bag-1.jpg"
+                src={`${headerUrl}/products/${store?.avatar}`}
               />
               <div className="font-semibold text-center">{store?.name}</div>
               <div className="flex items-center gap-5 text-sm">
-                <div className="flex items-center gap-1">
-                  <StarRoundedIcon
-                    sx={{ fontSize: 20, color: COLORS.yellow.c900 }}
-                  />
-                  <div>4.7/5</div>
-                </div>
-                <div>Người theo dõi: 1200</div>
-                <div>Điểm uy tín: 1234</div>
+                <div>Người theo dõi: {store?.followers?.length}</div>
+                <div>Điểm uy tín: {store?.score}</div>
               </div>
               {/* seller actions */}
               <div className="flex items-center gap-3">
-                <Button className="!text-xs !px-3 !py-1.5" color="info">
-                  Chat ngay
-                </Button>
                 {!followed ? (
                   <Button
                     onClick={() => handleChangeFollower()}
@@ -239,7 +231,7 @@ const SingleStoreScreen = () => {
         </div>
         <div className="relative col-span-4 rounded-2xl overflow-hidden h-full">
           <Image
-            src={"/images/bg-store-2.svg"}
+            src={"/images/store-bg-long.svg"}
             alt="background-store-2"
             layout="fill"
             objectFit="cover"
