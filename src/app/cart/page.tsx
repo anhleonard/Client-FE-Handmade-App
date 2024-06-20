@@ -17,7 +17,12 @@ import Button from "@/libs/button";
 import SellerItemsPackage from "@/components/cart/seller-items-package";
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import { useRouter } from "next/navigation";
-import { AlertState, OrderProduct, SellerPackage } from "@/enum/defined-types";
+import {
+  AlertState,
+  OrderProduct,
+  SellerPackage,
+  Store,
+} from "@/enum/defined-types";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,6 +53,7 @@ const CartPage = () => {
       if (res) {
         let items: OrderProduct[] = [];
         for (let store of res) {
+          console.log("order products of store:", store?.store);
           const foundItem = store?.orderProducts
             .filter((item: any) => item.isSelected)
             .map((item: any) => item);

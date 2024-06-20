@@ -11,11 +11,13 @@ import AvatarDropdown from "./avatar-dropdown";
 import CartDropdown from "./cart-dropdown";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import storage from "@/apis/storage";
 
 const MainTabsHeader = () => {
   const [showSearchForm, setShowSearchForm] = useState(false);
   const router = useRouter();
   const token = useSelector((state: RootState) => state.user.token);
+  const localToken = storage.getLocalAccessToken();
 
   const renderSearchForm = () => {
     return (
@@ -72,7 +74,7 @@ const MainTabsHeader = () => {
           <div className="flex-1 flex items-center justify-end ">
             {!showSearchForm && <TemplatesDropdown />}
 
-            {!token ? (
+            {!token && !localToken ? (
               <div className="flex flex-row gap-2 items-center">
                 <div className="hidden md:block">
                   <Link href="/signup">
@@ -92,8 +94,8 @@ const MainTabsHeader = () => {
               </div>
             ) : null}
 
-            {token ? <AvatarDropdown /> : null}
-            {token ? <CartDropdown /> : null}
+            {token || localToken ? <AvatarDropdown /> : null}
+            {token || localToken ? <CartDropdown /> : null}
           </div>
         </div>
       </div>
