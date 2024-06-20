@@ -115,10 +115,10 @@ const AccountSavelists = () => {
               />
             ))
           : null}
-        {!products?.length && (
-          <NoOrderCard title="Bạn chưa có sản phẩm nào ở đây!" />
-        )}
       </div>
+      {!products?.length && (
+        <NoOrderCard title="Bạn chưa có sản phẩm nào ở đây!" />
+      )}
     </div>
   );
 };
