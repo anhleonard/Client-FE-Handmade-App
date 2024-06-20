@@ -19,7 +19,7 @@ export const getProvinces = async () => {
 export const getDistricts = async (provinceId: number) => {
   return await axios
     .get(
-      `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceId}`,
+      `https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceId}`,
       {
         headers,
       }
@@ -30,7 +30,7 @@ export const getDistricts = async (provinceId: number) => {
 export const getWards = async (districtId: number) => {
   return await axios
     .get(
-      `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`,
+      `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`,
       {
         headers,
       }
