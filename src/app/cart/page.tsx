@@ -1,32 +1,15 @@
 "use client";
-import { NoSymbolIcon, CheckIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import {
-  Breadcrumbs,
-  Collapse,
-  List,
-  ListItem,
-  ListItemButton,
-} from "@mui/material";
+import { Collapse, List, ListItem, ListItemButton } from "@mui/material";
 import DefaultLayout from "@/layout/default-layout";
 import ChildHeading from "@/layout/child-heading";
-import { COLORS } from "@/enum/colors";
 import { useEffect, useState } from "react";
 import { calculateTotalPrice, formatCurrency } from "@/enum/functions";
 import Button from "@/libs/button";
-import SellerItemsPackage from "@/components/cart/seller-items-package";
-import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import { useRouter } from "next/navigation";
-import {
-  AlertState,
-  OrderProduct,
-  SellerPackage,
-  Store,
-} from "@/enum/defined-types";
+import { AlertState, OrderProduct, SellerPackage } from "@/enum/defined-types";
 import { AlertStatus } from "@/enum/constants";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import storage from "@/apis/storage";
 import { orderProductsByUser } from "@/apis/services/order-products";
 import TestSellerItemsPackage from "@/components/cart/test-seller-items-package";
@@ -49,18 +32,23 @@ const CartPage = () => {
   const getListSellerPackages = async () => {
     try {
       const token = storage.getLocalAccessToken();
-      const res = await orderProductsByUser(token);
+      const res: SellerPackage[] = await orderProductsByUser(token);
       if (res) {
         let items: OrderProduct[] = [];
-        for (let store of res) {
-          console.log("order products of store:", store?.store);
+
+        let sortedData = res;
+        if (res?.length) {
+          sortedData = res.sort((a, b) => a.store.id - b.store.id);
+        }
+
+        for (let store of sortedData) {
           const foundItem = store?.orderProducts
-            .filter((item: any) => item.isSelected)
-            .map((item: any) => item);
+            .filter((item) => item.isSelected)
+            .map((item) => item);
           items = [...items, ...foundItem];
         }
         setSelectedOrderProducts(items);
-        setListSellerPackages(res);
+        setListSellerPackages(sortedData);
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -79,24 +67,6 @@ const CartPage = () => {
 
   const handleRefetch = () => {
     dispatch(refetchComponent());
-  };
-
-  const renderStatusSoldout = () => {
-    return (
-      <div className="rounded-full flex items-center justify-center px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-        <NoSymbolIcon className="w-3.5 h-3.5" />
-        <span className="ml-1 leading-none">Sold Out</span>
-      </div>
-    );
-  };
-
-  const renderStatusInstock = () => {
-    return (
-      <div className="rounded-full flex items-center justify-center px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-        <CheckIcon className="w-3.5 h-3.5" />
-        <span className="ml-1 leading-none">In Stock</span>
-      </div>
-    );
   };
 
   return (

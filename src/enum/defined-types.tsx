@@ -153,8 +153,8 @@ export type OrderProduct = {
 export type SellerPackage = {
   store: Store;
   orderProducts: OrderProduct[];
-  selectedItems: string[];
-  totalPayment: number;
+  // selectedItems: string[];
+  // totalPayment: number;
 };
 
 export type SelectedPackage = {
