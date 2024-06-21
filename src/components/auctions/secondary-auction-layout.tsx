@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { ReactNode } from "react";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { COLORS } from "@/enum/colors";
+import RandomAuctions from "./random-auctions";
 
 type Props = {
   children?: ReactNode;
@@ -32,19 +33,7 @@ const SecondaryAuctionLayout = ({ children, headerTitle }: Props) => {
 
           {/* right content */}
           <div className="flex flex-col gap-4 md:col-span-1">
-            <div className="font-bold text-grey-c900">Các dự án khác</div>
-            <div className="flex flex-col gap-2">
-              <div className="font-bold text-grey-c900 hover:cursor-pointer hover:underline">
-                Large-scale Oracle to MySQL Conversion
-              </div>
-              <div className="text-sm">$100 - $200</div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="font-bold text-grey-c900 hover:cursor-pointer hover:underline">
-                Large-scale Oracle to MySQL Conversion
-              </div>
-              <div className="text-sm">$100 - $200</div>
-            </div>
+            <RandomAuctions />
           </div>
         </div>
       </div>

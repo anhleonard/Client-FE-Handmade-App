@@ -85,3 +85,9 @@ export const updatePaidAuction = async (variables: any, token: string) => {
 export const filterTopAuctions = async () => {
   return await axios.get(`${headerUrl}/auctions/top`).then((res) => res.data);
 };
+
+export const randomAuctions = async () => {
+  return await axios
+    .get(`${headerUrl}/auctions/random`)
+    .then((res) => res.data);
+};
