@@ -19,9 +19,7 @@ import { COLORS } from "@/enum/colors";
 import ProductReviews from "@/components/reviews/product-reviews";
 import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import { AlertStatus, exampleItems } from "@/enum/constants";
-import Link from "next/link";
+import { AlertStatus } from "@/enum/constants";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AlertState, Product, Variant } from "@/enum/defined-types";
@@ -31,7 +29,7 @@ import { openAlert } from "@/redux/slices/alertSlice";
 import { headerUrl } from "@/apis/services/authentication";
 import { createOrderProduct } from "@/apis/services/order-products";
 import storage from "@/apis/storage";
-import { ChangeFollowerValues, OrderProductValues } from "@/apis/types";
+import { OrderProductValues } from "@/apis/types";
 import { filterStoreProducts } from "@/apis/services/stores";
 
 const ProductDetailPage = () => {
@@ -169,7 +167,7 @@ const ProductDetailPage = () => {
     }
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (isSelected: boolean) => {
     if (productId && typeof productId === "string") {
       try {
         dispatch(openLoading());
@@ -179,6 +177,7 @@ const ProductDetailPage = () => {
           productId: parseInt(productId),
           productQuantity: qualitySelected,
           ...(selectedVariant?.id && { variantId: selectedVariant.id }),
+          ...(isSelected && { isSelected: true }),
         };
         const res = await createOrderProduct(variables, token);
         if (res) {
@@ -282,7 +281,7 @@ const ProductDetailPage = () => {
             />
             <Button
               className="!flex-1 hover:!scale-[1.02]"
-              onClick={() => handleAddToCart()}
+              onClick={() => handleAddToCart(false)}
               startIcon={
                 <ShoppingBagOutlinedIcon
                   sx={{ color: COLORS.white, fontSize: 22 }}
@@ -291,7 +290,11 @@ const ProductDetailPage = () => {
             >
               THÊM VÀO GIỎ HÀNG
             </Button>
-            <Button className="min-w-[140px] hover:!scale-[1.02]" color="error">
+            <Button
+              className="min-w-[140px] hover:!scale-[1.02]"
+              color="error"
+              onClick={() => handleAddToCart(true)}
+            >
               MUA NGAY
             </Button>
           </div>
@@ -313,15 +316,6 @@ const ProductDetailPage = () => {
             content={product?.description}
           />
           <AccordionInfo title="Công dụng" content={product?.uses} />
-          <AccordionInfo
-            title="Chính sách vận chuyển & hoàn trả"
-            content={
-              <ul>
-                <li>Đặt hàng ngay hôm nay và nhận trước ngày 15/3/2024</li>
-                <li>Không đổi trả</li>
-              </ul>
-            }
-          />
           {product?.productionDate && (
             <AccordionInfo
               title="Ngày sản xuất"

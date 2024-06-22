@@ -1,5 +1,4 @@
 import { EnumOrderStatus } from "@/enum/constants";
-import { OrderStatus } from "@/enum/defined-types";
 
 export type LoginFormValues = {
   email: string;
@@ -19,6 +18,7 @@ export type OrderProductValues = {
   productId: number;
   productQuantity: number;
   variantId?: number;
+  isSelected?: boolean;
 };
 
 export type UpdateOrderProductValues = {

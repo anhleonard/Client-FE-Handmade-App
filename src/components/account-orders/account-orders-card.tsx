@@ -1,9 +1,8 @@
 "use client";
 import { Collapse, List, ListItem } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import { COLORS } from "@/enum/colors";
-import MyDisplayImage from "@/libs/display-image";
 import {
   formatCurrency,
   formatDate,
@@ -99,11 +98,6 @@ const AccountOrdersCard = ({
             onClick={() => handleOpenCancelModal()}
           >
             Hủy đơn
-          </Button>
-        )}
-        {status === EnumOrderStatus.SHIPPED && (
-          <Button className="!text-sm !font-normal" color="grey">
-            Yêu cầu đổi trả/ hoàn tiền
           </Button>
         )}
         {status === EnumOrderStatus.CENCELLED && (

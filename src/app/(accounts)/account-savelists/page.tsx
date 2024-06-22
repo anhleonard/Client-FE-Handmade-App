@@ -78,7 +78,7 @@ const AccountSavelists = () => {
         <div className="text-lg font-bold text-grey-c900">
           Sản phẩm yêu thích
         </div>
-        <div className="flex items-center gap-6">
+        {/* <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <MySingleCheckBox
               value={"all"}
@@ -95,7 +95,7 @@ const AccountSavelists = () => {
           >
             Thêm vào giỏ hàng
           </Button>
-        </div>
+        </div> */}
       </div>
 
       <div className="font-medium">Có tất cả {products?.length} sản phẩm</div>

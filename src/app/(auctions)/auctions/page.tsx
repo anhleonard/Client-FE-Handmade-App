@@ -14,7 +14,6 @@ import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { filterAuctions } from "@/apis/services/auctions";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import storage from "@/apis/storage";
 

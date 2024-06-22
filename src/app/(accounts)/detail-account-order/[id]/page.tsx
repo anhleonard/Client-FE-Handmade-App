@@ -15,7 +15,6 @@ import { AlertState, Order } from "@/enum/defined-types";
 import { openAlert } from "@/redux/slices/alertSlice";
 import storage from "@/apis/storage";
 import { singleOrder } from "@/apis/services/orders";
-import { formatDate } from "@/enum/functions";
 
 const DetailAccountOrder = () => {
   const router = useRouter();

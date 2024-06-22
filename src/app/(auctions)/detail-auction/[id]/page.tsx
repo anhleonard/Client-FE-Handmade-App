@@ -3,7 +3,7 @@ import DetailAuction from "@/components/auctions/detail-auction";
 import ListSellerPrice from "@/components/auctions/list-seller-price";
 import React, { useEffect, useState } from "react";
 import SecondaryAuctionLayout from "@/components/auctions/secondary-auction-layout";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { AlertState, Auction, Shipping } from "@/enum/defined-types";
 import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";

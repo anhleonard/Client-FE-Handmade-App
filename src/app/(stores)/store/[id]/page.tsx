@@ -3,8 +3,6 @@ import DefaultLayout from "@/layout/default-layout";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
 import React, { Context, createContext, useEffect, useState } from "react";
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import { COLORS } from "@/enum/colors";
 import Button from "@/libs/button";
 import { AlertStatus } from "@/enum/constants";
 import { useParams } from "next/navigation";

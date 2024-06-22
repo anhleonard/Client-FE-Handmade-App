@@ -11,7 +11,7 @@ import { Form, Formik, getIn } from "formik";
 import { ChangePasswordValues } from "@/apis/types";
 import { AlertState } from "@/enum/defined-types";
 import { AlertStatus } from "@/enum/constants";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { openAlert } from "@/redux/slices/alertSlice";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { changePassword } from "@/apis/services/users";

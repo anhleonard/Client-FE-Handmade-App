@@ -16,7 +16,6 @@ import CompletedAuctions from "@/components/account-auction/completed-auctions/c
 import CanceledAuctions from "@/components/account-auction/canceled-auctions/canceled-auctions";
 import AllAuctions from "@/components/account-auction/all-auctions/all-auctions";
 import WaitingAuctions from "@/components/account-auction/waiting-auctions/waiting-auctions";
-import OverdateAuctions from "@/components/account-auction/overdate-auctions/overdate-auctions-table";
 
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
@@ -145,108 +144,6 @@ export const accountAuctionTabs = [
   //   content: <OverdateAuctions />,
   // },
 ];
-
-export const exampleItems = {
-  totalItems: 4,
-  items: [
-    {
-      id: "item-option-0",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 140ml",
-      price: 79000,
-      prePrice: 100000,
-      discount: 15,
-      rating: 2,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-1.jpg",
-    },
-    {
-      id: "item-option-1",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 240ml",
-      price: 80000,
-      prePrice: 120000,
-      discount: 25,
-      rating: 4,
-      sellerName: "Khoai lang thang",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-2.jpg",
-    },
-    {
-      id: "item-option-2",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-      price: 92000,
-      prePrice: 250000,
-      discount: 30,
-      rating: 5,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-3.jpg",
-    },
-    {
-      id: "item-option-3",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-      price: 92000,
-      prePrice: 250000,
-      discount: 30,
-      rating: 5,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-4.jpg",
-    },
-    {
-      id: "item-option-4",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-      price: 92000,
-      prePrice: 250000,
-      discount: 30,
-      rating: 5,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-4.jpg",
-    },
-    {
-      id: "item-option-5",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-      price: 92000,
-      prePrice: 250000,
-      discount: 30,
-      rating: 5,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-4.jpg",
-    },
-    {
-      id: "item-option-6",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-      price: 92000,
-      prePrice: 250000,
-      discount: 30,
-      rating: 5,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-4.jpg",
-    },
-    {
-      id: "item-option-7",
-      name: "Nước Dưỡng Tóc Tinh Dầu Bưởi Cocoon 340ml",
-      price: 92000,
-      prePrice: 250000,
-      discount: 30,
-      rating: 5,
-      sellerName: "Tiệm nhà len",
-      isLiked: true,
-      sold: 556,
-      image: "/images/bags/bag-4.jpg",
-    },
-  ],
-};
 
 export const orderStatus: OrderStatus[] = [
   {

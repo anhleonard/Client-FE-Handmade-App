@@ -36,13 +36,13 @@ const AccountAdressCard = ({
             </div>
           </div>
           <div className="flex flex-col gap-1 items-end">
-            <div className="flex flex-row gap-3 items-center">
+            {/* <div className="flex flex-row gap-3 items-center">
               <MyTextAction label="Xóa" color="text-blue-c900" />
               <MyTextAction
                 label="Chỉnh sửa"
                 onClick={() => router.push(`/update-address/${radioValue}`)}
               />
-            </div>
+            </div> */}
             <div className="flex flex-row gap-3 items-center">
               <FormControlLabel
                 value={radioValue}

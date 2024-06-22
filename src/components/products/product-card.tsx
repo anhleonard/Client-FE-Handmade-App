@@ -10,7 +10,6 @@ import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
 import { formatCurrency } from "@/enum/functions";
 import { Rating } from "@mui/material";
-import MySingleCheckBox from "@/libs/single-checkbox";
 import { Product } from "@/enum/defined-types";
 import { headerUrl } from "@/apis/services/authentication";
 
@@ -104,7 +103,7 @@ const ProductCard: FC<ProductCardProps> = ({
                 readOnly
               />
 
-              {!pathname.includes("/account-savelists") ? (
+              {/* {!pathname.includes("/account-savelists") ? (
                 <div className="text-grey-c400 font-normal text-xs">
                   Đã bán {item?.soldNumber}
                 </div>
@@ -118,7 +117,10 @@ const ProductCard: FC<ProductCardProps> = ({
                   }}
                   isChecked={selectedItems?.includes(item?.id.toString())}
                 />
-              )}
+              )} */}
+              <div className="text-grey-c400 font-normal text-xs">
+                Đã bán {item?.soldNumber}
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,3 @@
-import { exampleItems } from "@/enum/constants";
 import React from "react";
 import ProductCard from "../products/product-card";
 import Button from "@/libs/button";

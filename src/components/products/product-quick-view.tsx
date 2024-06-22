@@ -149,7 +149,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
     }
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (isSelected: boolean) => {
     if (product?.id) {
       try {
         dispatch(openLoading());
@@ -159,6 +159,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
           productId: product?.id,
           productQuantity: qualitySelected,
           ...(selectedVariant?.id && { variantId: selectedVariant.id }),
+          ...(isSelected && { isSelected: true }),
         };
         const res = await createOrderProduct(variables, token);
         if (res) {
@@ -259,7 +260,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
           </div>
           <Button
             className="!flex-1 hover:!scale-100 hover:!opacity-80"
-            onClick={() => handleAddToCart()}
+            onClick={() => handleAddToCart(false)}
             startIcon={
               <ShoppingBagOutlinedIcon
                 sx={{ color: COLORS.white, fontSize: 22 }}
@@ -271,6 +272,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
           <Button
             className="min-w-[140px] hover:!scale-100 hover:!opacity-80"
             color="error"
+            onClick={() => handleAddToCart(true)}
           >
             MUA NGAY
           </Button>

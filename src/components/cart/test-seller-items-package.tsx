@@ -5,7 +5,6 @@ import MySingleCheckBox from "@/libs/single-checkbox";
 import { Collapse, Divider, List, ListItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import MyTextArea from "@/libs/text-area";
 import { AlertState, OrderProduct, SellerPackage } from "@/enum/defined-types";
 import TestBuyingItem from "./test-buying-item";
 import storage from "@/apis/storage";
@@ -13,6 +12,7 @@ import { updatedOrderProduct } from "@/apis/services/order-products";
 import { AlertStatus } from "@/enum/constants";
 import { useDispatch } from "react-redux";
 import { openAlert } from "@/redux/slices/alertSlice";
+import Link from "next/link";
 
 function calculateTotalPrice(
   selectedItems: string[],
@@ -116,9 +116,12 @@ const TestSellerItemsPackage = ({ sellerPackage, handleRefetch }: Props) => {
             <StorefrontOutlinedIcon
               sx={{ fontSize: 24, color: COLORS.grey.c900 }}
             />
-            <div className="text-base font-bold text-grey-c900">
+            <Link
+              href={`/store/${sellerPackage?.store?.id}`}
+              className="text-base font-bold text-grey-c900 hover:text-primary-c900 hover:underline"
+            >
               {sellerPackage?.store?.name}
-            </div>
+            </Link>
             <MyLabel type="warning">
               {sellerPackage.orderProducts.length} sản phẩm
             </MyLabel>
@@ -157,11 +160,11 @@ const TestSellerItemsPackage = ({ sellerPackage, handleRefetch }: Props) => {
           <ListItem className="block w-full px-4 py-4" disablePadding>
             <div className="grid md:grid-cols-2 gap-5">
               <div className="col-span-1">
-                <MyTextArea
+                {/* <MyTextArea
                   id={`${Math.random()}`}
                   placeholder="Ghi chú cho nhà bán"
                   className="h-full"
-                />
+                /> */}
               </div>
               <div className="col-span-1 bg-primary-c50 p-4 text-sm text-grey-c900 rounded-2xl space-y-4">
                 <div className="flex flex-row justify-between items-center">
@@ -180,12 +183,6 @@ const TestSellerItemsPackage = ({ sellerPackage, handleRefetch }: Props) => {
                       )
                     )}
                   </div>
-                </div>
-                <div className="flex flex-row justify-between items-center">
-                  <div className="text-grey-c700 font-semibold">
-                    Tiền được giảm
-                  </div>
-                  <div className="font-bold">- {formatCurrency(0)}</div>
                 </div>
                 <Divider
                   sx={{
