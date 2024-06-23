@@ -1,4 +1,3 @@
-import explore1Svg from "@/images/collections/explore1.svg";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
@@ -14,18 +13,14 @@ export interface Props {
   category: Category;
 }
 
-const MainCategoryCard = ({
-  className = "",
-  bgSVG = explore1Svg,
-  category,
-}: Props) => {
+const MainCategoryCard = ({ className = "", bgSVG, category }: Props) => {
   return (
     <div
       className={`nc-CardCategory4 relative w-full aspect-w-12 aspect-h-11 h-0 rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 group hover:nc-shadow-lg transition-shadow ${className}`}
     >
       <div>
         <div className="absolute bottom-0 right-0 max-w-[280px] opacity-80">
-          <Image src={bgSVG} alt="" />
+          {bgSVG ? <Image src={bgSVG} alt="" /> : null}
         </div>
 
         <div className="absolute inset-5 sm:inset-8 flex flex-col justify-between">

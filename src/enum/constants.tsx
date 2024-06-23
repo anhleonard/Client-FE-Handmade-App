@@ -16,6 +16,27 @@ import CompletedAuctions from "@/components/account-auction/completed-auctions/c
 import CanceledAuctions from "@/components/account-auction/canceled-auctions/canceled-auctions";
 import AllAuctions from "@/components/account-auction/all-auctions/all-auctions";
 import WaitingAuctions from "@/components/account-auction/waiting-auctions/waiting-auctions";
+import explore1Svg from "@/images/collections/explore1.svg";
+import explore2Svg from "@/images/collections/explore2.svg";
+import explore3Svg from "@/images/collections/explore3.svg";
+import explore4Svg from "@/images/collections/explore4.svg";
+import explore5Svg from "@/images/collections/explore5.svg";
+import explore6Svg from "@/images/collections/explore6.svg";
+import explore7Svg from "@/images/collections/explore7.svg";
+import explore8Svg from "@/images/collections/explore8.svg";
+import explore9Svg from "@/images/collections/explore9.svg";
+
+export const rightSvgs = [
+  explore1Svg,
+  explore2Svg,
+  explore3Svg,
+  explore4Svg,
+  explore5Svg,
+  explore6Svg,
+  explore7Svg,
+  explore8Svg,
+  explore9Svg,
+];
 
 export enum ColorState {
   primary = "bg-primary-c800 text-white text-xs font-medium",
