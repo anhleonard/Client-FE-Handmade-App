@@ -18,6 +18,7 @@ import AccountAuction from "./account-auction/page";
 import ReorderRoundedIcon from "@mui/icons-material/ReorderRounded";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import storage from "@/apis/storage";
+import withAuth from "@/components/authentication/withAuth";
 
 export interface CommonLayoutProps {
   children?: React.ReactNode;
@@ -130,4 +131,4 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
   );
 };
 
-export default CommonLayout;
+export default withAuth(CommonLayout);

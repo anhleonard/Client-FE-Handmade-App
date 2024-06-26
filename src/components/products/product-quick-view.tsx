@@ -169,7 +169,10 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({
         let alert: AlertState = {
           isOpen: true,
           title: "LỖI",
-          message: error?.response?.data?.message,
+          message:
+            error?.response?.data?.message === "Forbidden resource"
+              ? "Vui lòng đăng nhập để sử dụng chức năng này!"
+              : error?.response?.data?.message,
           type: AlertStatus.ERROR,
         };
         dispatch(openAlert(alert));

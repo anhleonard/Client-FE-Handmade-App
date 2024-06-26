@@ -30,6 +30,7 @@ import { createPayment } from "@/apis/services/payments";
 import { CreatePaymentValues } from "@/apis/types";
 import { RootState } from "@/redux/store";
 import { createOrder } from "@/apis/services/orders";
+import withAuth from "@/components/authentication/withAuth";
 
 const paymentWays = [
   {
@@ -264,4 +265,4 @@ const PaymentPage = () => {
   );
 };
 
-export default PaymentPage;
+export default withAuth(PaymentPage);

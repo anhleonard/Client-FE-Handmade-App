@@ -15,6 +15,7 @@ import { orderProductsByUser } from "@/apis/services/order-products";
 import TestSellerItemsPackage from "@/components/cart/test-seller-items-package";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
+import withAuth from "@/components/authentication/withAuth";
 
 const CartPage = () => {
   const router = useRouter();
@@ -179,4 +180,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default withAuth(CartPage);

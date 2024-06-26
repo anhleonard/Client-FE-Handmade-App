@@ -30,6 +30,7 @@ import { createAuctionPayment } from "@/apis/services/payments";
 import { uploadImages } from "@/apis/services/uploads";
 import ListCandidates from "@/components/auctions/list-candidates";
 import { sortedStores } from "@/apis/services/stores";
+import withAuth from "@/components/authentication/withAuth";
 
 const CreateAuctionPage = () => {
   const dispatch = useDispatch();
@@ -445,4 +446,4 @@ const CreateAuctionPage = () => {
   );
 };
 
-export default CreateAuctionPage;
+export default withAuth(CreateAuctionPage);

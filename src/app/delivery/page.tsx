@@ -28,6 +28,7 @@ import { calculateTotalPrice, contentShippingAddress } from "@/enum/functions";
 import { FormControl, RadioGroup } from "@mui/material";
 import { selectedOrderProducts } from "@/apis/services/order-products";
 import Link from "next/link";
+import withAuth from "@/components/authentication/withAuth";
 
 const DeliveryPage = () => {
   const router = useRouter();
@@ -224,4 +225,4 @@ const DeliveryPage = () => {
   );
 };
 
-export default DeliveryPage;
+export default withAuth(DeliveryPage);
