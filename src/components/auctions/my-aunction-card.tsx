@@ -9,12 +9,20 @@ import {
   formatCurrency,
 } from "@/enum/functions";
 import Button from "@/libs/button";
-import { useParams, useRouter } from "next/navigation";
-import { Auction } from "@/enum/defined-types";
+import { useRouter } from "next/navigation";
+import { Auction, PaidAuction } from "@/enum/defined-types";
 import { AuctionStatus, Role } from "@/enum/constants";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/redux/slices/modalSlice";
 import EditAuctionModal from "./edit-auction-modal";
+
+function checkRefund(paids: PaidAuction[]) {
+  return paids.some(
+    (paid) =>
+      paid.isRefund === true &&
+      (paid.type === "deposit" || paid.type === "total")
+  );
+}
 
 type Props = {
   auction: Auction;
@@ -170,7 +178,9 @@ const MyAunctionCard = ({ auction, handleRefetch }: Props) => {
               </div>
               <MyLabel type="error">Đã hủy</MyLabel>
             </div>
-            {auction?.canceledBy?.role === Role.ADMIN ? (
+            {auction?.canceledBy?.role === Role.ADMIN &&
+            auction?.paids?.length &&
+            !checkRefund(auction?.paids) ? (
               <Button
                 className="!text-xs !py-1.5 !w-fit"
                 color="info"

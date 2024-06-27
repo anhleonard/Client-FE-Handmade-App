@@ -2,7 +2,6 @@
 import { getDefaultShipping } from "@/apis/services/users";
 import storage from "@/apis/storage";
 import AccountCard from "@/components/account/account_card";
-import withAuth from "@/components/authentication/withAuth";
 import { AlertStatus } from "@/enum/constants";
 import { AlertState, Shipping } from "@/enum/defined-types";
 import { contentShippingAddress, getCurrentUser } from "@/enum/functions";

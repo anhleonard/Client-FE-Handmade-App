@@ -17,7 +17,7 @@ import { AlertState, Auction, Bidder, PaidAuction } from "@/enum/defined-types";
 import { AlertStatus, AuctionStatus, Role } from "@/enum/constants";
 import storage from "@/apis/storage";
 import { useDispatch } from "react-redux";
-import { closeModal, openModal } from "@/redux/slices/modalSlice";
+import { openModal } from "@/redux/slices/modalSlice";
 import RejectAuctionModal from "./reject-auction-modal";
 import { headerUrl } from "@/apis/services/authentication";
 import { openAlert } from "@/redux/slices/alertSlice";
@@ -31,9 +31,7 @@ import {
   createAuctionPayment,
   createRefundPayment,
 } from "@/apis/services/payments";
-import CheckIcon from "@mui/icons-material/Check";
 import { closeConfirm, openConfirm } from "@/redux/slices/confirmSlice";
-import { SCREEN } from "@/enum/setting";
 import ExtendDaysModal from "./extend-days-modal";
 import { updateAuction, updatePaidAuction } from "@/apis/services/auctions";
 
@@ -72,16 +70,19 @@ const DetailAuction = ({
       case AuctionStatus.CANCELED:
         return <MyLabel type="error">Đã hủy</MyLabel>;
 
+      case AuctionStatus.SENT_SELLER:
+        return <MyLabel type="grey">Đã gửi dự án tới đối tác</MyLabel>;
+
       default:
         return <MyLabel type="grey">Chờ duyệt</MyLabel>;
     }
   };
 
-  const handleOpenDetailModal = (auctionId: number) => {
+  const handleOpenDetailModal = (auctionId: number, auction: Auction) => {
     const modal = {
       isOpen: true,
       title: "Lý do hủy dự án",
-      content: <RejectAuctionModal auctionId={auctionId} />,
+      content: <RejectAuctionModal auctionId={auctionId} auction={auction} />,
       className: "max-w-3xl",
     };
     dispatch(openModal(modal));
@@ -216,95 +217,87 @@ const DetailAuction = ({
     try {
       dispatch(openLoading());
 
-      //update auction
-      const variables = {
-        status: AuctionStatus.CANCELED,
-        additionalComment: "Hủy dự án do quá hạn tiến hành.",
-      };
       const token = storage.getLocalAccessToken();
-
-      //refund amount of money
-      const userPaids: PaidAuction[] = auction?.paids;
-
-      let deposit = 0; //khởi tạo deposit
-      let depositValues: CreateRefundPaymentValues | null = null;
-      let totalValues: CreateRefundPaymentValues | null = null;
-
       const selectedBidder = auction?.candidates?.filter(
         (bidder) => bidder.isSelected === true
       )[0];
+      const userPaids = auction?.paids || [];
+      const auctionId = auction?.id;
 
-      for (let paid of userPaids) {
+      const variables = {
+        status: AuctionStatus.CANCELED,
+        additionalComment: "Hủy do đã quá hạn làm dự án",
+      };
+
+      let deposit = 0;
+      let depositValues: CreateRefundPaymentValues | null = null;
+      let totalValues: CreateRefundPaymentValues | null = null;
+
+      userPaids.forEach((paid) => {
         if (paid.type === "deposit") {
           depositValues = {
             zp_trans_id: paid.zp_trans_id,
             amount: auction.deposit,
           };
-
-          deposit = auction?.deposit;
+          deposit = auction.deposit;
         }
 
         if (paid.type === "total") {
           totalValues = {
             zp_trans_id: paid.zp_trans_id,
-            amount: selectedBidder?.bidderMoney - deposit,
+            amount: selectedBidder.bidderMoney - deposit,
           };
         }
-      }
+      });
 
-      let resDeposit: any;
-      let resTotal: any;
-
-      if (depositValues) {
-        resDeposit = await createRefundPayment(depositValues);
-        if (resDeposit?.return_code === 2) {
-          let alert: AlertState = {
+      const handlePaymentRefund = async (
+        paymentValues: CreateRefundPaymentValues,
+        type: string
+      ) => {
+        const res = await createRefundPayment(paymentValues);
+        if (res?.return_code === 2) {
+          const alert: AlertState = {
             isOpen: true,
-            title: "LỖI HOÀN TIỀN CỌC",
-            message: resDeposit?.return_message,
+            title: `LỖI HOÀN TIỀN ${type === "deposit" ? "CỌC" : ""}`,
+            message: res?.return_message,
             type: AlertStatus.ERROR,
           };
           dispatch(openAlert(alert));
-          return;
+          return false;
         }
         const params: PaidAuctionValues = {
-          auctionId: auction?.id,
-          type: "deposit",
+          auctionId,
+          type,
         };
         await updatePaidAuction(params, token);
-      }
+        return true;
+      };
 
-      if (totalValues) {
-        resTotal = await createRefundPayment(totalValues);
-        if (resTotal?.return_code === 2) {
+      const refundDeposit = depositValues
+        ? handlePaymentRefund(depositValues, "deposit")
+        : Promise.resolve(true);
+      const refundTotal = totalValues
+        ? handlePaymentRefund(totalValues, "total")
+        : Promise.resolve(true);
+
+      const [isDepositRefunded, isTotalRefunded] = await Promise.all([
+        refundDeposit,
+        refundTotal,
+      ]);
+
+      if (isDepositRefunded && isTotalRefunded) {
+        const updatedAuction = await updateAuction(auctionId, variables, token);
+        if (updatedAuction) {
+          dispatch(closeConfirm());
           let alert: AlertState = {
             isOpen: true,
-            title: "LỖI HOÀN TIỀN",
-            message: resDeposit?.return_message,
-            type: AlertStatus.ERROR,
+            title: "HỦY DỰ ÁN & HOÀN TIỀN",
+            message: "Đã hủy dự án và hoàn tiền lại cho khách hàng thành công",
+            type: AlertStatus.SUCCESS,
           };
           dispatch(openAlert(alert));
-          return;
+          handleRefetch();
         }
-        const params: PaidAuctionValues = {
-          auctionId: auction?.id,
-          type: "total",
-        };
-        await updatePaidAuction(params, token);
-      }
-
-      const updatedAuction = await updateAuction(auction?.id, variables, token);
-
-      if (updatedAuction && resDeposit && resTotal) {
-        dispatch(closeConfirm());
-        let alert: AlertState = {
-          isOpen: true,
-          title: "HỦY DỰ ÁN & HOÀN TIỀN",
-          message: "Đã hủy dự án và hoàn tiền lại cho khách hàng thành công",
-          type: AlertStatus.SUCCESS,
-        };
-        dispatch(openAlert(alert));
-        handleRefetch();
       }
     } catch (error: any) {
       let alert: AlertState = {
@@ -415,6 +408,7 @@ const DetailAuction = ({
             </ListItem>
 
             {(auction?.status === AuctionStatus.AUCTIONING ||
+              auction?.status === AuctionStatus.SENT_SELLER ||
               !auction?.status) && (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
@@ -430,6 +424,7 @@ const DetailAuction = ({
             )}
 
             {(auction?.status === AuctionStatus.AUCTIONING ||
+              auction?.status === AuctionStatus.SENT_SELLER ||
               !auction?.status) && (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
@@ -444,7 +439,9 @@ const DetailAuction = ({
               </ListItem>
             )}
 
-            {auction.status === AuctionStatus.AUCTIONING || !auction?.status ? (
+            {auction.status === AuctionStatus.AUCTIONING ||
+            auction?.status === AuctionStatus.SENT_SELLER ||
+            !auction?.status ? (
               <ListItem
                 className="block w-full border-b-[2px] border-grey-c50 px-4 py-4"
                 disablePadding
@@ -499,6 +496,7 @@ const DetailAuction = ({
 
             {auction?.status === AuctionStatus.PROGRESS ||
             !auction?.status ||
+            auction?.status === AuctionStatus.SENT_SELLER ||
             auction?.status === AuctionStatus.AUCTIONING ||
             auction?.status === AuctionStatus.DELIVERY ||
             auction?.status === AuctionStatus.COMPLETED ? (
@@ -637,7 +635,7 @@ const DetailAuction = ({
             auction?.isPaymentFull === false ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1">
-                  <div className="font-bold text-grey-c900">Tiền đã cọc</div>
+                  <div className="font-bold text-grey-c900">Tiền cọc</div>
                   <div className="font-medium text-primary-c900">
                     {formatCurrency(auction?.deposit)}
                   </div>
@@ -647,6 +645,7 @@ const DetailAuction = ({
 
             {auction?.owner?.id === +storage.getLocalUserId() &&
             auction?.status !== AuctionStatus.CANCELED &&
+            auction?.status &&
             auction?.isPaymentFull === false ? (
               <ListItem className="border-b-[2px] border-grey-c50">
                 <div className="flex flex-col gap-1 ">
@@ -664,9 +663,42 @@ const DetailAuction = ({
               </ListItem>
             ) : null}
 
+            {auction?.owner?.id === +storage.getLocalUserId() &&
+            !auction?.status &&
+            !bidder ? (
+              <ListItem className="border-b-[2px] border-grey-c50">
+                <div className="flex flex-col gap-1 ">
+                  <div className="font-bold text-grey-c900">
+                    Trạng thái thanh toán tiền cọc
+                  </div>
+                  <div className="font-medium text-primary-c900">
+                    {auction?.isPaymentDeposit ? (
+                      <MyLabel type="success">Đã thanh toán</MyLabel>
+                    ) : (
+                      <MyLabel type="error">Chưa thanh toán</MyLabel>
+                    )}
+                  </div>
+                </div>
+              </ListItem>
+            ) : null}
+
+            {!auction?.status && bidder && !auction?.isPaymentFull ? (
+              <ListItem className="border-b-[2px] border-grey-c50">
+                <div className="flex flex-col gap-1 ">
+                  <div className="font-bold text-grey-c900">
+                    Trạng thái thanh toán dự án
+                  </div>
+                  <div className="font-medium text-primary-c900">
+                    <MyLabel type="error">Chưa thanh toán</MyLabel>
+                  </div>
+                </div>
+              </ListItem>
+            ) : null}
+
             {(auction?.status === AuctionStatus.PROGRESS ||
               auction?.status === AuctionStatus.DELIVERY ||
               auction?.status === AuctionStatus.COMPLETED ||
+              auction?.status === AuctionStatus.SENT_SELLER ||
               (!auction?.status && auction?.isPaymentFull)) &&
             auction?.owner?.id === +storage.getLocalUserId() ? (
               <ListItem className="border-b-[2px] border-grey-c50">
@@ -684,6 +716,7 @@ const DetailAuction = ({
             {(auction?.status === AuctionStatus.PROGRESS ||
               auction?.status === AuctionStatus.DELIVERY ||
               auction?.status === AuctionStatus.COMPLETED ||
+              auction?.status === AuctionStatus.SENT_SELLER ||
               (!auction?.status && auction?.isPaymentFull)) &&
             auction?.owner?.id === +storage.getLocalUserId() ? (
               <ListItem>
@@ -704,28 +737,39 @@ const DetailAuction = ({
           </List>
         </Collapse>
       </div>
-      {(!auction?.status || auction?.status === AuctionStatus.AUCTIONING) &&
-        auction?.owner?.id === +storage.getLocalUserId() &&
-        calculateRemainingDays(auction?.closedDate) > 0 && (
+
+      {(!auction?.status ||
+        auction?.status === AuctionStatus.SENT_SELLER ||
+        (auction?.status === AuctionStatus.AUCTIONING &&
+          calculateRemainingDays(auction?.closedDate) > 0)) &&
+        auction?.owner?.id === +storage.getLocalUserId() && (
           <div className="mt-4 flex flex-row justify-end gap-4">
             <Button
               className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
               color="grey"
-              onClick={() => handleOpenDetailModal(auction?.id)}
+              onClick={() => handleOpenDetailModal(auction?.id, auction)}
             >
               Hủy dự án
             </Button>
-            {!auction?.isPaymentDeposit ? (
+            {!auction?.isPaymentDeposit &&
+            calculateRemainingDays(auction?.closedDate) > 0 ? (
               <Button
                 className="!w-fit !px-3 !py-2 !text-xs !font-semibold"
                 color="info"
-                onClick={() => handlePaymentDeposit(auction?.id)}
+                onClick={() =>
+                  !auction?.status && bidder
+                    ? handlePaymentTotal(auction?.id)
+                    : handlePaymentDeposit(auction?.id)
+                }
               >
-                Thanh toán tiền cọc
+                {!auction?.status && bidder
+                  ? "Thanh toán toàn bộ"
+                  : "Thanh toán tiền cọc"}
               </Button>
             ) : null}
           </div>
         )}
+
       <div className="mt-4 flex flex-row justify-end gap-4">
         {!auction?.isPaymentFull &&
         auction?.status === AuctionStatus.PROGRESS ? (
@@ -737,6 +781,7 @@ const DetailAuction = ({
             Thanh toán toàn bộ
           </Button>
         ) : null}
+
         {bidder?.estimatedDay &&
         calculateDaysAfterAccepted(bidder?.estimatedDay, bidder?.acceptedAt) ===
           0 &&

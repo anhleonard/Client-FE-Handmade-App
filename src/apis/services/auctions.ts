@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateAuctionValues, CreatePaidAuction } from "../types";
+import { CreatePaidAuction } from "../types";
 import { headerUrl } from "./authentication";
 
 export const createAuction = async (variables: any, token: string) => {

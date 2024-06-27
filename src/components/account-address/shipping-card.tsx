@@ -9,7 +9,6 @@ import {
 import React, { ReactNode } from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { COLORS } from "@/enum/colors";
-import MyTextAction from "@/libs/text-action";
 import { useRouter } from "next/navigation";
 
 type Props = {

@@ -4,7 +4,7 @@ import ListSellerPrice from "@/components/auctions/list-seller-price";
 import React, { useEffect, useState } from "react";
 import SecondaryAuctionLayout from "@/components/auctions/secondary-auction-layout";
 import { useParams } from "next/navigation";
-import { AlertState, Auction, Shipping } from "@/enum/defined-types";
+import { AlertState, Auction, Bidder, Shipping } from "@/enum/defined-types";
 import { useDispatch, useSelector } from "react-redux";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import { singleAuction } from "@/apis/services/auctions";
@@ -19,6 +19,7 @@ import {
   calculateRemainingDays,
   contentShippingAddress,
 } from "@/enum/functions";
+import PickedCandidateCard from "@/components/auctions/picked-candidate";
 
 const DetailAuctionPage = () => {
   const params = useParams();
@@ -29,6 +30,8 @@ const DetailAuctionPage = () => {
   const [shipping, setShipping] = useState<Shipping>();
   const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
+  const [selectedBidder, setSelectedBidder] = useState<Bidder>();
+
   const getSingleAuction = async () => {
     if (auctionId && typeof auctionId === "string") {
       try {
@@ -37,6 +40,11 @@ const DetailAuctionPage = () => {
         if (res) {
           setAuction(res);
           setShipping(res?.shipping);
+          setSelectedBidder(
+            res?.candidates?.filter(
+              (bidder: Bidder) => bidder.isSelected === true
+            )[0]
+          );
         }
       } catch (error: any) {
         let alert: AlertState = {
@@ -55,10 +63,6 @@ const DetailAuctionPage = () => {
   useEffect(() => {
     getSingleAuction();
   }, [refetchQueries]);
-
-  const selectedBidder = auction?.candidates?.filter(
-    (bidder) => bidder.isSelected === true
-  )[0];
 
   const handleRefetch = () => {
     dispatch(refetchComponent());
@@ -90,7 +94,14 @@ const DetailAuctionPage = () => {
         <UpdateWorkForm auction={auction} handleRefetch={handleRefetch} />
       ) : null}
 
-      {(auction?.status === AuctionStatus.DELIVERY || !auction?.status) && (
+      {(!auction?.status && selectedBidder) ||
+      (auction?.status === AuctionStatus.SENT_SELLER && selectedBidder) ? (
+        <PickedCandidateCard candidate={selectedBidder} />
+      ) : null}
+
+      {(auction?.status === AuctionStatus.DELIVERY ||
+        !auction?.status ||
+        auction?.status === AuctionStatus.SENT_SELLER) && (
         <div>
           <div className="text-sm font-semibold mb-2 ml-2 text-grey-c900">
             Địa chỉ giao hàng
