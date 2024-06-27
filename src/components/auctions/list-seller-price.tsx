@@ -16,9 +16,10 @@ import { createAuctionPayment } from "@/apis/services/payments";
 
 type Props = {
   auction: Auction;
+  isOwned?: boolean;
 };
 
-const ListSellerPrice = ({ auction }: Props) => {
+const ListSellerPrice = ({ auction, isOwned = false }: Props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [pickedSeller, setPickedSeller] = useState("");
@@ -109,24 +110,27 @@ const ListSellerPrice = ({ auction }: Props) => {
                   <SellerPriceCard
                     key={index}
                     bidder={bidder}
-                    hasRadioCheck
+                    hasRadioCheck={isOwned}
                     radioValue={bidder?.id?.toString()}
                   />
                 );
               })}
             </RadioGroup>
           </FormControl>
-          <div className="flex flex-row items-end justify-end">
-            <Button
-              className="!w-fit"
-              color="info"
-              onClick={() => handleOpenConfirm()}
-            >
-              Lựa chọn & Thanh toán
-            </Button>
-          </div>
+          {isOwned ? (
+            <div className="flex flex-row items-end justify-end">
+              <Button
+                className="!w-fit"
+                color="info"
+                onClick={() => handleOpenConfirm()}
+              >
+                Lựa chọn & Thanh toán
+              </Button>
+            </div>
+          ) : null}
         </div>
       ) : null}
+
       {!auction?.candidates?.length && (
         <div className="flex flex-row items-center justify-center text-sm text-grey-c900 font-medium">
           Chưa có seller đặt giá!

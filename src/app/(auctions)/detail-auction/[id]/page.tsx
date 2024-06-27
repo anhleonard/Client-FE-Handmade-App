@@ -20,6 +20,7 @@ import {
   contentShippingAddress,
 } from "@/enum/functions";
 import PickedCandidateCard from "@/components/auctions/picked-candidate";
+import storage from "@/apis/storage";
 
 const DetailAuctionPage = () => {
   const params = useParams();
@@ -87,7 +88,10 @@ const DetailAuctionPage = () => {
       )}
 
       {auction && auction.status === AuctionStatus.AUCTIONING && (
-        <ListSellerPrice auction={auction} />
+        <ListSellerPrice
+          auction={auction}
+          isOwned={auction?.owner?.id === +storage.getLocalUserId()}
+        />
       )}
 
       {auction && auction.status === AuctionStatus.PROGRESS ? (
