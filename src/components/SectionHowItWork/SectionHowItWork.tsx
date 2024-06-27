@@ -18,28 +18,28 @@ const DEMO_DATA = [
     img: HIW1img,
     imgDark: HIW1img,
     title: "Lọc và khám phá",
-    desc: "Smart filtering and suggestions make it easy to find",
+    desc: "Lọc và đề xuất thông minh giúp bạn dễ dàng tìm thấy sản phẩm",
   },
   {
     id: 2,
     img: HIW2img,
     imgDark: HIW2img,
     title: "Thêm vào giỏ hàng",
-    desc: "Easily select the correct items and add them to the cart",
+    desc: "Dễ dàng chọn đúng mặt hàng và thêm vào giỏ hàng",
   },
   {
     id: 3,
     img: HIW3img,
     imgDark: HIW3img,
     title: "Giao hàng nhanh chóng",
-    desc: "The carrier will confirm and ship quickly to you",
+    desc: "Nhà bán sẽ xác nhận và gửi hàng nhanh chóng tới bạn",
   },
   {
     id: 4,
     img: HIW4img,
     imgDark: HIW4img,
     title: "Tận hưởng sản phẩm",
-    desc: "Have fun and enjoy your 5-star quality products",
+    desc: "Hãy vui vẻ và tận hưởng những sản phẩm chất lượng của chúng tôi",
   },
 ];
 

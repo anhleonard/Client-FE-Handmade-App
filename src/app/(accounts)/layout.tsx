@@ -122,7 +122,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
                 );
               })}
             </div>
-            <div className="flex-shrink-0 mb-10 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
+            <div className="flex-shrink-0 my-6 lg:mb-0 lg:mx-4 border-t lg:border-t-0"></div>
             <div className="lg:w-2/3 xl:w-3/4">{children}</div>
           </div>
         </main>

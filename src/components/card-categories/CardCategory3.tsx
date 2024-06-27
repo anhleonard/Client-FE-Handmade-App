@@ -1,5 +1,4 @@
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import Link from "next/link";
 import { CATS_DISCOVER } from "./data";
 import { Avatar } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -21,7 +20,7 @@ const CardCategory3 = ({
   name = CATS_DISCOVER[2].name,
   desc = CATS_DISCOVER[2].desc,
   color = CATS_DISCOVER[2].color,
-  auctionImage = "/images/default-auction.jpg",
+  auctionImage,
   collection = false,
   close,
 }: CardCategory3Props) => {

@@ -1,19 +1,25 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Heading from "./Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import { useDispatch } from "react-redux";
 import { TopAuctionCard } from "@/app/page";
 import CardCategory3 from "./card-categories/CardCategory3";
+
+const auctionCardImages = [
+  "/images/auctions/auc-1.jpg",
+  "/images/auctions/auc-2.jpg",
+  "/images/auctions/auc-3.jpg",
+  "/images/auctions/auc-4.jpg",
+  "/images/auctions/auc-5.jpg",
+];
 
 type Props = {
   auctions: TopAuctionCard[];
 };
 
 const DiscoverMoreSlider = ({ auctions }: Props) => {
-  const dispatch = useDispatch();
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
 
@@ -77,7 +83,7 @@ const DiscoverMoreSlider = ({ auctions }: Props) => {
                 name={item.name}
                 desc={item.desc}
                 color={item.color}
-                // auctionImage={item.auctionImage}
+                auctionImage={auctionCardImages[index]}
               />
             </li>
           ))}

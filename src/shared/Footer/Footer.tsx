@@ -58,8 +58,8 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <div className="relative border-t border-neutral-200 dark:border-neutral-700 py-8 px-[250px]">
-      <div className="grid grid-cols-3 gap-21">
+    <div className="relative border-t border-neutral-200 dark:border-neutral-700 py-8 md:px-[120px] lg:px-[200px] px-12">
+      <div className="grid md:grid-cols-3 md:gap-21 gap-8">
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-5">
             <Logo />

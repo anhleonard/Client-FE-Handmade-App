@@ -5,12 +5,6 @@ import Glide from "@glidejs/glide/dist/glide.esm";
 import Heading from "@/components/Heading/Heading";
 import React, { FC, useRef, useState } from "react";
 import { useEffect } from "react";
-import clientSay1 from "@/images/clientSay1.png";
-import clientSay2 from "@/images/clientSay2.png";
-import clientSay3 from "@/images/clientSay3.png";
-import clientSay4 from "@/images/clientSay4.png";
-import clientSay5 from "@/images/clientSay5.png";
-import clientSay6 from "@/images/clientSay6.png";
 import quotationImg from "@/images/quotation.png";
 import quotationImg2 from "@/images/quotation2.png";
 import { StarIcon } from "@heroicons/react/24/solid";
@@ -45,41 +39,59 @@ const SectionClientSay: FC<SectionClientSayProps> = ({ className = "" }) => {
   const renderBg = () => {
     return (
       <div className="hidden md:block">
-        <Image
-          sizes="100px"
+        <Avatar
           className="absolute top-9 -left-20"
-          src={clientSay1}
+          src="/images/clients/handmade-3.jpg"
           alt=""
+          style={{
+            width: 60,
+            height: 60,
+          }}
         />
-        <Image
-          sizes="100px"
-          className="absolute bottom-[100px] right-full mr-40"
-          src={clientSay2}
+        <Avatar
+          className="absolute bottom-[100px] right-full mr-20"
+          src="/images/clients/handmade-5.jpg"
           alt=""
+          style={{
+            width: 60,
+            height: 60,
+          }}
         />
-        <Image
-          sizes="100px"
+        <Avatar
           className="absolute top-full left-[140px]"
-          src={clientSay3}
+          src="/images/clients/handmade-6.jpg"
           alt=""
+          style={{
+            width: 60,
+            height: 60,
+          }}
         />
-        <Image
-          sizes="100px"
+        <Avatar
           className="absolute -bottom-10 right-[140px]"
-          src={clientSay4}
+          src="/images/clients/handmade-7.jpg"
           alt=""
+          style={{
+            width: 60,
+            height: 60,
+          }}
         />
-        <Image
-          sizes="100px"
+        <Avatar
           className="absolute left-full ml-32 bottom-[80px]"
-          src={clientSay5}
+          src="/images/clients/handmade-10.jpg"
           alt=""
+          style={{
+            width: 60,
+            height: 60,
+          }}
         />
-        <Image
-          sizes="100px"
+        <Avatar
           className="absolute -right-10 top-10 "
-          src={clientSay6}
+          src="/images/clients/handmade-9.jpg"
           alt=""
+          style={{
+            width: 60,
+            height: 60,
+          }}
         />
       </div>
     );
@@ -101,7 +113,7 @@ const SectionClientSay: FC<SectionClientSayProps> = ({ className = "" }) => {
 
         <Avatar
           className="mx-auto"
-          src="/images/clients/image-1.jpg"
+          src="/images/clients/handmade-1.jpg"
           style={{
             width: 120,
             height: 120,

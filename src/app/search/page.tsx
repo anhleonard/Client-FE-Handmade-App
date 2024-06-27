@@ -169,16 +169,30 @@ const PageSearch = ({}) => {
 
             {/* LOOP ITEMS */}
             <div className="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-              {products.length &&
-                products.map((product: Product) => (
-                  <ProductCard
-                    key={product.id}
-                    item={product}
-                    localToken={localToken}
-                    isLiked={product?.isLiked}
-                  />
-                ))}
+              {products.length
+                ? products.map((product: Product) => (
+                    <ProductCard
+                      key={product.id}
+                      item={product}
+                      localToken={localToken}
+                      isLiked={product?.isLiked}
+                    />
+                  ))
+                : null}
             </div>
+
+            {!products?.length ? (
+              <div className="flex flex-col items-center justify-center gap-4">
+                <img
+                  src="/images/no-item-found.svg"
+                  alt="no-item-found"
+                  className="h-[200px] w-[200px]"
+                />
+                <div className="text-sm font-medium text-grey-c900">
+                  Không tìm thấy sản phẩm phù hợp!
+                </div>
+              </div>
+            ) : null}
 
             {/* PAGINATION */}
             <div className="flex mt-10 justify-center items-center">
