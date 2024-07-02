@@ -96,7 +96,7 @@ const SingleStoreScreen = () => {
       dispatch(openLoading());
       const res: Store = await singleStore(storeId);
       const canceledRating = await canceledOrderStoreRating(storeId);
-      if (res && canceledRating) {
+      if (res) {
         if (res?.followers?.length) {
           const userId = storage.getLocalUserId();
           const user = res?.followers?.some(
@@ -108,7 +108,7 @@ const SingleStoreScreen = () => {
         } else setFollowed(false);
         setStore(res);
         setCollectValue(tabCollectId ? +tabCollectId : res?.collections[0]?.id);
-        setRate(canceledRating);
+        setRate(canceledRating ?? 0);
         dispatch(addStore({ store: res }));
       }
     } catch (error: any) {
