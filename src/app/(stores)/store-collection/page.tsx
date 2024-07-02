@@ -34,7 +34,9 @@ const StoreCollection = ({ value, handleChange }: Props) => {
     }
   }
 
-  if (collectionStoreTabs?.length) collectionStoreTabs.reverse();
+  // if (collectionStoreTabs?.length) collectionStoreTabs.reverse();
+
+  // if (collectionStoreTabs?.length) console.log({ collectionStoreTabs });
 
   return (
     <div className="md:pt-3">

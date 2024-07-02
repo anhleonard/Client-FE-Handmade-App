@@ -69,10 +69,10 @@ const VerticalScrollTabs = ({
               },
             }}
           >
-            {tabs.map((item) => {
+            {tabs.map((item, index) => {
               return (
                 <Tab
-                  key={item.value}
+                  key={index}
                   label={item.label}
                   value={item.value}
                   sx={{
@@ -90,9 +90,9 @@ const VerticalScrollTabs = ({
           </Tabs>
         </div>
         <div className="md:col-span-3">
-          {tabs.map((item) => {
+          {tabs.map((item, index) => {
             return (
-              <TabPanel key={item.value} value={value} index={item.value}>
+              <TabPanel key={index} value={value} index={item.value}>
                 <div className="my-6 md:my-0">{item.content}</div>
               </TabPanel>
             );

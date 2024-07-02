@@ -24,7 +24,7 @@ const RenderVariants = ({
       <div className="text-sm mb-2 font-semibold text-grey-c900">{label} :</div>
       <div className="flex flex-row gap-2 items-center flex-wrap">
         {variants.map((variant, index) => (
-          <>
+          <div key={index}>
             {!(variant.inventoryNumber === 0) ? (
               <div
                 key={index}
@@ -50,7 +50,7 @@ const RenderVariants = ({
                 {formatVariant(variant?.variantItems)}
               </button>
             )}
-          </>
+          </div>
         ))}
       </div>
     </div>

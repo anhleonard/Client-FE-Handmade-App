@@ -57,3 +57,9 @@ export const cancelOrder = async (
     .put(`${headerUrl}/orders/cancel/${orderId}`, variables, config)
     .then((res) => res.data);
 };
+
+export const canceledOrderStoreRating = async (orderId: number) => {
+  return await axios
+    .get(`${headerUrl}/orders/rating/${orderId}`)
+    .then((res) => res.data);
+};

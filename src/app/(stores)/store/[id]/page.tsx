@@ -22,6 +22,7 @@ import { ChangeFollowerValues } from "@/apis/types";
 import { RootState } from "@/redux/store";
 import { refetchComponent } from "@/redux/slices/refetchSlice";
 import { headerUrl } from "@/apis/services/authentication";
+import { canceledOrderStoreRating } from "@/apis/services/orders";
 
 interface StoreContextType {
   createdAt: Date;
@@ -30,6 +31,9 @@ interface StoreContextType {
   value: number;
   searchText: string;
   handleResetValue: (value: number, searchText: string) => void;
+  storePoint: number;
+  storeFollow: number;
+  canceledRating: number;
 }
 
 export const StoreContext: Context<StoreContextType> = createContext({
@@ -39,6 +43,9 @@ export const StoreContext: Context<StoreContextType> = createContext({
   value: 0,
   searchText: "",
   handleResetValue: (value: number, searchText: string) => {},
+  storePoint: 0,
+  storeFollow: 0,
+  canceledRating: 0,
 });
 
 const SingleStoreScreen = () => {
@@ -51,6 +58,8 @@ const SingleStoreScreen = () => {
   const tabId = storage.getStoreTab();
   const [value, setValue] = useState<number>(tabId ? +tabId : 1);
   const [followed, setFollowed] = useState<boolean>(false);
+
+  const [rate, setRate] = useState(0);
 
   const refetchQueries = useSelector((state: RootState) => state.refetch.time);
 
@@ -65,9 +74,7 @@ const SingleStoreScreen = () => {
   };
 
   const tabCollectId = storage.getCollectionTab();
-  const [collectValue, setCollectValue] = useState<number>(
-    tabCollectId ? +tabCollectId : 1
-  );
+  const [collectValue, setCollectValue] = useState<number>(0);
 
   //change inside collect tab
   const handleChangeCollect = (
@@ -88,7 +95,8 @@ const SingleStoreScreen = () => {
     try {
       dispatch(openLoading());
       const res: Store = await singleStore(storeId);
-      if (res) {
+      const canceledRating = await canceledOrderStoreRating(storeId);
+      if (res && canceledRating) {
         if (res?.followers?.length) {
           const userId = storage.getLocalUserId();
           const user = res?.followers?.some(
@@ -99,6 +107,8 @@ const SingleStoreScreen = () => {
           }
         } else setFollowed(false);
         setStore(res);
+        setCollectValue(tabCollectId ? +tabCollectId : res?.collections[0]?.id);
+        setRate(canceledRating);
         dispatch(addStore({ store: res }));
       }
     } catch (error: any) {
@@ -246,6 +256,9 @@ const SingleStoreScreen = () => {
             value: value,
             searchText: searchText,
             handleResetValue: handleResetValue,
+            storePoint: store.score,
+            storeFollow: store.followers.length,
+            canceledRating: rate,
           }}
         >
           <ScrollTabs
