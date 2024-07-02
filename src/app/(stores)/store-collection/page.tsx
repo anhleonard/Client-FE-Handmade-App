@@ -3,6 +3,7 @@ import VerticalScrollTabs from "@/components/scroll-tabs/vertical-scroll-tabs";
 import SingleStoreCollection from "@/components/store/single-store-collection";
 import { CustomTab } from "@/enum/defined-types";
 import { RootState } from "@/redux/store";
+import Image from "next/image";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -40,11 +41,24 @@ const StoreCollection = ({ value, handleChange }: Props) => {
 
   return (
     <div className="md:pt-3">
-      <VerticalScrollTabs
-        tabs={collectionStoreTabs}
-        value={value}
-        handleChange={handleChange}
-      />
+      {collectionStoreTabs?.length ? (
+        <VerticalScrollTabs
+          tabs={collectionStoreTabs}
+          value={value}
+          handleChange={handleChange}
+        />
+      ) : null}
+      {!collectionStoreTabs?.length ? (
+        <div className="flex flex-col items-center justify-center gap-4 w-full rounded-xl bg-grey-c10 py-[100px]">
+          <Image
+            src={"/images/no-reviews.png"}
+            alt="no-reviews"
+            width={180}
+            height={180}
+          />
+          <div className="font-medium">Cửa hàng chưa có bộ sưu tập nào!</div>
+        </div>
+      ) : null}
     </div>
   );
 };
