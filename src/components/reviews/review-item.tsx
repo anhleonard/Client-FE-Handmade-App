@@ -1,3 +1,4 @@
+import { headerUrl } from "@/apis/services/authentication";
 import { Review } from "@/enum/defined-types";
 import { formatCommonTime } from "@/enum/functions";
 import { Avatar, Rating } from "@mui/material";
@@ -18,7 +19,7 @@ const ReviewItem = ({ className = "", review }: Props) => {
           <div className="flex flex-row items-center gap-3">
             <Avatar
               alt="user-image"
-              src={review?.user?.avatar}
+              src={`${headerUrl}/products/${review?.user?.avatar}`}
               sx={{ width: 44, height: 44 }}
             />
             <div>
