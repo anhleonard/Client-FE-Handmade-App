@@ -39,6 +39,8 @@ const DetailAccountOrder = () => {
 
       case EnumOrderStatus.CENCELLED:
         return <MyLabel type="error">Đơn hàng đã được hủy</MyLabel>;
+      case EnumOrderStatus.OVERDATE:
+        return <MyLabel type="grey">Đơn hàng đã quá hạn xác nhận</MyLabel>;
     }
   };
 

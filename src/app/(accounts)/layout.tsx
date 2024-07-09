@@ -95,8 +95,10 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
                     case 2:
                       return path === "/account-savelists";
                     case 3:
-                      return path === "/account-order";
-
+                      return (
+                        path === "/account-order" ||
+                        /^\/detail-account-order\/\d+$/.test(path)
+                      );
                     case 4:
                       return path === "/account-auction";
                     case 5:
