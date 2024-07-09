@@ -7,7 +7,7 @@ import MyDatePicker from "@/libs/date-picker";
 import Button from "@/libs/button";
 import MyRadioButtonsGroup from "@/libs/radio-button-group";
 import { AlertStatus, genderTypes } from "@/enum/constants";
-import { Avatar, IconButton, Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { COLORS } from "@/enum/colors";
 import { useDispatch } from "react-redux";
 import MainInputImage from "@/libs/main-input-image";
@@ -21,7 +21,6 @@ import { openAlert } from "@/redux/slices/alertSlice";
 import { closeLoading, openLoading } from "@/redux/slices/loadingSlice";
 import storage from "@/apis/storage";
 import { updateUser } from "@/apis/services/users";
-import { closeModal } from "@/redux/slices/modalSlice";
 
 const EditAccountPage = () => {
   const currentUser: User = getCurrentUser();
@@ -29,7 +28,7 @@ const EditAccountPage = () => {
   const dispatch = useDispatch();
 
   const [previewImage, setPreviewImage] = useState(
-    `${headerUrl}/products/${currentUser?.avatar}`
+    currentUser?.avatar ? `${headerUrl}/products/${currentUser?.avatar}` : ""
   );
   const [fileImage, setFileImage] = useState<File | null>();
 
@@ -166,7 +165,7 @@ const EditAccountPage = () => {
                   formatDOBDate(formik.values.dateOfBirth)
                 }
                 disabled
-                helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
+                // helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
               />
 
               <div className="grid md:grid-cols-2 gap-4 md:gap-8">
@@ -188,13 +187,17 @@ const EditAccountPage = () => {
                   placeholder="Nhập email của bạn"
                   className="w-full"
                   disabled
-                  helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
+                  // helperText="Để thay đổi thông tin, vui lòng liên hệ Người quản lý"
                   onChange={formik.handleChange}
                   value={formik.values.email}
                 />
               </div>
-              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                <Button color="black" className="!w-full !py-3">
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8 pt-4">
+                <Button
+                  color="black"
+                  className="!w-full !py-3"
+                  onClick={() => router.push("/account")}
+                >
                   HỦY
                 </Button>
                 <Button className="!w-full !py-3" type="submit">

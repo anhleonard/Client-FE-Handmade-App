@@ -151,8 +151,12 @@ const EditPasswordPage = () => {
                 }
               />
 
-              <div className="grid md:grid-cols-2 gap-6 md:gap-8 pt-2">
-                <Button color="black" className="!w-full !py-3">
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8 pt-4">
+                <Button
+                  color="black"
+                  className="!w-full !py-3"
+                  onClick={() => router.push("/account")}
+                >
                   HỦY
                 </Button>
                 <Button className="!w-full !py-3" type="submit">
