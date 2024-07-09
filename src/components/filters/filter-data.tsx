@@ -60,7 +60,7 @@ export const DATA_sortOrderRadios = [
   { name: "Giá cao đến thấp", id: "PRICE_HIGH_LOW" },
 ];
 
-export const PRICE_RANGE = [5000, 10000000];
+export const PRICE_RANGE = [5000, 2000000];
 
 export const DATA_COMPLETED_TIME: FilterTime[] = [
   { name: "< 1 tuần", min: 0, max: 6, id: "LESS_1_WEEK" },

@@ -16,6 +16,7 @@ import CompletedAuctions from "@/components/account-auction/completed-auctions/c
 import CanceledAuctions from "@/components/account-auction/canceled-auctions/canceled-auctions";
 import AllAuctions from "@/components/account-auction/all-auctions/all-auctions";
 import WaitingAuctions from "@/components/account-auction/waiting-auctions/waiting-auctions";
+import EventBusyRoundedIcon from "@mui/icons-material/EventBusyRounded";
 import explore1Svg from "@/images/collections/explore1.svg";
 import explore2Svg from "@/images/collections/explore2.svg";
 import explore3Svg from "@/images/collections/explore3.svg";
@@ -197,6 +198,12 @@ export const orderStatus: OrderStatus[] = [
     icon: <HighlightOffRoundedIcon sx={{ fontSize: 20 }} />,
     color: "text-support-c500",
   },
+  {
+    label: "Quá hạn xác nhận",
+    value: "OVERDATE",
+    icon: <EventBusyRoundedIcon sx={{ fontSize: 20 }} />,
+    color: "text-grey-c800",
+  },
 ];
 
 export enum AlertStatus {
@@ -221,6 +228,7 @@ export enum EnumOrderStatus {
   SHIPPED = "SHIPPED",
   DELIVERED = "DELIVERED",
   CENCELLED = "CENCELLED",
+  OVERDATE = "OVERDATE",
 }
 
 export enum AuctionStatus {

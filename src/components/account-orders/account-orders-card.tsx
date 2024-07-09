@@ -56,6 +56,9 @@ const AccountOrdersCard = ({
     case EnumOrderStatus.CENCELLED:
       currentStatus = orderStatus.find((item) => item.value === status);
       break;
+    case EnumOrderStatus.OVERDATE:
+      currentStatus = orderStatus.find((item) => item.value === status);
+      break;
   }
 
   const renderActionButtons = () => {
