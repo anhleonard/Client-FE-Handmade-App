@@ -1,7 +1,9 @@
+import { headerUrl } from "@/apis/services/authentication";
 import { updateProgress } from "@/apis/services/progresses";
 import storage from "@/apis/storage";
 import { UpdateProgressValues } from "@/apis/types";
-import { AlertStatus, AuctionStatus } from "@/enum/constants";
+import { COLORS } from "@/enum/colors";
+import { AlertStatus, AuctionStatus, Role } from "@/enum/constants";
 import { AlertState, Progress } from "@/enum/defined-types";
 import { formatDate } from "@/enum/functions";
 import Button from "@/libs/button";
@@ -54,14 +56,24 @@ const ContentUpdatedWork = ({ status, progress, handleRefetch }: Props) => {
     <div className="flex flex-col gap-2 text-sm">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-3">
-          <Avatar
-            alt="avatar"
-            sx={{ width: 42, height: 42 }}
-            src="/images/bags/bag-1.jpg"
-          />
+          {progress?.user?.role === Role.SELLER ? (
+            <Avatar src="/broken-image.jpg" />
+          ) : progress?.user?.avatar ? (
+            <Avatar
+              alt="avatar"
+              sx={{ width: 42, height: 42 }}
+              src={`${headerUrl}/products/${progress?.user?.avatar}`}
+            />
+          ) : (
+            <Avatar sx={{ bgcolor: COLORS.primary.c700 }} alt="T">
+              T
+            </Avatar>
+          )}
           <div className="flex flex-col items-start gap-1">
             <div className="font-bold text-grey-c900">
-              {progress?.user?.name}
+              {progress?.user?.role === Role.SELLER
+                ? "Đối tác"
+                : progress?.user?.name}
             </div>
             <div className="flex flex-row items-center gap-2 text-grey-c900">
               <div className="text-xs">{formatDate(progress?.createdAt)}</div>
