@@ -31,10 +31,10 @@ const TabFilters = ({
             setRangePrices={setRangePrices}
           />
 
-          <RenderTabIsOnsale
+          {/* <RenderTabIsOnsale
             isOnSale={isOnSale}
             setIsIsOnSale={setIsIsOnSale}
-          />
+          /> */}
         </div>
 
         <RenderTabsSortOrder

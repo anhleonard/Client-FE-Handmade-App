@@ -185,9 +185,12 @@ const AccountOrdersCard = ({
             <StorefrontOutlinedIcon
               sx={{ fontSize: 20, color: COLORS.grey.c900 }}
             />
-            <div className="text-base font-bold text-grey-c900">
+            <Link
+              className="text-base font-bold text-grey-c900 hover:text-primary-c900 hover:cursor-pointer"
+              href={`/store/${order?.store?.id}`}
+            >
               {order?.store?.name}
-            </div>
+            </Link>
           </div>
 
           {/* order status */}
@@ -221,9 +224,12 @@ const AccountOrdersCard = ({
                       className="h-15 w-15 rounded-lg object-cover block"
                     />
                     <div className="space-y-1 flex-1">
-                      <div className="text-base font-semibold text-grey-c900">
+                      <Link
+                        className="text-base font-semibold text-grey-c900 hover:text-primary-c900 hover:cursor-pointer hover:underline"
+                        href={`/product-detail/${orderProduct?.product?.id}`}
+                      >
                         {orderProduct?.product?.productName}
-                      </div>
+                      </Link>
                       <div className="flex flex-row justify-between items-center">
                         <div className="space-y-1">
                           {orderProduct?.variant?.variantItems.length ? (

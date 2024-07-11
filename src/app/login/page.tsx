@@ -158,12 +158,12 @@ const LoginPage = () => {
                           getIn(formik.errors, "password")
                         }
                       />
-                      <Link
+                      {/* <Link
                         href={"/forgot-pass"}
                         className="font-medium text-grey-c700 text-xs underline"
                       >
                         Quên mật khẩu?
-                      </Link>
+                      </Link> */}
                     </div>
 
                     <div className="flex flex-col gap-2 items-end pt-2">
