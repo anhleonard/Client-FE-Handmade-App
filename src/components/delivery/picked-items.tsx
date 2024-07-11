@@ -39,7 +39,7 @@ const PickedItems = ({
       <ListItem className="bg-white border-b-2 border-grey-c50" disablePadding>
         <ListItemButton className="flex flex-row justify-between py-6 px-4 hover:bg-transparent">
           <div className="text-base font-bold text-grey-c900">{title}</div>
-          <MyLabel type="warning">6 sản phẩm</MyLabel>
+          {/* <MyLabel type="warning">6 sản phẩm</MyLabel> */}
         </ListItemButton>
       </ListItem>
       <Collapse in={true}>
